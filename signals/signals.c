@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:37:06 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/03 11:48:35 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/03 22:27:30 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,18 @@ void sig_handler(int sig)
 {
         if (sig == SIGINT)
         {       
-        printf("\n");
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-        printf("flag signal avant = %d\n", flag);
-        flag = 1;
-        printf("flag signal apres = %d\n", flag);
+                if (flag == 1)
+                {
+                        flag = 0;
+                        printf("\n");
+                }
+                else 
+                {
+                printf("\n");
+                rl_on_new_line();
+                rl_replace_line("", 0);
+                rl_redisplay();
+                }
         }
 }
 

@@ -6,7 +6,7 @@
 #    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/06/01 18:47:44 by nabil            ###   ########.fr        #
+#    Updated: 2024/06/03 21:53:49 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ LIBFTDIR		:= 	./lib/libft
 LIBFT			:= 	$(LIBFTDIR)/libft.a
 #Sources
 HDRS			:=	./includes
-SRCS			:=	./main.c ./parsing/parsing.c ./builtins/echo.c ./signals/signals.c
+SRCS			:=	./main.c ./parsing/parsing.c ./builtins/echo.c ./signals/signals.c ./pipe/pipe_main.c
 OBJS			:= 	$(SRCS:.c=.o)
 #bonus
 BONUS			:=	checker

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/03 11:50:17 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/03 22:32:48 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	ft_execve(char *line)
 	int		execve_status;
 	char	*new_line;
 
+	flag = 1;
 	new_line = verif_quote(line);
 	args = cmd_args(new_line);
 	verif_quote(args[0]);
@@ -120,6 +121,40 @@ int verif_wight_space(char *line)
 	}
 	return (0);
 }
+void init(t_general *g)
+{
+	g->line = NULL;
+	g->prompt = NULL;
+	g->status = 0;
+}
+
+int	main(void)
+{
+	t_general g;
+
+	init(&g);
+	g.status = 0;
+	main_signal();
+	while (1)
+	{
+		g.prompt = ft_get_prompt();
+		g.line = readline(g.prompt);
+		if (g.line == NULL)
+           		break;
+		add_history(g.line);
+		pipe_while(&g);
+		free(g.prompt);
+		free(g.line);
+		flag = 0;
+	}
+	free(g.prompt);
+	rl_clear_history();
+	if (WIFEXITED(g.status))
+		return (WEXITSTATUS(g.status));
+	else
+		return (0);
+}
+
 /*
 int	main(void)
 {
@@ -160,53 +195,3 @@ int	main(void)
 		return (0);
 }
 */
-
-
-int	main(void)
-{
-	char *line;
-	char *prompt;
-	pid_t pid;
-	int status;
-
-	status = 0;
-	main_signal();
-	prompt = ft_get_prompt();
-	line = readline(prompt);
-	while (line)
-	{
-		add_history(line);
-		pid = fork();
-		if (pid == 0)
-		{
-			
-			ft_execve(line);
-			printf("test 1\n");
-		}
-		else 
-		{
-			
-			waitpid(pid, &status, 0);
-			printf("test 2 \n");
-			printf("flag else = %d\n", flag);
-		}
-		free(prompt);
-		free(line);
-		if (flag == 0)
-		{
-			printf("flag if flag = %d\n", flag);
-			prompt = ft_get_prompt();
-			printf("test 3\n");
-			line = readline(prompt);
-		}
-		else {
-			
-			flag = 0;
-		}
-	}
-	rl_clear_history();
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else
-		return (0);
-}

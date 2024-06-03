@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/02 13:03:23 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/03 21:56:53 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@
 # include <wait.h>
 #include <readline/readline.h>
 
+typedef struct s_general
+{
+        char *line;
+        char *prompt;
+        int status;
+}t_general;
+
 typedef struct s_signals
 {
         int i;
@@ -48,6 +55,8 @@ char *take_of_single_quote(char *str);
 char *verif_quote(char *str);
 void main_signal();
 void sig_handler(int sig);
+void pipe_while(t_general *g);
+void	ft_execve(char *line);
 
 
 # endif
