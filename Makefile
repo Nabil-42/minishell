@@ -6,12 +6,12 @@
 #    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/06/03 21:53:49 by nabil            ###   ########.fr        #
+#    Updated: 2024/06/14 11:08:11 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #comipilation && shell cmd
-CC				:= 	gcc
+CC				:= 	gcc -O0 -g
 CFLAGS			:= 	-Wall -Wextra -Werror
 RMF				:= 	rm -f
 MV				:= 	mv
@@ -35,12 +35,12 @@ LIBFTDIR		:= 	./lib/libft
 LIBFT			:= 	$(LIBFTDIR)/libft.a
 #Sources
 HDRS			:=	./includes
-SRCS			:=	./main.c ./parsing/parsing.c ./builtins/echo.c ./signals/signals.c ./pipe/pipe_main.c
+SRCS			:=	./main.c ./parsing/parsing.c ./builtins/echo/echo.c ./builtins/echo/double_quote.c ./builtins/echo/simple_quote.c ./signals/signals.c ./pipe/pipe_main.c ./builtins/cd_project.c ./builtins/pwd.c ./builtins/env.c
 OBJS			:= 	$(SRCS:.c=.o)
 #bonus
-BONUS			:=	checker
-BONUSDIR		:=	./bonus_src
-B_SOURCES		:=	$(BONUSDIR)
+BONUS			:=	tahar
+BONUSDIR		:=	./builtins
+B_SOURCES		:=	$(BONUSDIR)/env.c
 B_OBJECTS		:=	$(B_SOURCES:.c=.o)
 #Add Libs
 HEADERS			:= 	-I $(HDRS) -I $(LIBFTDIR)/includes -I $(BONUSDIR)
@@ -73,7 +73,7 @@ $(BONUS): $(LIBS) $(B_OBJECTS)
 libft: $(LIBFT)
 
 $(LIBFT):
-	@$(MAKE) -s -C $(LIBFTDIR)
+	@$(MAKE) -s -C $(LIBFTDIR) bonus
 	@echo "$(GREEN)**********************$(NC)"
 	@echo "$(GREEN)*   LIBFT COMPILED   *$(NC)"
 	@echo "$(GREEN)**********************$(NC)"

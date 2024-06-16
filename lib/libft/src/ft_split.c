@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 09:55:39 by tissad            #+#    #+#             */
-/*   Updated: 2024/05/30 13:57:05 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/13 14:02:43 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	ft_countstrs(char const *s, char c);
 static int	ft_strlenset(char const *s, unsigned int start, char c);
 static int	ft_strlenword(char const *s, unsigned int start, char c);
-void	free_tab(char **tab);
+void		free_tab(char **tab);
 
 char	**ft_split(char const *s, char c)
 {

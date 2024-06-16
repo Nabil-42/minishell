@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:27:58 by tissad            #+#    #+#             */
-/*   Updated: 2024/05/30 13:57:28 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/13 17:07:13 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int		ft_strtoi(const char *s, char **endptr);
 char	*ft_strtok(char *str, const char *delimiters);
 char	*ft_itoa(int n);
 char	*ft_strdup(const char *src);
+char	*ft_strndup(char const *src, size_t len);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
@@ -77,12 +78,14 @@ typedef struct s_list
 }	t_list;
 /*----------------------------------------------------------------------------*/
 int		ft_lstsize(t_list *lst);
-void	ft_lstadd_front(t_list **lst, t_list *n);
-void	ft_lstadd_back(t_list **lst, t_list *n);
+void	ft_lstadd_front(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void*));
+void	ft_lstdelcond(t_list **lst, void *value, int (*cond)(void*, void*), \
+void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstnew(void *content);
+void	ft_lstadd_back(t_list **lst, t_list *new);
 t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 /******************************************************************************/

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tissad <issad.tahar@icloud.com>            +#+  +:+       +#+         #
+#    By: tissad <tissad@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 12:06:21 by tissad            #+#    #+#              #
-#    Updated: 2024/04/04 17:45:32 by tissad           ###   ########.fr        #
+#    Updated: 2024/06/07 11:48:26 by tissad           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,15 +68,16 @@ SOURCES=./src/ft_atoi.c\
 		./ft_printf_src/ft_printf_convert.c\
 		./ft_printf_src/ft_printf_convert_i.c
 #Fichiers source bonus
-S_BONUS = ft_lstnew.c\
-ft_lstadd_front.c\
-ft_lstsize.c\
-ft_lstlast.c\
-ft_lstadd_back.c\
-ft_lstdelone.c\
-ft_lstclear.c\
-ft_lstiter.c\
-ft_lstmap.c
+S_BONUS 	= 	./src/ft_lstnew.c \
+				./src/ft_lstadd_front.c \
+				./src/ft_lstsize.c \
+				./src/ft_lstlast.c \
+				./src/ft_lstadd_back.c \
+				./src/ft_lstdelone.c \
+				./src/ft_lstdelcond.c \
+				./src/ft_lstclear.c \
+				./src/ft_lstiter.c \
+				./src/ft_lstmap.c
 #Variable Make
 OBJECTS=$(SOURCES:.c=.o)
 O_BONUS=$(S_BONUS:.c=.o)
@@ -94,8 +95,6 @@ $(EXEC): $(OBJECTS)
 
 bonus: $(EXEC) $(O_BONUS)
 	$(AR) $(ARFLAGS) $^
-%.o:%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 #La regle clean supprime les .o objets
 clean:

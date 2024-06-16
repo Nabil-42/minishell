@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/03 21:56:21 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/15 16:28:19 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,77 @@
 
 extern volatile sig_atomic_t flag;
 
-void pipe_while(t_general *g)
+void pipe_while(t_general *g) 
 {
-       	int pipefd[2];
-	int receiv_num;
-        pid_t pid;
-        
-        if (pipe(pipefd) == -1) 
-	{
-            	perror("pipe");
-        	exit(EXIT_FAILURE);
+    int pipefd[2];
+    pid_t pid;
+    int num_pipes = g->count;  // Nombre de pipes à créer (ici, 2 pipes)
+    int i = 0;
+    int k = 0;
+
+    int prev_pipe_read = -1;  // Descripteur de fichier pour la lecture du pipe précédent
+
+    while (i <= num_pipes) 
+    {
+        // Créer le pipe
+        if (i < num_pipes && pipe(pipefd) == -1) 
+        {
+            perror("pipe");
+            exit(EXIT_FAILURE);
         }
-	pid = fork();
-	if (pid == 0)
-	{
-		close(pipefd[0]);
-		receiv_num = 1;
-		write(pipefd[1], &receiv_num, sizeof(receiv_num));
-		close(pipefd[1]);
-		ft_execve(g->line);
-	}
-	else 
-	{
-		close(pipefd[1]);
-		read(pipefd[0], &receiv_num, sizeof(receiv_num));
-		close(pipefd[0]);
-		flag = receiv_num;
-		waitpid(pid, &g->status, 0);
-	}
+
+        pid = fork();
+        if (pid == -1) 
+        {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        } 
+        else if (pid == 0) 
+        {  // Processus fils
+            // Redirection de l'entrée standard si ce n'est pas le premier processus
+            if (prev_pipe_read != -1) 
+            {
+                dup2(prev_pipe_read, 0);  // Rediriger l'entrée standard depuis le pipe précédent
+                close(prev_pipe_read);    // Fermer le descripteur de fichier du pipe précédent
+            }
+
+            // Redirection de la sortie standard vers le pipe actuel sauf pour la dernière commande
+            if (i < num_pipes) 
+            {
+                close(pipefd[0]);  // Ferme l'extrémité de lecture du pipe dans le processus fils
+                dup2(pipefd[1], 1);  // Rediriger la sortie standard vers l'extrémité d'écriture du pipe
+                close(pipefd[1]);    // Fermer l'extrémité d'écriture du pipe dans le processus fils
+            }
+
+            // Exécution de la commande avec execve
+            ft_execve(g->line, g->tab_cmd[k]);  // Ici, g->line contient la commande à exécuter
+            exit(EXIT_FAILURE);  // Si execve échoue, sortir avec un code d'erreur
+        } 
+        else 
+        {  // Processus parent
+            if (prev_pipe_read != -1) 
+            {
+                close(prev_pipe_read);  // Fermer le descripteur de fichier du pipe précédent
+            }
+
+            if (i < num_pipes) 
+            {
+                close(pipefd[1]);  // Fermer l'extrémité d'écriture du pipe dans le processus parent
+                prev_pipe_read = pipefd[0];  // Mettre à jour prev_pipe_read pour lire à partir du pipe actuel dans la prochaine itération
+            }
+
+            // Attendre que le processus fils se termine
+            waitpid(pid, &g->status, 0);
+
+            // Incrémenter les compteurs pour la boucle while
+            i++;
+            k++;
+        }
+    }
+
+    // Fermer le descripteur de fichier du dernier pipe après avoir terminé les itérations
+    if (prev_pipe_read != -1) 
+    {
+        close(prev_pipe_read);
+    }
 }
