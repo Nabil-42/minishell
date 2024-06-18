@@ -59,6 +59,7 @@
   "files.associations": {
     "signal.h": "c",
     "libft.h": "c",
-    "minishell.h": "c"
+    "minishell.h": "c",
+    "env.h": "c"
   }
 }
