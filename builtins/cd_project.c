@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd_project.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/13 16:23:02 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/18 17:43:02 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
 #include "../lib/libft/includes/libft.h"
-#include "env.h"
+#include "../includes/minishell.h"
+#include "env/env.h"
 
 int cd_based_path(char *cmd)
 {

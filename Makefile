@@ -6,52 +6,62 @@
 #    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/06/14 11:08:11 by nabil            ###   ########.fr        #
+#    Updated: 2024/06/18 20:29:44 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #comipilation && shell cmd
-CC				:= 	gcc -O0 -g
-CFLAGS			:= 	-Wall -Wextra -Werror
-RMF				:= 	rm -f
-MV				:= 	mv
-MK				:=	mkdir
-#norminette
-NR				:= 	norminette
-NRCFLAGS		:= 	-R CheckForbiddenSourceHeader
-NRHFLAGS		:= 	-R CheckDefine
-#git
-GCL				:= 	git clone
-GADD			:=	git add
-GCMT			:=	git commit -m "auto commit : update"
-GPUSH			:=	git push
-#Color set
-GREEN			:= 	\033[0;32m
-NC				:= 	\033[0m
-#Errors && info directory
-INFOS			:= 	infos
-#LIBFT
-LIBFTDIR		:= 	./lib/libft
-LIBFT			:= 	$(LIBFTDIR)/libft.a
-#Sources
-HDRS			:=	./includes
-SRCS			:=	./main.c ./parsing/parsing.c ./builtins/echo/echo.c ./builtins/echo/double_quote.c ./builtins/echo/simple_quote.c ./signals/signals.c ./pipe/pipe_main.c ./builtins/cd_project.c ./builtins/pwd.c ./builtins/env.c
-OBJS			:= 	$(SRCS:.c=.o)
-#bonus
-BONUS			:=	tahar
-BONUSDIR		:=	./builtins
-B_SOURCES		:=	$(BONUSDIR)/env.c
-B_OBJECTS		:=	$(B_SOURCES:.c=.o)
-#Add Libs
-HEADERS			:= 	-I $(HDRS) -I $(LIBFTDIR)/includes -I $(BONUSDIR)
-LIBS			:= 	$(LIBFT) -lreadline -lncurses
+CC			:= gcc -O0 -g
+CFLAGS		:= -Wall -Wextra -Werror
+RMF			:= rm -f
+MK			:= mkdir
+NR			:= norminette
+NRCFLAGS	:= -R CheckForbiddenSourceHeader
+NRHFLAGS	:= -R CheckDefine
+GCL			:= git clone
+GADD		:= git add
+GCMT		:= git commit -m "auto commit: update"
+GPUSH		:= git push
+GREEN		:= \033[0;32m
+NC			:= \033[0m
+INFOS		:= infos
+LIBFTDIR	:= ./lib/libft
+LIBFT		:= $(LIBFTDIR)/libft.a
+HDRS		:= ./includes
+SRCS		:= ./main.c \
+			./signals/signals.c \
+			./pipe/pipe_main.c \
+			./parsing/parsing.c \
+			./builtins/echo/echo.c \
+			./builtins/echo/echo_simple_quote.c \
+			./builtins/echo/echo_double_quote.c \
+			./builtins/echo/echo_2.c \
+			./builtins/echo/dollar.c \
+			./builtins/echo/dollar_n.c \
+			./builtins/echo/dollar_double.c \
+			./builtins/env/env_1.c \
+			./builtins/env/env_2.c \
+			./builtins/env/env_3.c \
+			./builtins/redirection/right.c \
+			./builtins/redirection/right_double.c \
+			./builtins/builtin.c \
+			./builtins/cd_project.c \
+			./builtins/pwd.c
 
-NAME			:=	minishell
+OBJS		:= $(SRCS:.c=.o)
+BONUS		:= tahar
+BONUSDIR	:= ./builtins
+B_SOURCES	:= $(BONUSDIR)/env.c
+B_OBJECTS	:= $(B_SOURCES:.c=.o)
+HEADERS		:= -I $(HDRS) -I $(LIBFTDIR)/includes -I $(BONUSDIR)
+LIBS		:= $(LIBFT) -lreadline -lncurses
+
+NAME		:= minishell
 
 all: $(INFOS) libft $(NAME)
 
 %.o: %.c
-	@$(CC) $(CFLAGS)  -c $< -o $@ $(HEADERS)
+	@$(CC) $(CFLAGS) -c $< -o $@ $(HEADERS)
 
 $(INFOS):
 	@$(MK) -p $(INFOS)
@@ -62,7 +72,7 @@ $(NAME): $(OBJS) $(HDRS)
 	@echo "$(GREEN)* $(NAME) COMPILED *$(NC)"
 	@echo "$(GREEN)**********************$(NC)"
 
-bonus:$(BONUS)
+bonus: $(BONUS)
 
 $(BONUS): $(LIBS) $(B_OBJECTS)
 	@$(CC) $(CFLAGS) $(B_OBJECTS) $(LIBS) $(HEADERS) -o $(BONUS)
@@ -86,9 +96,9 @@ norme: $(INFOS)
 	@echo "$(GREEN)**********************$(NC)"
 
 push: fclean $(INFOS)
-	@$(GADD) Makefile $(SRCS) $(HDRS) >> $(INFOS)/git_infos.txt 2>&1 
-	@$(GCMT) >> $(INFOS)/git_infos.txt 2>&1 
-	@$(GPUSH)  >> $(INFOS)/git_infos.txt 2>&1
+	@$(GADD) Makefile $(SRCS) $(HDRS) >> $(INFOS)/git_infos.txt 2>&1
+	@$(GCMT) >> $(INFOS)/git_infos.txt 2>&1
+	@$(GPUSH) >> $(INFOS)/git_infos.txt 2>&1
 	@echo "$(GREEN)**********************$(NC)"
 	@echo "$(GREEN)*  $(NAME) PUSHED  *$(NC)"
 	@echo "$(GREEN)**********************$(NC)"
