@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:25:04 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/18 20:58:50 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 10:34:45 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ char *extract_env_variable_name_n(char *str, int *i)
             || (str[*i] >= 'a' && str[*i] <= 'z'))
             && str[*i] != '\0')
     {
-        variable_env[k++] = str[*i++];
+        variable_env[k] = str[*i];
+        ++*i;
+        ++k;
     }
     variable_env[k] = '\0';
 

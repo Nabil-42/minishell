@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/18 22:38:31 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 12:10:59 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,25 @@ int expand_variable(char *variable_env, t_echo *eko)
 
 int dollar_double(char *str, t_echo *eko)
 {
+    char *variable_env;
+    int result;
+    
     if (str[eko->i] != '$')
         return 0;
-
+    if (str[eko->i] == '$' && str[eko->i + 1] == ' ')
+        return 0;
+    if (str[eko->i] == '$' && str[eko->i + 1] == '\0')
+        return 0;
+    if (str[eko->i] == '$' && str[eko->i + 1] == '"')
+        return 0;
+    if (str[eko->i] == '$' && str[eko->i + 1] == '?')
+        return 0;
     ++eko->i;
-    char *variable_env = extract_variable_name(str, eko);
-
+    variable_env = extract_variable_name(str, eko);
     if (variable_env == NULL)
         return 0;
 
-    int result = expand_variable(variable_env, eko);
-
+    result = expand_variable(variable_env, eko);
     free(variable_env);
     return result;
 }

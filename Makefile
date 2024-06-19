@@ -6,7 +6,7 @@
 #    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/06/18 20:29:44 by nabil            ###   ########.fr        #
+#    Updated: 2024/06/19 15:21:12 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS		:= ./main.c \
 			./builtins/redirection/right_double.c \
 			./builtins/builtin.c \
 			./builtins/cd_project.c \
+			./builtins/exit.c \
 			./builtins/pwd.c
 
 OBJS		:= $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/15 16:32:38 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 12:52:45 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ft_get_prompt(void)
 	handl = getcwd(path, PATH_MAX);
 	if (handl == NULL)
 		return (NULL);
-	tmp = ft_strjoin("-> ", handl);
+	tmp = ft_strjoin("minishell:", handl);
 	if (!tmp)
 		return (NULL);
 	prompt = ft_strjoin(tmp, " ");
@@ -139,6 +139,7 @@ void	init(t_general *g)
         g->command_after_pipe = NULL;
 	g->count = 0;
 	g->nbr_token = 0;
+	g->$ = 0;
 }
 void multiple_pipe(char *line, t_general *g)
 {
@@ -153,7 +154,6 @@ void multiple_pipe(char *line, t_general *g)
 	count_commands(new_line, g);
 	free(g->line);
 	g->line = new_line;
-	// printf("g line = %s\n", g->line);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -175,7 +175,7 @@ int	main(int ac, char **av, char **envp)
 		if (g.line == NULL)
 			break ;
 		add_history(g.line);
-		if (builtin(g.line, &local_env))
+		if (builtin(g.line, &local_env, &g))
 			continue ;
 		multiple_pipe(g.line, &g);
 		g.nbr_token =  count_tokens(g.line);

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/18 22:57:33 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 12:22:06 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,12 @@ char *extract_env_variable_name(char *str, int *i)
         return NULL;
 
     ++(*i);
-    while (((str[*i] >= 'A' && str[*i] <= 'Z') || (str[*i] >= 'a' && str[*i] <= 'z')) && str[*i] != '\0')
+    while (((str[*i] >= 'A' && str[*i] <= 'Z')
+        || (str[*i] >= 'a' && str[*i] <= 'z')) && str[*i] != '\0')
     {
-        variable_env[k++] = str[*i++];
+        variable_env[k] = str[*i];
+        ++*i;
+        k++;
     }
     variable_env[k] = '\0';
     return variable_env;
@@ -51,11 +54,14 @@ char *extract_env_variable_name(char *str, int *i)
 
 int handle_variable_expansion(char *str, t_echo *eko, int *i)
 {
-    char *variable_env = extract_env_variable_name(str, i);
+    char *variable_env;
+    char *name;
+    
+    variable_env = extract_env_variable_name(str, i);
     if (variable_env == NULL)
         return 0;
 
-    char *name = getenv(variable_env);
+    name = getenv(variable_env);
     free(variable_env);
 
     if (name == NULL)
@@ -70,7 +76,21 @@ int handle_variable_expansion(char *str, t_echo *eko, int *i)
 }
 void copy_normal_char(char *str, t_echo *eko, int *i)
 {
-    eko->line[eko->j++] = str[*i];
+    char *itoua;
+    int k;
+    if (str[*i] == '$' && str[*i + 1] == '?')
+        {
+            k = 0;
+            itoua = ft_itoa(eko->$);
+            while (itoua[k])
+            {
+                eko->line[eko->j] = itoua[k];
+                ++eko->j;
+                k++;
+            }
+            ++*i;
+        }
+    else (eko->line[eko->j++] = str[*i]);
     ++(*i);
 }
 int dollar(char *str, t_echo *eko)
@@ -83,8 +103,9 @@ int dollar(char *str, t_echo *eko)
         if (handle_direction(str, i, eko))
             return 0;
 
-        if (str[i] == '$')
+        if (str[i] == '$' && str[i + 1] != '\0' && str[eko->i + 1] != '?')
         {
+            
             if (!handle_variable_expansion(str, eko, &i))
                 return 0;
             continue;

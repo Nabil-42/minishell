@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/18 23:02:59 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 12:06:34 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,27 @@ int handle_single_double_quote(char *str, t_echo *eko, int *flag)
 
 void copy_non_special_char(char *str, t_echo *eko)
 {
-    eko->line[eko->j] = str[eko->i];
+    char *itoua;
+    int k;
+    if (str[eko->i] == '$' && str[eko->i + 1] == '?')
+        {
+            k = 0;
+            itoua = ft_itoa(eko->$);
+            while (itoua[k])
+            {
+                eko->line[eko->j] = itoua[k];
+                ++eko->j;
+                k++;
+            }
+            --eko->j;
+            ++eko->i;
+        }
+    else (eko->line[eko->j] = str[eko->i]);
+    if (str[eko->i] == '$' && str[eko->i + 1] == ' ')
+        {
+            ++eko->j;
+            eko->line[eko->j] = ' ';
+        }
     ++eko->i;
     ++eko->j;
 }

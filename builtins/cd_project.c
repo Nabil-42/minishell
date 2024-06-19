@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/18 17:43:02 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 13:13:13 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../includes/minishell.h"
 #include "env/env.h"
 
-int cd_based_path(char *cmd)
+int cd_based_path(char *cmd, t_general *g)
 {
 	int		i;
 	int		status;
@@ -40,15 +40,26 @@ int cd_based_path(char *cmd)
 		free(tmp);
 		++i;
 	}
-	return (printf("minishell: %s: No such file or directory\n", cmd), 0);
+	if (*cmd != '$')
+	{
+		g->$ = 1;
+		ft_fprintf(2, " Aucun fichier ou dossier de ce type");	
+	}
+	return (0);
 }
 
-void cd_project(char **tab, t_env *local_env)
+void cd_project(char **tab, t_env *local_env, t_general *g)
 {
         char *user;
         char *tmp;
-		char path[PATH_MAX];
+	char path[PATH_MAX];
         
+	if (tab[2] != NULL)
+	{
+		g->$ = 1;
+		ft_fprintf(2, " trop d'arguments");
+		return;
+	}
         if (tab[1] == NULL)
         {
                 user = getenv("USER"); 
@@ -56,12 +67,12 @@ void cd_project(char **tab, t_env *local_env)
                 chdir(tmp);
                 free(tmp);
                 free_tab(tab);
-				tmp = ft_strjoin("PWD=",  getcwd(path, PATH_MAX));
-				ft_export(local_env, tmp);
+		tmp = ft_strjoin("PWD=",  getcwd(path, PATH_MAX));
+		ft_export(local_env, tmp);
                 return;
         }
-        if (cd_based_path(tab[1]) == 1)
-        {        
+        if (cd_based_path(tab[1], g) == 1)
+        {       
                 chdir(tab[1]);
                 free_tab(tab);        
         }

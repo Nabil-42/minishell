@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/18 23:26:34 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 11:47:51 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void    echo_2(char **tab, char *str, t_echo *eko, char *tmp)
         free(str);
         return;
     }
-    if (*tmp == '\0') 
+    if (*tmp == '\0' && str[0] != 39 && str[1] != 39) 
     {
         dollar(str, eko);
         free_tab(tab);

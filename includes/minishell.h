@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/18 23:40:07 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 13:17:28 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_general
         char *command_after_pipe;
         int count;
         int nbr_token;
+        int $;
         
 }t_general;
 
@@ -104,7 +105,7 @@ void	del(void *content);
 void skip_white_space(char *str, int i, char *output);
 
 
-
+void ft_exit(char **tab, t_general *g);
 
 
 int is_delimiter(char c);
@@ -119,8 +120,8 @@ void main_signal();
 void sig_handler(int sig);
 void pipe_while(t_general *g);
 void	ft_execve(char *line, char *tab_cmd);
-int builtin(char *line, t_env * local_env);
-void cd_project(char **tab, t_env *local_env);
+int builtin(char *line, t_env * local_env, t_general *g);
+void cd_project(char **tab, t_env *local_env, t_general *g);
 void pwd(char **tab);
 void export(char **tab);
 int dollar_double(char *str, t_echo *eko);
