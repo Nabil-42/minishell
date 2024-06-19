@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/19 13:17:28 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:09:41 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 typedef struct s_general
 {
         char **tab_cmd;
+        char **tab_dir;
         char *line;
         char *prompt;
         int status;
@@ -105,7 +106,30 @@ void	del(void *content);
 void skip_white_space(char *str, int i, char *output);
 
 
+///////////////////// PARSING ///////////////////////////
+int check_special_characters(const char *str);
+void count_commands(char *command_line, t_general *g);
+int is_delimiter(char c);
+int count_tokens(char *str);
+char *ft_strncpy(char *dest, const char *src, size_t n);
+int verif_quote_2(char *str, int i, int *double_quote_count, int *single_quote_count);
+char *verif_quote(char *str);
+int is_redirection(char c);
+void check_redirection_2(int *expecting_command, int *i, char *str);
+int is_space(char *str, int *i);
+int check_redirections(char *str);
+char **split_delimiters(const char *str, int *result_size);
+
+
+
+
+
+
+///////////////////// BUILTINS ///////////////////////////
 void ft_exit(char **tab, t_general *g);
+
+
+
 
 
 int is_delimiter(char c);

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/19 12:52:45 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:11:36 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int	verif_wight_space(char *line)
 void	init(t_general *g)
 {
 	g->tab_cmd = NULL;
+	g->tab_dir = NULL;
 	g->line = NULL;
 	g->prompt = NULL;
 	g->status = 0;
@@ -141,6 +142,37 @@ void	init(t_general *g)
 	g->nbr_token = 0;
 	g->$ = 0;
 }
+int is_delimiter(char c) 
+{
+    return (c == '|' || c == '<' || c == '>');
+}
+
+int count_tokens(char *str) 
+{
+    int count;
+    int i;
+    int inside_token;
+
+    count = 0;
+    i = 0;
+    inside_token = 0;
+    while (str[i] != '\0') 
+    {
+        if (is_delimiter(str[i]))
+            inside_token = 0;
+        else 
+        {
+            if (!inside_token) 
+	            {
+                    count++;
+                    inside_token = 1;
+                }
+        }
+        i++;
+    }
+    return count;
+}
+
 void multiple_pipe(char *line, t_general *g)
 {
 	char	*new_line;
@@ -175,14 +207,18 @@ int	main(int ac, char **av, char **envp)
 		if (g.line == NULL)
 			break ;
 		add_history(g.line);
-		if (builtin(g.line, &local_env, &g))
-			continue ;
-		multiple_pipe(g.line, &g);
 		g.nbr_token =  count_tokens(g.line);
 		g.tab_cmd = split_str(g.line, &g.nbr_token);
-		// printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[0] );
-		// printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[1] );
-		pipe_while(&g);
+		g.tab_dir = split_delimiters(g.line, &g.nbr_token);
+		printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[0] );
+		printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[1] );
+		printf(" %s\n", g.tab_dir[0] );
+		printf(" %s\n", g.tab_dir[1] );
+		printf(" %s\n", g.tab_dir[2] );
+		// if (builtin(g.line, &local_env, &g))
+		// 	continue ;
+		// multiple_pipe(g.line, &g);
+		// pipe_while(&g);
 		free(g.line);
 		flag = 0;
 	}

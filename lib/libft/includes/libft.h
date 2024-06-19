@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:27:58 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/13 17:07:13 by tissad           ###   ########.fr       */
+/*   Updated: 2024/06/19 15:58:28 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strcmp(char const *s1, char const *s2);
 double	ft_strtod(const char *str, char **endptr);
 void	free_tab(char **tab);
+int	ft_atoi_bis(const char *str);
 /******************************************************************************/
 /*                                  Bonus                                     */
 /******************************************************************************/

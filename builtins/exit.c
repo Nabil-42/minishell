@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:16:27 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/19 14:41:31 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/19 16:03:36 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,34 @@
 #include "../includes/minishell.h"
 #include "env/env.h"
 
-int is_number(const char *str)
-{
+int is_number(const char *str) {
+    // Ignore leading white spaces
+    while (isspace(*str)) 
+        str++;
+    
+    // Ignore leading double quotes
+    if (*str == '"') 
+        str++;
+    
+    // Check for leading plus or minus sign
     if (*str == '+' || *str == '-') 
         str++;
-    while (*str) 
-    {
+
+    // Ignore leading double quotes again if any after the sign
+    if (*str == '"')
+        str++;
+    // Check if the next character is a digit
+    if (!isdigit(*str))
+        return 0;
+    
+    // Loop through the rest of the string
+    while (*str) {
+        // Ignore double quotes in between
+        if (*str == '"') {
+            str++;
+            continue;
+        }
+        // If any non-digit character is found, return 0
         if (!isdigit(*str))
             return 0;
         str++;
@@ -36,13 +58,13 @@ void ft_exit(char **tab, t_general *g)
         if (tab[2] != NULL) 
         {
                 ft_fprintf(2, "exit: trop d'arguments\n");
-                return;
+                exit(1);
         }
         if (!is_number(tab[1])) 
         {
                 ft_fprintf(2, "exit: %s: argument numérique nécessaire\n", tab[1]);
                 exit(2);
         }
-        exit_code = atoi(tab[1]);
+        exit_code = ft_atoi_bis(tab[1]);
         exit(exit_code % 256);
 }
