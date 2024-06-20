@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:17:26 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/18 20:49:49 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 17:59:02 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@
 
 void	delete_envp(t_env *env)
 {
-	int		i;
-	
+	int	i;
+
 	i = 0;
 	while (i < MAX_ENV)
 	{
 		ft_lstclear(&env->env_p[i], del);
 		i++;
-	}	
+	}
 }
 
 int	exist_env_var(char *env_var, char *key, t_list *lst)
 {
-	t_list *lst_iter;
-	
+	t_list	*lst_iter;
+
 	lst_iter = lst;
 	while (lst_iter)
 	{
@@ -60,11 +60,11 @@ void	ft_export(t_env *env, char *env_var)
 	}
 	else
 	{
-		if(!exist_env_var(env_var, key, env->env_p[hash]))
+		if (!exist_env_var(env_var, key, env->env_p[hash]))
 		{
 			new_var = ft_lstnew((void *)ft_strdup(env_var));
 			ft_lstadd_back(&env->env_p[hash], new_var);
-			env->nb_var++;	
+			env->nb_var++;
 		}
 	}
 	free(key);
@@ -91,7 +91,6 @@ void	ft_env(t_env *env)
 	{
 		if (local_env[i])
 			printf("%s\n", local_env[i]);
-
 		i++;
 	}
 	free(local_env);
@@ -103,7 +102,7 @@ void	ft_env(t_env *env)
 // 	(void) av;
 // 	(void) envp;
 // 	t_env env;
-	
+
 // 	init_local_env(&env);
 // 	dup_env(&env, envp);
 // 	ft_export(&env, "VAR=roroooooooooooooo");
@@ -115,6 +114,6 @@ void	ft_env(t_env *env)
 // 	ft_export(&env, "VAR=0");
 // 	ft_env(&env);
 // 	ft_unset(&env, "VAR");
-// 	ft_env(&env);	
+// 	ft_env(&env);
 // 	delete_envp(&env);
 // }

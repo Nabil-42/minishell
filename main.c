@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/20 08:47:14 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 18:03:40 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ char	*verif_directoty(char *cmd, int status)
 	while (cmd[i])
 	{
 		if (cmd[i] == '\\' || cmd[i] == ';')
-			return (printf("minishell: %s: command not found\n", cmd), exit(128
-					+ status), NULL);
+			return (printf("minishell: %s: 6 command not found\n", cmd),
+				exit(128 + status), NULL);
 		if (cmd[i] == '/')
 			return (printf("minishell: %s: No such file or directory\n", cmd),
 				exit(128 + status), NULL);
 		++i;
 	}
-	return (printf("minishell: %s: command not found\n", cmd), exit(128
+	return (printf("minishell: %s: 7 command not found\n", cmd), exit(128
 			+ status), NULL);
 }
 
@@ -101,9 +101,9 @@ void	ft_execve(char *line, char *tab_cmd)
 {
 	char	**args;
 	char	*path_cmd;
-	int	execve_status;
+	int		execve_status;
+
 	(void)line;
-	
 	flag = 1;
 	args = cmd_args(tab_cmd);
 	path_cmd = based_path(args[0]);
@@ -129,73 +129,83 @@ int	verif_wight_space(char *line)
 	}
 	return (0);
 }
-void	init(t_general *g)
+int	is_delimiter(char c)
 {
-	g->tab_cmd = NULL;
-	g->tab_dir = NULL;
-	g->line = NULL;
-	g->prompt = NULL;
-	g->status = 0;
-	g->command_before_pipe = NULL;
-        g->command_after_pipe = NULL;
-	g->count = 0;
-	g->nbr_token = 0;
-	g->$ = 0;
+	return (c == '|' || c == '<' || c == '>');
 }
-int is_delimiter(char c) 
+
+int	count_tokens(char *str)
 {
-    return (c == '|' || c == '<' || c == '>');
+	int	count;
+	int	i;
+	int	inside_token;
+
+	count = 0;
+	i = 0;
+	inside_token = 0;
+	int in_single_quotes = 0; // 1: à l'intérieur de guillemets simples,
+		0: à l'extérieur
+	int in_double_quotes = 0; // 1: à l'intérieur de guillemets doubles,
+		0: à l'extérieur
+	while (str[i] != '\0')
+	{
+		// Gérer les guillemets simples
+		if (str[i] == '\'')
+		{
+			if (in_single_quotes)
+			{
+				in_single_quotes = 0;
+			}
+			else if (!in_double_quotes)
+			{
+				in_single_quotes = 1;
+			}
+			// Gérer les guillemets doubles
+		}
+		else if (str[i] == '"')
+		{
+			if (in_double_quotes)
+			{
+				in_double_quotes = 0;
+			}
+			else if (!in_single_quotes)
+			{
+				in_double_quotes = 1;
+			}
+		}
+		// Compter les tokens seulement si on n'est pas dans des guillemets
+		if (!in_single_quotes && !in_double_quotes)
+		{
+			if (is_delimiter(str[i]))
+			{
+				// Vérifier pour les délimiteurs doubles
+				if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<'
+						&& str[i + 1] == '<'))
+				{
+					count++;
+					i++; // Sauter le deuxième caractère du délimiteur double
+				}
+				else
+				{
+					count++;
+				}
+				inside_token = 0;
+			}
+			else
+			{
+				if (!inside_token)
+				{
+					count++;
+					inside_token = 1;
+				}
+			}
+		}
+		i++;
+	}
+	return (count);
 }
 
-int count_tokens(const char *str) {
-    int count = 0;
-    int i = 0;
-    int inside_token = 0;
-    int in_single_quotes = 0; // 1: à l'intérieur de guillemets simples, 0: à l'extérieur
-    int in_double_quotes = 0; // 1: à l'intérieur de guillemets doubles, 0: à l'extérieur
-
-    while (str[i] != '\0') {
-        // Gérer les guillemets simples
-        if (str[i] == '\'') {
-            if (in_single_quotes) {
-                in_single_quotes = 0;
-            } else if (!in_double_quotes) {
-                in_single_quotes = 1;
-            }
-        // Gérer les guillemets doubles
-        } else if (str[i] == '"') {
-            if (in_double_quotes) {
-                in_double_quotes = 0;
-            } else if (!in_single_quotes) {
-                in_double_quotes = 1;
-            }
-        }
-
-        // Compter les tokens seulement si on n'est pas dans des guillemets
-        if (!in_single_quotes && !in_double_quotes) {
-            if (is_delimiter(str[i])) {
-                // Vérifier pour les délimiteurs doubles
-                if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')) {
-                    count++;
-                    i++; // Sauter le deuxième caractère du délimiteur double
-                } else {
-                    count++;
-                }
-                inside_token = 0;
-            } else {
-                if (!inside_token) {
-                    count++;
-                    inside_token = 1;
-                }
-            }
-        }
-        i++;
-    }
-
-    return count;
-}
-
-void multiple_pipe(char *line, t_general *g)
+void	multiple_pipe(char *line, t_general *g)
 {
 	char	*new_line;
 
@@ -209,12 +219,25 @@ void multiple_pipe(char *line, t_general *g)
 	free(g->line);
 	g->line = new_line;
 }
+void	init(t_general *g)
+{
+	g->tab_cmd = NULL;
+	g->tab_dir = NULL;
+	g->line = NULL;
+	g->prompt = NULL;
+	g->command_before_pipe = NULL;
+	g->command_after_pipe = NULL;
+	g->status = 0;
+	g->count = 0;
+	g->nbr_token = 0;
+	g->$ = 0;
+}
 
 int	main(int ac, char **av, char **envp)
 {
 	t_general	g;
-	t_env 		local_env;
-	
+	t_env		local_env;
+
 	(void)ac;
 	(void)av;
 	init(&g);
@@ -227,22 +250,23 @@ int	main(int ac, char **av, char **envp)
 		g.line = readline(g.prompt);
 		free(g.prompt);
 		if (g.line == NULL)
-			break;
+			break ;
 		if (*g.line == '\0')
-			continue;
+			continue ;
 		add_history(g.line);
-		g.nbr_token =  count_tokens(g.line);
+		g.nbr_token = count_tokens(g.line);
 		g.tab_cmd = split_str(g.line, &g.nbr_token);
 		g.tab_dir = split_delimiters(g.line, &g.nbr_token);
-		// printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[0] );
-		// printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[1] );
-		// printf(" %s\n", g.tab_dir[0] );
-		// printf(" %s\n", g.tab_dir[1] );
-		// printf(" %s\n", g.tab_dir[2] );
 		if (builtin(g.tab_cmd[0], &local_env, &g))
+		{
+			free_tab(g.tab_cmd);
+			free_tab(g.tab_dir);
 			continue ;
-		multiple_pipe(g.line, &g);
-		pipe_while(&g);
+		}
+		// multiple_pipe(g.line, &g);
+		// pipe_while(&g);
+		free_tab(g.tab_cmd);
+		free_tab(g.tab_dir);
 		free(g.line);
 		flag = 0;
 	}

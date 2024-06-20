@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:34:49 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/18 20:49:56 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 17:59:06 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void	init_local_env(t_env *local_env, char **envp)
 	dup_env(local_env, envp);
 }
 
-
-
-char **get_local_env(t_env *env)
+char	**get_local_env(t_env *env)
 {
 	char	**local_env;
 	t_list	*lst_iter;

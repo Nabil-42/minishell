@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:33:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/18 20:49:53 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 17:59:04 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 #include "../../lib/libft/includes/libft.h"
 #include "env/env.h"
 
-unsigned int hash_function(const char *key, unsigned int table_size)
+unsigned int	hash_function(const char *key, unsigned int table_size)
 {
-    uint32_t hash;
-    const uint32_t fnv_prime = 16777619U;
-    
+	uint32_t		hash;
+	const uint32_t	fnv_prime = 16777619U;
+
 	hash = 2166136261U;
 	while (*key)
 	{
-        hash ^= (uint8_t)*key++;
-        hash *= fnv_prime;
-    }
-    return (hash % table_size);
+		hash ^= (uint8_t)*key++;
+		hash *= fnv_prime;
+	}
+	return (hash % table_size);
 }
 
 char	*get_key(char *env_var)
@@ -42,10 +42,10 @@ char	*get_key(char *env_var)
 
 void	dup_env(t_env *local_env, char **envp)
 {
-	t_list	*new_var;
-	char	*key;
-	int		hash;
-	int		i;
+	t_list *new_var;
+	char *key;
+	int hash;
+	int i;
 
 	i = 0;
 	while (envp[i])
