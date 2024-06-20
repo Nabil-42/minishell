@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/19 22:11:36 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 08:47:14 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,29 +147,51 @@ int is_delimiter(char c)
     return (c == '|' || c == '<' || c == '>');
 }
 
-int count_tokens(char *str) 
-{
-    int count;
-    int i;
-    int inside_token;
+int count_tokens(const char *str) {
+    int count = 0;
+    int i = 0;
+    int inside_token = 0;
+    int in_single_quotes = 0; // 1: à l'intérieur de guillemets simples, 0: à l'extérieur
+    int in_double_quotes = 0; // 1: à l'intérieur de guillemets doubles, 0: à l'extérieur
 
-    count = 0;
-    i = 0;
-    inside_token = 0;
-    while (str[i] != '\0') 
-    {
-        if (is_delimiter(str[i]))
-            inside_token = 0;
-        else 
-        {
-            if (!inside_token) 
-	            {
+    while (str[i] != '\0') {
+        // Gérer les guillemets simples
+        if (str[i] == '\'') {
+            if (in_single_quotes) {
+                in_single_quotes = 0;
+            } else if (!in_double_quotes) {
+                in_single_quotes = 1;
+            }
+        // Gérer les guillemets doubles
+        } else if (str[i] == '"') {
+            if (in_double_quotes) {
+                in_double_quotes = 0;
+            } else if (!in_single_quotes) {
+                in_double_quotes = 1;
+            }
+        }
+
+        // Compter les tokens seulement si on n'est pas dans des guillemets
+        if (!in_single_quotes && !in_double_quotes) {
+            if (is_delimiter(str[i])) {
+                // Vérifier pour les délimiteurs doubles
+                if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')) {
+                    count++;
+                    i++; // Sauter le deuxième caractère du délimiteur double
+                } else {
+                    count++;
+                }
+                inside_token = 0;
+            } else {
+                if (!inside_token) {
                     count++;
                     inside_token = 1;
                 }
+            }
         }
         i++;
     }
+
     return count;
 }
 
@@ -205,20 +227,22 @@ int	main(int ac, char **av, char **envp)
 		g.line = readline(g.prompt);
 		free(g.prompt);
 		if (g.line == NULL)
-			break ;
+			break;
+		if (*g.line == '\0')
+			continue;
 		add_history(g.line);
 		g.nbr_token =  count_tokens(g.line);
 		g.tab_cmd = split_str(g.line, &g.nbr_token);
 		g.tab_dir = split_delimiters(g.line, &g.nbr_token);
-		printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[0] );
-		printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[1] );
-		printf(" %s\n", g.tab_dir[0] );
-		printf(" %s\n", g.tab_dir[1] );
-		printf(" %s\n", g.tab_dir[2] );
-		// if (builtin(g.line, &local_env, &g))
-		// 	continue ;
-		// multiple_pipe(g.line, &g);
-		// pipe_while(&g);
+		// printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[0] );
+		// printf("gline = %s et tabcmd = %s\n",g.line, g.tab_cmd[1] );
+		// printf(" %s\n", g.tab_dir[0] );
+		// printf(" %s\n", g.tab_dir[1] );
+		// printf(" %s\n", g.tab_dir[2] );
+		if (builtin(g.tab_cmd[0], &local_env, &g))
+			continue ;
+		multiple_pipe(g.line, &g);
+		pipe_while(&g);
 		free(g.line);
 		flag = 0;
 	}

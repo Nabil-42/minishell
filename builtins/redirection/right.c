@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/19 20:09:21 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 08:14:53 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,15 @@ void skip_white_space(char *str, int i, char *output)
     output[j] = '\0';
 }
 
-int direction(char *str, int dir, t_echo *eko) 
+int direction(char *str, t_echo *eko, t_general *g) 
 {
     char output[1024];
     int fd;
     int saved_stdout;
     int i;
-
-    i = dir;
+    
+    i = 0;
+    (void)g;
     skip_white_space(str, i, output);
     fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     

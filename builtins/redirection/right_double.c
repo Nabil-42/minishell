@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:16:58 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/18 23:52:46 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 08:15:19 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 #include "../../lib/libft/includes/libft.h"
 #include "../env/env.h"
 
-int direction_double(char *str, int i, t_echo *eko)
+int direction_double(char *str, t_echo *eko, t_general *g)
 {
-        char output[1024];
+    char output[1024];
     int j = 0;
     int fd;
     int saved_stdout;
-
-    ++i;
-    ++i;
+    int i;
+    
+    i = 0;
+    (void)g;
     while (str[i] && str[i] <= 32)
         ++i;
     while (str[i] && j < 1023)

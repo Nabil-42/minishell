@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:09:46 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/19 22:15:28 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 08:40:38 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,13 @@ int is_double_delimiter(char c1, char c2) {
 }
 
 char **split_delimiters(const char *str, int *result_size) {
-    char **result = NULL;
-    *result_size = 0;
-
     int len = strlen(str);
     int in_quotes = 0; // 0: pas de guillemets, 1: guillemets simples, 2: guillemets doubles
-
-    for (int i = 0; i < len; i++) {
+    int delimiter_count = 0;
+    
+    // Première passe : compter les délimiteurs
+    int i = 0;
+    while (i < len) {
         if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\')) {
             if (in_quotes == 1)
                 in_quotes = 0;
@@ -126,10 +126,36 @@ char **split_delimiters(const char *str, int *result_size) {
         }
 
         if (!in_quotes && is_delimiter(str[i])) {
-            // Vérifier si le délimiteur est suivi immédiatement par le même délimiteur pour détecter les doubles
+            delimiter_count++;
+            if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')) {
+                i++; // Avancer un caractère de plus pour sauter le deuxième délimiteur
+            }
+        }
+        i++;
+    }
+
+    // Allouer de la mémoire pour tous les délimiteurs
+    char **result = malloc(delimiter_count * sizeof(char *));
+    *result_size = 0;
+
+    // Deuxième passe : remplir les délimiteurs
+    i = 0;
+    while (i < len) {
+        if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\')) {
+            if (in_quotes == 1)
+                in_quotes = 0;
+            else if (in_quotes == 0)
+                in_quotes = 1;
+        } else if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\')) {
+            if (in_quotes == 2)
+                in_quotes = 0;
+            else if (in_quotes == 0)
+                in_quotes = 2;
+        }
+
+        if (!in_quotes && is_delimiter(str[i])) {
             if (i + 1 < len && str[i] == '>' && str[i + 1] == '>') {
                 // Délimiteur double ">>"
-                result = realloc(result, (*result_size + 1) * sizeof(char *));
                 result[*result_size] = malloc(3); // Allouer de la mémoire pour le délimiteur double et le caractère nul
                 result[*result_size][0] = '>';
                 result[*result_size][1] = '>';
@@ -138,7 +164,6 @@ char **split_delimiters(const char *str, int *result_size) {
                 i++; // Avancer un caractère de plus pour sauter le deuxième délimiteur
             } else if (i + 1 < len && str[i] == '<' && str[i + 1] == '<') {
                 // Délimiteur double "<<"
-                result = realloc(result, (*result_size + 1) * sizeof(char *));
                 result[*result_size] = malloc(3); // Allouer de la mémoire pour le délimiteur double et le caractère nul
                 result[*result_size][0] = '<';
                 result[*result_size][1] = '<';
@@ -147,13 +172,13 @@ char **split_delimiters(const char *str, int *result_size) {
                 i++; // Avancer un caractère de plus pour sauter le deuxième délimiteur
             } else {
                 // Délimiteur simple
-                result = realloc(result, (*result_size + 1) * sizeof(char *));
                 result[*result_size] = malloc(2); // Allouer de la mémoire pour le délimiteur et le caractère nul
                 result[*result_size][0] = str[i];
                 result[*result_size][1] = '\0';
                 (*result_size)++;
             }
         }
+        i++;
     }
 
     return result;

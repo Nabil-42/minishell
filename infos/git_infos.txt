@@ -1,0 +1,97 @@
+Sur la branche main
+Votre branche est à jour avec 'origin/main'.
+
+Modifications qui ne seront pas validées :
+  (utilisez "git add/rm <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+  (valider ou annuler le contenu non suivi ou modifié dans les sous-modules)
+	supprimé :        builtins/builtin.o
+	supprimé :        builtins/cd_project.o
+	supprimé :        builtins/echo/dollar.o
+	supprimé :        builtins/echo/dollar_double.o
+	supprimé :        builtins/echo/dollar_n.o
+	supprimé :        builtins/echo/echo.o
+	supprimé :        builtins/echo/echo_2.o
+	supprimé :        builtins/echo/echo_double_quote.o
+	supprimé :        builtins/echo/echo_simple_quote.o
+	supprimé :        builtins/env/env_1.o
+	supprimé :        builtins/env/env_2.o
+	supprimé :        builtins/env/env_3.o
+	supprimé :        builtins/exit.o
+	supprimé :        builtins/pwd.o
+	supprimé :        builtins/redirection/right.o
+	supprimé :        builtins/redirection/right_double.o
+	supprimé :        lib/libft/ft_printf_src/ft_printf.o
+	supprimé :        lib/libft/ft_printf_src/ft_printf_convert.o
+	supprimé :        lib/libft/ft_printf_src/ft_printf_convert_i.o
+	supprimé :        lib/libft/ft_printf_src/ft_printf_get_flags.o
+	supprimé :        lib/libft/ft_printf_src/ft_printf_itoa_base.o
+	supprimé :        lib/libft/ft_printf_src/ft_printf_just.o
+	supprimé :        lib/libft/libft.a
+	supprimé :        lib/libft/src/ft_atoi.o
+	supprimé :        lib/libft/src/ft_bzero.o
+	supprimé :        lib/libft/src/ft_calloc.o
+	supprimé :        lib/libft/src/ft_isalnum.o
+	supprimé :        lib/libft/src/ft_isalpha.o
+	supprimé :        lib/libft/src/ft_isascii.o
+	supprimé :        lib/libft/src/ft_isdigit.o
+	supprimé :        lib/libft/src/ft_isprint.o
+	supprimé :        lib/libft/src/ft_itoa.o
+	supprimé :        lib/libft/src/ft_lstadd_back.o
+	supprimé :        lib/libft/src/ft_lstadd_front.o
+	supprimé :        lib/libft/src/ft_lstclear.o
+	supprimé :        lib/libft/src/ft_lstdelcond.o
+	supprimé :        lib/libft/src/ft_lstdelone.o
+	supprimé :        lib/libft/src/ft_lstiter.o
+	supprimé :        lib/libft/src/ft_lstlast.o
+	supprimé :        lib/libft/src/ft_lstmap.o
+	supprimé :        lib/libft/src/ft_lstnew.o
+	supprimé :        lib/libft/src/ft_lstsize.o
+	supprimé :        lib/libft/src/ft_memchr.o
+	supprimé :        lib/libft/src/ft_memcmp.o
+	supprimé :        lib/libft/src/ft_memcpy.o
+	supprimé :        lib/libft/src/ft_memmove.o
+	supprimé :        lib/libft/src/ft_memset.o
+	supprimé :        lib/libft/src/ft_putchar_fd.o
+	supprimé :        lib/libft/src/ft_putendl_fd.o
+	supprimé :        lib/libft/src/ft_putnbr_fd.o
+	supprimé :        lib/libft/src/ft_putstr_fd.o
+	supprimé :        lib/libft/src/ft_split.o
+	supprimé :        lib/libft/src/ft_strcat.o
+	supprimé :        lib/libft/src/ft_strchr.o
+	supprimé :        lib/libft/src/ft_strcmp.o
+	supprimé :        lib/libft/src/ft_strcpy.o
+	supprimé :        lib/libft/src/ft_strcspn.o
+	supprimé :        lib/libft/src/ft_strdup.o
+	supprimé :        lib/libft/src/ft_striteri.o
+	supprimé :        lib/libft/src/ft_strjoin.o
+	supprimé :        lib/libft/src/ft_strlcat.o
+	supprimé :        lib/libft/src/ft_strlcpy.o
+	supprimé :        lib/libft/src/ft_strlen.o
+	supprimé :        lib/libft/src/ft_strmapi.o
+	supprimé :        lib/libft/src/ft_strncmp.o
+	supprimé :        lib/libft/src/ft_strnstr.o
+	supprimé :        lib/libft/src/ft_strrchr.o
+	supprimé :        lib/libft/src/ft_strspn.o
+	supprimé :        lib/libft/src/ft_strtod.o
+	supprimé :        lib/libft/src/ft_strtok.o
+	supprimé :        lib/libft/src/ft_strtol.o
+	supprimé :        lib/libft/src/ft_strtrim.o
+	supprimé :        lib/libft/src/ft_substr.o
+	supprimé :        lib/libft/src/ft_tolower.o
+	supprimé :        lib/libft/src/ft_toupper.o
+	supprimé :        lib/libft/src/get_next_line.o
+	supprimé :        main.o
+	supprimé :        minishell
+	modifié :         minishell_tester (contenu non suivi)
+	supprimé :        parsing/parsing.o
+	supprimé :        parsing/parsing_2.o
+	supprimé :        parsing/parsing_3.o
+	supprimé :        pipe/pipe_main.o
+	supprimé :        signals/signals.o
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+	infos/
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")

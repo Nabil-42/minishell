@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/19 11:47:51 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 08:21:56 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ char *remake_str(char **tab, t_echo *eko, int i)
 }
 
 
-void    echo_2(char **tab, char *str, t_echo *eko, char *tmp)
+void    echo_2(t_general *g, char *str, t_echo *eko, char *tmp)
 {
-    if (tab[1] && ft_strcmp(tab[1], "-n") == 0) 
+    (void)g;
+    if (eko->tab[1] && ft_strcmp(eko->tab[1], "-n") == 0) 
     {
-        echo_args(str, eko, tab, tmp);
+        echo_args(str, eko, eko->tab, tmp);
         free(eko->line);
         free(str);
         return;
@@ -58,18 +59,18 @@ void    echo_2(char **tab, char *str, t_echo *eko, char *tmp)
     if (*tmp == '\0' && str[0] != 39 && str[1] != 39) 
     {
         dollar(str, eko);
-        free_tab(tab);
+        free_tab(eko->tab);
         free(eko->line);
         free(str);
         return;
     }
     printf("%s\n", tmp);
-    free_tab(tab);
+    free_tab(eko->tab);
     free(eko->line);
     free(str);
 }
 
-void echo(char **tab, t_echo *eko)
+void echo(char **tab, t_echo *eko, t_general *g)
 {
     char *str = NULL;
     char *tmp = NULL;
@@ -86,12 +87,12 @@ void echo(char **tab, t_echo *eko)
     eko->line = malloc(sizeof(char) * (eko->len_str + PATH_MAX + 1));
     if (!eko->line) 
         return (free(str), (void)0);
-    tmp = echo_verif_quote(str, eko);
+    tmp = echo_verif_quote(str, eko, g);
     if (tmp == NULL)
     {
         free(eko->line);
         free(str); 
         return;
     }
-    echo_2(tab, str, eko, tmp);
+    echo_2(g, str, eko, tmp);
 }

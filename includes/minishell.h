@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/19 22:09:41 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/20 08:13:48 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,13 @@ typedef struct s_echo
 {
         int flag;
         int flag_i;
-        int dir;
         char *line;
         int len_str;
         int i;
         int j;
         int $;
+        char **tab;
+        int check_dir;
 }t_echo;
 
 typedef struct s_signals
@@ -73,7 +74,7 @@ char *remake_str(char **tab, t_echo *eko, int i);
 void prepare_echo(char **tab, t_echo *eko, char **str, char **tmp);
 void execute_echo(char **tab, t_echo *eko, char *str, char *tmp);
 void finalize_echo(char **tab, t_echo *eko, char *tmp, char *str);
-void echo(char **tab, t_echo *eko);
+void echo(char **tab, t_echo *eko, t_general *g);
 int handle_consecutive_quotes(char *str, t_echo *eko);
 int handle_single_double_quote(char *str, t_echo *eko, int *flag);
 void copy_non_special_char(char *str, t_echo *eko);
@@ -81,7 +82,7 @@ int echo_take_of_double_quote(char *str, t_echo *eko, int n);
 void echo_args(char *str, t_echo *eko, char **tab, char *tmp);
 int handle_double_quote(char *str, t_echo *eko, int *i, int *test);
 int handle_single_quote(char *str, t_echo *eko, int *i, int *test);
-char *echo_verif_quote(char *str, t_echo *eko);
+char *echo_verif_quote(char *str, t_echo *eko, t_general *g);
 char *handle_remaining_chars(char *str, t_echo *eko, int test);
 int process_single_quotes(char *str, t_echo *eko, int *i, int *test);
 int process_double_quotes(char *str, t_echo *eko, int *i, int *test);
@@ -119,6 +120,8 @@ void check_redirection_2(int *expecting_command, int *i, char *str);
 int is_space(char *str, int *i);
 int check_redirections(char *str);
 char **split_delimiters(const char *str, int *result_size);
+int direction_double(char *str, t_echo *eko, t_general *g);
+int direction(char *str,t_echo *eko, t_general *g);
 
 
 
@@ -136,7 +139,6 @@ int is_delimiter(char c);
 int count_tokens(char *str);
 char **split_str(char *str, int *num_tokens);
 void count_commands(char *command_line, t_general *g);
-int check_redirections(char *str);
 int check_special_characters(const char *str);
 char *based_path(char *cmd);
 char *verif_quote(char *str);
@@ -152,8 +154,6 @@ int dollar_double(char *str, t_echo *eko);
 int echo_take_of_double_quote(char *str, t_echo *eko, int n);
 int dollar(char *str, t_echo *eko);
 int dollar_n(char *str, t_echo *eko);
-int direction_double(char *str, int i, t_echo *eko);
-int direction(char *str, int i, t_echo *eko);
 
 
 # endif
