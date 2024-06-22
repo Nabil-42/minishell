@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/20 17:59:17 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/22 09:31:20 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ int	direction(char *str, t_echo *eko, t_general *g, char *line)
 	(void)g;
 	(void)eko;
 	skip_white_space(str, i, output);
+	
 	fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		(perror("open"), exit(EXIT_FAILURE));
+		return (0);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (saved_stdout < 0)
 		(perror("dup"), close(fd), exit(EXIT_FAILURE));

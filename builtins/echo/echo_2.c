@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/20 17:39:08 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/21 21:57:19 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,27 +80,28 @@ void	echo_verif_4(t_echo *eko, int *i, char *str)
 
 void	echo_verif_3(t_echo *eko, t_general *g)
 {
-	int	i;
-
-	i = 0;
-	if (g->tab_dir == NULL)
+	
+	if (g->tab_dir[0] == NULL)
 		return ;
-	while (i < g->nbr_token)
+	while (g->index_dir < g->nbr_token + 1)
 	{
-		if (g->tab_dir[i][0] == '|')
-			return ;
-		if (g->tab_dir[i] != NULL && g->tab_dir[i][0] == '>')
+		if (g->tab_dir[g->index_dir][0] == '|')
 		{
-			if (g->tab_dir[i][1] != '\0')
+			return;
+		}
+		if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
+		{
+			if (g->tab_dir[g->index_dir][1] != '\0')
 			{
-				if (g->tab_dir[i][1] == '>')
-					direction_double(g->tab_cmd[i + 1], eko, g, eko->line);
+				if (g->tab_dir[g->index_dir][1] == '>')
+					(direction_double(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
 			}
-			else if (g->tab_dir[i] != NULL && g->tab_dir[i][0] == '>')
-				direction(g->tab_cmd[i + 1], eko, g, eko->line);
+			else if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
+				(direction(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
 		}
 		eko->check_dir = 1;
-		++i;
+		g->index_dir++;
+		printf("%d\n", g->index_dir);
 	}
 }
 

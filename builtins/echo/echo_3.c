@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo_3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 12:20:23 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/20 17:58:50 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/20 20:06:47 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 #include "../../lib/libft/includes/libft.h"
 #include "../env/env.h"
 

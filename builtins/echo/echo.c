@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/20 17:36:44 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/21 21:59:32 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 	if (!eko->line)
 		return (free(str), (void)0);
 	tmp = echo_verif_quote(str, eko, g);
+	
 	if (tmp == NULL)
 	{
+		
 		free(eko->line);
 		free(str);
 		return ;

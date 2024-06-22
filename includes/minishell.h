@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/20 18:02:44 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/20 21:16:58 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_general
 	int			count;
 	int			nbr_token;
 	int $;
+	int index_dir;
 
 }				t_general;
 
@@ -67,6 +68,9 @@ typedef struct s_signals
 {
 	int			i;
 }				t_signals;
+
+int 	direction_double_$(char *str, t_echo *eko, t_general *g, int $);
+int 	direction_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// ECHO ////////////////////////
 
@@ -92,8 +96,8 @@ int				process_double_quotes(char *str, t_echo *eko, int *i,
 void			echo_verif_3(t_echo *eko, t_general *g);
 void echo_verif_3_$(t_echo *eko, t_general *g);
 void			echo_verif_3_n(t_echo *eko, t_general *g);
-int direction_double_$(char *str, t_echo *eko, t_general *g, int $);
-int direction_$(char *str, t_echo *eko, t_general *g, int $);
+int 				direction_double_$(char *str, t_echo *eko, t_general *g, int $);
+int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// ENV ///////////////////////////
 
@@ -112,7 +116,6 @@ void			del(void *content);
 
 ///////////////////// REDIRECTION ///////////////////////////
 void			skip_white_space(char *str, int i, char *output);
-int direction_double_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// PARSING ///////////////////////////
 int				check_special_characters(const char *str);

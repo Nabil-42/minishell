@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/20 18:03:40 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/22 09:10:09 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,8 @@ int	count_tokens(char *str)
 	count = 0;
 	i = 0;
 	inside_token = 0;
-	int in_single_quotes = 0; // 1: à l'intérieur de guillemets simples,
-		0: à l'extérieur
-	int in_double_quotes = 0; // 1: à l'intérieur de guillemets doubles,
-		0: à l'extérieur
+	int in_single_quotes = 0;
+	int in_double_quotes = 0;
 	while (str[i] != '\0')
 	{
 		// Gérer les guillemets simples
@@ -231,6 +229,37 @@ void	init(t_general *g)
 	g->count = 0;
 	g->nbr_token = 0;
 	g->$ = 0;
+	g->index_dir = 0;
+}
+int boucle(t_general *g, t_env *local_env)
+{
+	int i;
+	int k;
+	k = 0;
+	i = 0;
+	while (i < g->nbr_token
+			|| (g->nbr_token == 0 && i == 0))
+		{
+			// printf("%s\n", g->tab_cmd[1]);
+			// printf("%s\n", g->tab_dir[i]);
+			// printf("%s\n", g->tab_dir[0]);
+			// printf("%s\n", g->tab_cmd[1]);
+			if (builtin(g->tab_cmd[k], local_env, g)
+				&& i == (g->nbr_token - 1))
+			{
+				break;
+			}
+			i++;
+			k += 2;
+		}
+		i = 0;
+		k = 0;
+		g->index_dir = 0;
+		if (g->tab_dir[0] != NULL)
+			free_tab(g->tab_dir);
+		if (g->tab_cmd[0] != NULL)
+			free_tab(g->tab_cmd);
+		return (0);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -238,6 +267,7 @@ int	main(int ac, char **av, char **envp)
 	t_general	g;
 	t_env		local_env;
 
+	
 	(void)ac;
 	(void)av;
 	init(&g);
@@ -257,12 +287,8 @@ int	main(int ac, char **av, char **envp)
 		g.nbr_token = count_tokens(g.line);
 		g.tab_cmd = split_str(g.line, &g.nbr_token);
 		g.tab_dir = split_delimiters(g.line, &g.nbr_token);
-		if (builtin(g.tab_cmd[0], &local_env, &g))
-		{
-			free_tab(g.tab_cmd);
-			free_tab(g.tab_dir);
-			continue ;
-		}
+		boucle(&g, &local_env);
+		continue;
 		// multiple_pipe(g.line, &g);
 		// pipe_while(&g);
 		free_tab(g.tab_cmd);
