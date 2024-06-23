@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 12:20:23 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/20 20:06:47 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/23 10:50:35 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void echo_verif_3_$(t_echo *eko, t_general *g)
 			else if (g->tab_dir[i] != NULL && g->tab_dir[i][0] == '>')
 				direction_$(g->tab_cmd[i + 1], eko, g, g->$);
 		}
-		eko->check_dir = 1;
+		g->check_dir = 1;
 		++i;
 	}
 }
@@ -61,7 +61,7 @@ void	echo_verif_3_n(t_echo *eko, t_general *g)
 			else if (g->tab_dir[i] != NULL && g->tab_dir[i][0] == '>')
 				direction(g->tab_cmd[i + 1], eko, g, eko->line);
 		}
-		eko->check_dir = 1;
+		g->check_dir = 1;
 		++i;
 	}
 }

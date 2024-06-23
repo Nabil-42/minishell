@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_n.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:25:04 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/20 17:58:44 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/23 10:51:30 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	dollar_n(char *str, t_echo *eko, t_general *g)
 		copy_normal_char_n(str, eko, &i);
 	}
 	echo_verif_3(eko, g);
-	if (eko->check_dir == 1)
+	if (g->check_dir == 1)
 		return (0);
 	eko->line[eko->j] = '\0';
 	printf("%s", eko->line);

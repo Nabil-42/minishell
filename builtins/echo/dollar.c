@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/21 23:21:07 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/23 17:08:17 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	handle_variable_expansion(char *str, t_echo *eko, int *i)
 	}
 	return (1);
 }
-void	copy_normal_char(char *str, t_echo *eko, int *i)
+void	copy_normal_char(char *str, t_echo *eko, int *i, t_general *g)
 {
 	char	*itoua;
 	int		k;
@@ -63,7 +63,7 @@ void	copy_normal_char(char *str, t_echo *eko, int *i)
 	if (str[*i] == '$' && str[*i + 1] == '?')
 	{
 		k = 0;
-		itoua = ft_itoa(eko->$);
+		itoua = ft_itoa(g->$);
 		while (itoua[k])
 		{
 			eko->line[eko->j] = itoua[k];
@@ -84,7 +84,7 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 	eko->j = 0;
 	while (str[i])
 	{
-		if (eko->check_dir == 1)
+		if (g->check_dir == 1)
 			return (0);
 		if (str[i] == '$' && str[i + 1] != '\0' && str[eko->i + 1] != '?')
 		{
@@ -92,10 +92,10 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 				return (0);
 			continue ;
 		}
-		copy_normal_char(str, eko, &i);
+		copy_normal_char(str, eko, &i, g);
 	}
 	echo_verif_3(eko, g);
-	if (eko->check_dir == 1)
+	if (g->check_pipe == 2)
 		return (0);
 	eko->line[eko->j] = '\0';
 	printf("%s\n", eko->line);

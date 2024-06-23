@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/22 08:51:31 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/23 17:07:19 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,15 @@ void	init_eko(t_echo *eko, char *line, t_general *g)
 	eko->line = NULL;
 	eko->flag_i = 0;
 	eko->flag = 0;
-	eko->tab = NULL;
-	eko->check_dir = 0;
-	
+	eko->tab = NULL;	
 }
 
 void	missingknow(t_echo *eko, t_general *g)
 {
 	echo_verif_3_$(eko, g);
-	if (eko->check_dir == 1)
+	if (g->check_dir == 1)
 		return ;
-	printf("%d\n", eko->$);
+	printf("%d\n", g->$);
 }
 
 int	check_line(char *line)
@@ -55,6 +53,11 @@ int	check_line(char *line)
 
 int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 {
+	if (g->tab_dir[0] != NULL)
+	{
+	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(g->tab_dir[0], "<") == 0)
+		return (echo_verif_3(eko, g), free_tab(eko->tab), 1);	
+	}
 	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(tab[1], "$?") == 0)
 		return (missingknow(eko, g), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "echo") == 0)
@@ -84,11 +87,11 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 		&& ft_strcmp(eko.tab[0], "exit") != 0
 		&& eko.tab[1] == NULL)
 		return (free(eko.tab), 0);
-	if (ft_strcmp(eko.tab[0], "echo") == 0
-		&& eko.tab[1] == NULL)
-	{
-		return (free_tab(eko.tab), 1);
-	}
+	// if (ft_strcmp(eko.tab[0], "echo") == 0
+	// 	&& eko.tab[1] == NULL)
+	// {
+	// 	return (free_tab(eko.tab), 1);
+	// }
 	result = execute_command(eko.tab, &eko, local_env, g);
 	return (result);
 }

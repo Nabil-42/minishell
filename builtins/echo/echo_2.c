@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/21 21:57:19 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/23 17:16:13 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../lib/libft/includes/libft.h"
 #include "../env/env.h"
 
-int	echo_verif_1(t_echo *eko, char *str, int *i)
+int	echo_verif_1(t_echo *eko, char *str, int *i, t_general *g)
 {
 	eko->flag_i = 0;
 	eko->flag = 0;
@@ -25,7 +25,7 @@ int	echo_verif_1(t_echo *eko, char *str, int *i)
 			++*i;
 			if (str[*i] == '"')
 			{
-				echo_take_of_double_quote(str, eko, *i);
+				echo_take_of_double_quote(str, eko, *i, g);
 				++*i;
 				eko->flag_i = 1;
 				eko->dir = *i;
@@ -80,29 +80,24 @@ void	echo_verif_4(t_echo *eko, int *i, char *str)
 
 void	echo_verif_3(t_echo *eko, t_general *g)
 {
-	
 	if (g->tab_dir[0] == NULL)
-		return ;
-	while (g->index_dir < g->nbr_token + 1)
-	{
-		if (g->tab_dir[g->index_dir][0] == '|')
-		{
-			return;
-		}
-		if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
-		{
-			if (g->tab_dir[g->index_dir][1] != '\0')
-			{
-				if (g->tab_dir[g->index_dir][1] == '>')
-					(direction_double(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
-			}
-			else if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
-				(direction(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
-		}
-		eko->check_dir = 1;
-		g->index_dir++;
-		printf("%d\n", g->index_dir);
-	}
+		return ;	
+	g->check_dir = 1;
+	handle_redirections_and_execute(eko->line, g, g->nbr_token, g->tab_dir);
+	// if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
+	// 	{
+	// 		if (g->tab_dir[g->index_dir][1] != '\0')
+	// 		{
+	// 			if (g->tab_dir[g->index_dir][1] == '>')
+	// 				(direction_double(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
+	// 		}
+	// 		else if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
+	// 			(direction(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
+	// 	}
+	// 	g->check_dir = 1;
+	// 	g->index_dir++;
+	// 	printf("%d\n", g->index_dir);
+	// }
 }
 
 char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
@@ -113,9 +108,9 @@ char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
 	i = 0;
 	while (str[i])
 	{
-		if (echo_verif_1(eko, str, &i) == 2)
+		if (echo_verif_1(eko, str, &i, g) == 2)
 			continue ;
-		else if (echo_verif_1(eko, str, &i) == 1)
+		else if (echo_verif_1(eko, str, &i, g) == 1)
 			return (NULL);
 		if (echo_verif_2(eko, str, &i) == 2)
 			continue ;
@@ -128,7 +123,7 @@ char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
 		return (eko->line);
 	echo_verif_4(eko, &i, str);
 	echo_verif_3(eko, g);
-	if (eko->check_dir == 1)
+	if (g->check_dir == 1)
 		return (NULL);
 	return (eko->line);
 }
@@ -142,7 +137,7 @@ void	echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
 		return ;
 	}
 	echo_verif_3(eko, g);
-	if (eko->check_dir == 1)
+	if (g->check_dir == 1)
 		return ;
 	printf("%s", tmp);
 	free_tab(eko->tab);

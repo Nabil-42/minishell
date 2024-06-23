@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:24 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/18 17:39:17 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/23 09:48:29 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <libft.h>
 #include "../../lib/libft/includes/libft.h"
+#include "../../includes/minishell.h"
 
 # define MAX_ENV 512
 
@@ -24,6 +25,7 @@ typedef struct s_env
     t_list  *env_p[MAX_ENV];
     int     nb_var;
 }   t_env;
+
 
 unsigned int hash_function(const char *key, unsigned int table_size);
 char	*get_key(char *env_var);

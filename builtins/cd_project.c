@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_project.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/20 17:59:22 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/23 17:23:06 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	cd_project(char **tab, t_env *local_env, t_general *g)
 	if (tab[2] != NULL)
 	{
 		g->$ = 1;
-		ft_fprintf(2, " trop d'arguments");
+		ft_fprintf(2, " trop d'arguments\n");
 		return ;
 	}
 	if (tab[1] == NULL)
@@ -74,7 +74,6 @@ void	cd_project(char **tab, t_env *local_env, t_general *g)
 	if (cd_based_path(tab[1], g) == 1)
 	{
 		chdir(tab[1]);
-		free_tab(tab);
 	}
 	tmp = ft_strjoin("PWD=", getcwd(path, PATH_MAX));
 	ft_export(local_env, tmp);

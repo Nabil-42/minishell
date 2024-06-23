@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_double_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/20 17:38:19 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/23 17:10:18 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	handle_single_double_quote(char *str, t_echo *eko, int *flag)
 	return (1);
 }
 
-void	copy_non_special_char(char *str, t_echo *eko)
+void	copy_non_special_char(char *str, t_echo *eko, t_general *g)
 {
 	char	*itoua;
 	int		k;
@@ -52,7 +52,7 @@ void	copy_non_special_char(char *str, t_echo *eko)
 	if (str[eko->i] == '$' && str[eko->i + 1] == '?')
 	{
 		k = 0;
-		itoua = ft_itoa(eko->$);
+		itoua = ft_itoa(g->$);
 		while (itoua[k])
 		{
 			eko->line[eko->j] = itoua[k];
@@ -73,7 +73,7 @@ void	copy_non_special_char(char *str, t_echo *eko)
 	++eko->j;
 }
 
-int	echo_take_of_double_quote(char *str, t_echo *eko, int n)
+int	echo_take_of_double_quote(char *str, t_echo *eko, int n, t_general *g)
 {
 	int	flag;
 	int	dollar_check;
@@ -94,7 +94,7 @@ int	echo_take_of_double_quote(char *str, t_echo *eko, int n)
 			return (-1);
 		if (dollar_check > 0)
 			continue ;
-		copy_non_special_char(str, eko);
+		copy_non_special_char(str, eko, g);
 	}
 	return (0);
 }

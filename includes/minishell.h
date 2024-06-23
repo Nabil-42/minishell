@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/20 21:16:58 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/23 19:16:23 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@
 
 # define PATH_MAX 4096
 
+
+
 typedef struct s_general
 {
 	char		**tab_cmd;
 	char		**tab_dir;
+	char		**tab_pipe;
 	char		*line;
 	char		*prompt;
 	char		*command_before_pipe;
@@ -47,8 +50,12 @@ typedef struct s_general
 	int			nbr_token;
 	int $;
 	int index_dir;
-
+	int		nbr_pipe;
+	int			check_dir;
+	int 		check_pipe;
+	t_env		local_env;
 }				t_general;
+
 
 typedef struct s_echo
 {
@@ -61,7 +68,7 @@ typedef struct s_echo
 	int			j;
 	int $;
 	char		**tab;
-	int			check_dir;
+
 }				t_echo;
 
 typedef struct s_signals
@@ -82,8 +89,7 @@ void			finalize_echo(char **tab, t_echo *eko, char *tmp, char *str);
 void			echo(char **tab, t_echo *eko, t_general *g);
 int				handle_consecutive_quotes(char *str, t_echo *eko);
 int				handle_single_double_quote(char *str, t_echo *eko, int *flag);
-void			copy_non_special_char(char *str, t_echo *eko);
-int				echo_take_of_double_quote(char *str, t_echo *eko, int n);
+void			copy_non_special_char(char *str, t_echo *eko, t_general *g);
 void			echo_args(char *str, t_echo *eko, char *tmp, t_general *g);
 int				handle_double_quote(char *str, t_echo *eko, int *i, int *test);
 int				handle_single_quote(char *str, t_echo *eko, int *i, int *test);
@@ -116,6 +122,7 @@ void			del(void *content);
 
 ///////////////////// REDIRECTION ///////////////////////////
 void			skip_white_space(char *str, int i, char *output);
+int handle_redirections_and_execute(char *line, t_general *g, int redir_count, char **tab_dir);
 
 ///////////////////// PARSING ///////////////////////////
 int				check_special_characters(const char *str);
@@ -138,23 +145,35 @@ int				direction(char *str, t_echo *eko, t_general *g, char *line);
 ///////////////////// BUILTINS ///////////////////////////
 void			ft_exit(char **tab, t_general *g);
 
+///////////////////// PIPE ///////////////////////////
+char **split_by_pipe(char *cmd);
+void execute_pipeline(char **commands, t_general *g, int *redir_counts, char ***redir_types);
+int	count_pipe(char *str);
+
+
+
+
+
+
+
+
 int				is_delimiter(char c);
 int				count_tokens(char *str);
 char			**split_str(char *str, int *num_tokens);
 void			count_commands(char *command_line, t_general *g);
 int				check_special_characters(const char *str);
-char			*based_path(char *cmd);
+char			*based_path(char *cmd, t_general *g);
 char			*verif_quote(char *str);
 void			main_signal(void);
 void			sig_handler(int sig);
 void			pipe_while(t_general *g);
-void			ft_execve(char *line, char *tab_cmd);
+void			ft_execve(char *line, char *tab_cmd, t_general *g);
 int				builtin(char *line, t_env *local_env, t_general *g);
 void			cd_project(char **tab, t_env *local_env, t_general *g);
 void			pwd(char **tab);
 void			export(char **tab);
 int				dollar_double(char *str, t_echo *eko);
-int				echo_take_of_double_quote(char *str, t_echo *eko, int n);
+int				echo_take_of_double_quote(char *str, t_echo *eko, int n, t_general *g);
 int				dollar(char *str, t_echo *eko, t_general *g);
 int				dollar_n(char *str, t_echo *eko, t_general *g);
 int				direction_double_n(char *str, t_echo *eko, t_general *g,
