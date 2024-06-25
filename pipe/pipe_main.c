@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 19:26:42 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 15:29:06 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,41 +79,58 @@ char **split_by_pipe(char *cmd)
     int i = 0;
     int count = 1;
     char **result;
-    char *temp, *cmd_copy;
+    char *cmd_copy;
+    char *token;
 
-    while (cmd[i] != '\0') {
-        if (cmd[i] == '|') {
+    // Count the number of pipes in the command
+    while (cmd[i] != '\0') 
+    {
+        if (cmd[i] == '|') 
+        {
             count++;
         }
         i++;
     }
 
+    // Allocate memory for the result array
     result = malloc((count + 1) * sizeof(char *));
-    if (result == NULL) {
+    if (result == NULL) 
+    {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
 
+    // Duplicate the command string
     cmd_copy = ft_strdup(cmd);
-    if (cmd_copy == NULL) {
+    if (cmd_copy == NULL) 
+    {
         perror("strdup");
         exit(EXIT_FAILURE);
     }
 
-    temp = strtok(cmd_copy, "|");
+    // Tokenize the string by "|"
     i = 0;
-    while (temp != NULL) 
+    token = strtok(cmd_copy, "|");
+    while (token != NULL) 
     {
-        result[i] = ft_strdup(temp);
-        if (result[i] == NULL) {
+        // Remove leading and trailing spaces from the token
+        while (*token == ' ') token++;
+        char *end = token + strlen(token) - 1;
+        while (end > token && *end == ' ') end--;
+        end[1] = '\0';
+
+        result[i] = ft_strdup(token);
+        if (result[i] == NULL) 
+        {
             perror("strdup");
             exit(EXIT_FAILURE);
         }
         i++;
-        temp = ft_strtok(NULL, "|");
+        token = strtok(NULL, "|");
     }
     result[i] = NULL;
 
+    // Free the duplicated command string
     free(cmd_copy);
 
     return result;

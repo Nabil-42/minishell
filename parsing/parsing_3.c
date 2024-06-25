@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:07:44 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 09:27:07 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 15:56:39 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	count_pipe(char *str)
 				}
 				else
 				{
-					count++;
+					++i;
 				}
 				inside_token = 0;
 			}
@@ -112,7 +112,6 @@ int	count_pipe(char *str)
 			{
 				if (!inside_token)
 				{
-					count++;
 					inside_token = 1;
 				}
 			}

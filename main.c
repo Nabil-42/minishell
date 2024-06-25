@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/23 19:29:50 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 16:05:44 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int	verif_wight_space(char *line)
 	}
 	return (0);
 }
+
 int	is_delimiter(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
@@ -269,7 +270,7 @@ int	main(int ac, char **av, char **envp)
 	t_general	g;
 	t_env		local_env;
 
-	
+
 	(void)ac;
 	(void)av;
 	g.status = 0;
@@ -287,10 +288,14 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		add_history(g.line);
 		g.nbr_token = count_tokens(g.line);
-		g.nbr_token = count_pipe(g.line);
+		g.nbr_pipe = count_pipe(g.line);
 		g.tab_cmd = split_str(g.line, &g.nbr_token);
 		g.tab_dir = split_delimiters(g.line, &g.nbr_token);
 		g.tab_pipe = split_by_pipe(g.line);
+
+		// printf("tab pipe = %s\n", g.tab_cmd[0]);
+		// printf("tab pipe = %s\n", g.tab_cmd[1]);
+		// printf("tab pipe = %s\n", g.tab_cmd[2]);
 		boucle(&g, &local_env);
 		continue;
 		// multiple_pipe(g.line, &g);

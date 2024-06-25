@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/23 19:16:23 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 16:09:01 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,18 +107,7 @@ int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// ENV ///////////////////////////
 
-int				cond(void *value, void *content);
-void			ft_env(t_env *env);
-void			ft_unset(t_env *env, char *key);
-void			ft_export(t_env *env, char *env_var);
-int				exist_env_var(char *env_var, char *key, t_list *lst);
-void			delete_envp(t_env *env);
-unsigned int	hash_function(const char *key, unsigned int table_size);
-char			*get_key(char *env_var);
-void			dup_env(t_env *local_env, char **envp);
-void			init_local_env(t_env *local_env, char **envp);
-char			**get_local_env(t_env *env);
-void			del(void *content);
+
 
 ///////////////////// REDIRECTION ///////////////////////////
 void			skip_white_space(char *str, int i, char *output);
@@ -169,7 +158,7 @@ void			sig_handler(int sig);
 void			pipe_while(t_general *g);
 void			ft_execve(char *line, char *tab_cmd, t_general *g);
 int				builtin(char *line, t_env *local_env, t_general *g);
-void			cd_project(char **tab, t_env *local_env, t_general *g);
+void			cd_project(char **tab, t_general *g);
 void			pwd(char **tab);
 void			export(char **tab);
 int				dollar_double(char *str, t_echo *eko);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:09:46 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/21 21:38:08 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 15:33:27 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,16 +116,18 @@ char	**split_str(char *str, int *result_size)
 	return (result);
 }
 
-char **split_delimiters(const char *str, int *result_size) {
+char **split_delimiters(const char *str, int *result_size) 
+{
     int len = strlen(str);
     int in_single_quotes = 0;
     int in_double_quotes = 0;
     int delimiter_count = 0;
 
-    // Première passe : compter les délimiteurs
     int i = 0;
-    while (i < len) {
-        if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\')) {
+    while (i < len) 
+	{
+        if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\')) 
+		{
             in_single_quotes = !in_single_quotes;
         } else if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\')) {
             in_double_quotes = !in_double_quotes;
@@ -147,10 +149,13 @@ char **split_delimiters(const char *str, int *result_size) {
     *result_size = 0;
 
     i = 0;
-    while (i < len) {
-        if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\')) {
+    while (i < len) 
+	{
+        if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\')) 
+		{
             in_single_quotes = !in_single_quotes;
-        } else if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\')) {
+        } else if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\')) 
+		{
             in_double_quotes = !in_double_quotes;
         }
 

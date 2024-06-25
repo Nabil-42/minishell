@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_project.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/23 17:23:06 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 16:07:25 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ int	cd_based_path(char *cmd, t_general *g)
 	return (0);
 }
 
-void	cd_project(char **tab, t_env *local_env, t_general *g)
+void	cd_project(char **tab, t_general *g)
 {
 	char	*user;
 	char	*tmp;
-	char	path[PATH_MAX];
+	//char	path[PATH_MAX];
 
 	if (tab[2] != NULL)
 	{
@@ -67,15 +67,10 @@ void	cd_project(char **tab, t_env *local_env, t_general *g)
 		chdir(tmp);
 		free(tmp);
 		free_tab(tab);
-		tmp = ft_strjoin("PWD=", getcwd(path, PATH_MAX));
-		ft_export(local_env, tmp);
 		return ;
 	}
 	if (cd_based_path(tab[1], g) == 1)
 	{
 		chdir(tab[1]);
 	}
-	tmp = ft_strjoin("PWD=", getcwd(path, PATH_MAX));
-	ft_export(local_env, tmp);
-	free(tmp);
 }

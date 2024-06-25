@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 17:07:19 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 16:15:44 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ int	check_line(char *line)
 
 int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 {
+	//cest deguuuuuuuuuuuuuuuuueeeuuuuueuuueueuueuueuueuueueuhyhhhh
+	int i =0;
+	
+	local_env = &g->local_env;
 	if (g->tab_dir[0] != NULL)
 	{
 	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(g->tab_dir[0], "<") == 0)
@@ -63,11 +67,13 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 	if (ft_strcmp(tab[0], "echo") == 0)
 		return (echo(tab, eko, g), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "cd") == 0)
-		return (cd_project(tab, local_env, g), free_tab(eko->tab), 1);
+		return (cd_project(tab, g), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "pwd") == 0)
 		return (pwd(tab), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "env") == 0)
 		return (ft_env(local_env), free_tab(eko->tab), 1);
+	if (ft_strcmp(tab[0], "export") == 0)
+		return (ft_export(local_env, tab), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "exit") == 0)
 		return (ft_exit(tab, g), free_tab(eko->tab), 1);
 	return (0);
@@ -77,9 +83,9 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 {
 	t_echo	eko;
 	int		result;
-
 	init_eko(&eko, line, g);
 	eko.tab = ft_split(line, ' ');
+	// printf("eko.tab = %s", eko.tab[2]);
 	if (ft_strcmp(eko.tab[0], "echo") != 0 
 		&& ft_strcmp(eko.tab[0], "cd") != 0
 		&& ft_strcmp(eko.tab[0], "pwd") != 0
