@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/26 10:43:39 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:21:49 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 		return (ft_export(local_env, tab), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "exit") == 0)
 		return (ft_exit(tab, g), free_tab(eko->tab), 1);
+	free_tab(eko->tab);
 	return (0);
 }
 
@@ -71,12 +72,13 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 		&& ft_strcmp(eko.tab[0],"env") != 0
 		&& ft_strcmp(eko.tab[0], "exit") != 0
 		&& eko.tab[1] == NULL)
-		return (free(eko.tab), 0);
+		return (free_tab(eko.tab), 0);
 	// if (ft_strcmp(eko.tab[0], "echo") == 0
 	// 	&& eko.tab[1] == NULL)
 	// {
 	// 	return (free_tab(eko.tab), 1);
 	// }
 	result = execute_command(eko.tab, &eko, local_env, g);
+	
 	return (result);
 }

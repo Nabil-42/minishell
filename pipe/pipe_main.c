@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/26 10:40:57 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:41:52 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ void execute_pipeline(char **tab_pipe, t_general *g)
             // }
         
             handle_redirections_and_execute(g->tab_pipe[i], g);
-            free(g->tab_dir);
-            free(g->tab_cmd);
+            free_tab(g->tab_pipe);
+            free_tab(g->tab_dir);
+	        free_tab(g->tab_cmd);
+	        free_tab(g->tab_file);
             exit(EXIT_SUCCESS);
         }
 	else {
@@ -139,7 +141,7 @@ char **split_by_pipe(char *cmd)
 
 
 
-void	pipe_while(t_general *g)
+void	pipe_while(t_general *g, char *str)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -187,6 +189,10 @@ void	pipe_while(t_general *g)
 			}
 			// Exécution de la commande avec execve
 			ft_execve(g->tab_cmd[0], g->tab_cmd[0], g);
+            free_tab(g->tab_pipe);free_tab(g->tab_dir);
+	    free_tab(g->tab_cmd);
+	    free(str);
+	    free_tab(g->tab_file);
 			exit(EXIT_FAILURE);
 		}
 		else

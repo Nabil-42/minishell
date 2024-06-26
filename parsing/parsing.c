@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:09:46 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/25 20:42:49 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 14:35:50 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char **split_delimiters(const char *str, int *result_size)
         i++;
     }
 
-    char **result = malloc((delimiter_count + 2) * sizeof(char *)); // +1 pour le NULL final
+    char **result = malloc((delimiter_count + 1) * sizeof(char *));
     if (!result) {
         return NULL;
     }

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/26 11:11:24 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:01:35 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int 	direction_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// ECHO ////////////////////////
 
-int				echo_take_of_simple_quote(char *str, t_echo *eko, int n);
+int				echo_take_of_simple_quote(char *str, t_echo *eko, int n, t_general *g);
 char			*remake_str(char **tab, t_echo *eko, int i);
 void			prepare_echo(char **tab, t_echo *eko, char **str, char **tmp);
 void			execute_echo(char **tab, t_echo *eko, char *str, char *tmp);
@@ -109,7 +109,7 @@ int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
 char	*remake_str_bis(char **tab);
 
 ///////////////////// ENV ///////////////////////////
-
+void	delete_envp(char **envp);
 
 
 ///////////////////// REDIRECTION ///////////////////////////
@@ -158,7 +158,7 @@ char			*based_path(char *cmd, t_general *g);
 char			*verif_quote(char *str);
 void			main_signal(void);
 void			sig_handler(int sig);
-void			pipe_while(t_general *g);
+void			pipe_while(t_general *g, char *str);
 void			ft_execve(char *line, char *tab_cmd, t_general *g);
 int				builtin(char *line, t_env *local_env, t_general *g);
 void			cd_project(char **tab, t_general *g);

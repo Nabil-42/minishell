@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 17:10:18 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:31:40 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	copy_non_special_char(char *str, t_echo *eko, t_general *g)
 		}
 		--eko->j;
 		++eko->i;
+		free(itoua);
 	}
 	else
 		(eko->line[eko->j] = str[eko->i]);

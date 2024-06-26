@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/26 10:59:17 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:44:21 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,18 @@ char	*verif_directoty(char *cmd, int status, t_general *g)
 	{
 		if (cmd[i] == '\\' || cmd[i] == ';')
 			return (printf("minishell: %s: 6 command not found\n", cmd),
-				exit(128 + status), NULL);
+			g->$ = (128 + status), NULL);
 		if (cmd[i] == '/')
 		{
 			g->$ = 1;
 			return (printf("minishell: %s: No such file or directory\n", cmd),
-				exit(128 + status), NULL);
+				g->$ = (128 + status), NULL);
 			
 		}
 		++i;
 	}
-	return (printf("minishell: %s: command not found\n", cmd), exit(128
-			+ status), NULL);
+	return (printf("minishell: %s: command not found\n", cmd), 
+		g->$ = (128 + status), NULL);
 }
 
 char	*based_path(char *cmd, t_general *g)
@@ -70,7 +70,8 @@ char	*based_path(char *cmd, t_general *g)
 		free(tmp);
 		++i;
 	}
-	return (verif_directoty(cmd, status, g));
+	free_tab(tab);
+	return (verif_directoty(cmd, status, g), NULL);
 }
 
 char	*ft_get_prompt(void)
@@ -111,13 +112,15 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	flag = 1;
 	args = cmd_args(tab_cmd);
 	path_cmd = based_path(args[0], g);
+	if (path_cmd == NULL)
+	    return(free_tab(args));
 	execve_status = execve(path_cmd, args, NULL);
 	if (execve_status != 0)
 	{
 		free_tab(args);
 		free(path_cmd);
 		return (printf("minishell: %s: trouver msg derreur\n", args[0]),
-			exit(128 + execve_status), (void)1);
+			g->$ = (128 + execve_status), (void)1);
 	}
 }
 int	verif_wight_space(char *line)
@@ -222,31 +225,23 @@ void	init(t_general *g)
 	g->tab_file = NULL;
 
 }
-int boucle(t_general *g, t_env *local_env)
+int boucle(t_general *g)
 {
 
-	(void)local_env;
 	if (g->nbr_pipe != 0)
 	{
 		execute_pipeline(g->tab_pipe, g);
 	}
 	else {
-		handle_redirections_and_execute(g->line, g);
+		handle_redirections_and_execute_simple(g->line, g);
 	}
-	if (g->tab_pipe[0] != NULL)
-	    free_tab(g->tab_pipe);
-	// if (g->tab_dir[0] != NULL)
-	//     free_tab(g->tab_dir);
-	// if (g->tab_cmd[0] != NULL)
-	//     free_tab(g->tab_cmd);
+	free_tab(g->tab_pipe);
 		return (0);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_general	g;
-	t_env		local_env;
-
 
 	(void)envp;
 	(void)ac;
@@ -254,8 +249,7 @@ int	main(int ac, char **av, char **envp)
 	g.status = 0;
 	init(&g);
 	main_signal();
-	init_local_env(&g.local_env, envp);
-	
+	// init_local_env(&g.local_env, envp);
 	while (1)
 	{
 		g.prompt = ft_get_prompt();
@@ -268,12 +262,7 @@ int	main(int ac, char **av, char **envp)
 		add_history(g.line);
 		g.nbr_pipe = count_pipe(g.line);
 		g.tab_pipe = split_by_pipe(g.line);
-		boucle(&g, &local_env);
-		continue;
-		// multiple_pipe(g.line, &g);
-		// pipe_while(&g);
-		free_tab(g.tab_cmd);
-		free_tab(g.tab_dir);
+		boucle(&g);
 		free(g.line);
 		flag = 0;
 	}
