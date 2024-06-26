@@ -3,22 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:07:44 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/25 15:56:39 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:30:17 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib/libft/includes/libft.h"
 #include "minishell.h"
-
-int	is_redirection(char c)
-{
-	if (c == '<' || c == '>' || c == '|')
-		return (1);
-	return (0);
-}
 
 int	check_special_characters(const char *str)
 {
@@ -57,64 +50,36 @@ int	count_pipe(char *str)
 {
 	int	count;
 	int	i;
-	int	inside_token;
+	int	in_single_quotes;
+	int	in_double_quotes;
 
 	count = 0;
 	i = 0;
-	inside_token = 0;
-	int in_single_quotes = 0;
-	int in_double_quotes = 0;
+	in_single_quotes = 0;
+	in_double_quotes = 0;
 	while (str[i] != '\0')
 	{
 		// Gérer les guillemets simples
 		if (str[i] == '\'')
 		{
 			if (in_single_quotes)
-			{
 				in_single_quotes = 0;
-			}
 			else if (!in_double_quotes)
-			{
 				in_single_quotes = 1;
-			}
-			// Gérer les guillemets doubles
 		}
+		// Gérer les guillemets doubles
 		else if (str[i] == '"')
 		{
 			if (in_double_quotes)
-			{
 				in_double_quotes = 0;
-			}
 			else if (!in_single_quotes)
-			{
 				in_double_quotes = 1;
-			}
 		}
-		// Compter les tokens seulement si on n'est pas dans des guillemets
-		if (!in_single_quotes && !in_double_quotes)
+		// Compter les pipes seulement si on n'est pas dans des guillemets
+		else if (!in_single_quotes && !in_double_quotes)
 		{
 			if (is_delimiter_pipe(str[i]))
-			{
-				// Vérifier pour les délimiteurs doubles
-				if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<'
-						&& str[i + 1] == '<'))
-				{
-					count++;
-					i++; // Sauter le deuxième caractère du délimiteur double
-				}
-				else
-				{
-					++i;
-				}
-				inside_token = 0;
-			}
-			else
-			{
-				if (!inside_token)
-				{
-					inside_token = 1;
-				}
-			}
+				count++;
 		}
 		i++;
 	}

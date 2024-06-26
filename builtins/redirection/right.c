@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/25 15:40:52 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/26 11:13:56 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,38 +143,51 @@ int apply_redirection(int fd, char *redir_type, t_general *g)
 
 void exe_cmd(char *cmd, t_general *g) 
 {
-	if (g->check_dir == 1)
-	{
-		printf("%s\n", cmd);
-	}
-	else(ft_execve(cmd, cmd, g));
+	
+	if (builtin(cmd, &g->local_env, g))
+		;
+	else if (g->nbr_pipe > 0) 
+		ft_execve(cmd, cmd, g);
+	else (pipe_while(g));
 }
 
-int handle_redirections_and_execute(char *cmd, t_general *g, int redir_count, char **redir_types) 
+int handle_redirections_and_execute(char *cmd, t_general *g) 
 {
     int fd;
     int saved_stdout = dup(STDOUT_FILENO);
     int saved_stdin = dup(STDIN_FILENO);
     int i = 0;
+    char *str;
 
     if (saved_stdout < 0 || saved_stdin < 0) 
     {
         perror("dup");
-	g->$ = 0;
+	g->$ = 1;
         return -1;
     }
-	
-    while (i < redir_count) 
+    g->tab_cmd = split_str(cmd, &g->nbr_dir);
+        // printf("tab_cmd[%d] = %s\n",i, g->tab_cmd[0]);
+        //     printf("tab_cmd[%d] = %s\n",i, g->tab_cmd[1]);
+        //     printf("tab_cmd[%d] = %s\n",i, g->tab_cmd[2]);
+    g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
+//     printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
+//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[1]);
+//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[2]);
+	g->tab_file = split_file(cmd, &g->nbr_file);
+	// printf("tab_dir[%d] = %s\n",i, g->tab_file[0]);
+        // printf("tab_dir[%d] = %s\n",i, g->tab_file[1]);
+        // printf("tab_dir[%d] = %s\n",i, g->tab_file[2]);
+	str = remake_str_bis(g->tab_cmd);
+    while (i < g->nbr_file) 
     {
-	
-        fd = handle_single_redirection(skip(g->tab_cmd[i + 1]), redir_types[i], g);
+        fd = handle_single_redirection(g->tab_file[i], g->tab_dir[i], g);
         if (fd < 0) 
 	{
             restore_standard_fds(saved_stdout, saved_stdin, g);
 	    g->$ = 1;
             return -1;
         }
-        if (apply_redirection(fd, redir_types[i], g) < 0) 
+        if (apply_redirection(fd, g->tab_dir[i], g) < 0) 
 	{
             restore_standard_fds(saved_stdout, saved_stdin, g);
 	    g->$ = 1;
@@ -183,7 +196,7 @@ int handle_redirections_and_execute(char *cmd, t_general *g, int redir_count, ch
         i++;
     }
 
-    exe_cmd(cmd, g);
+    exe_cmd(str, g);
 
     restore_standard_fds(saved_stdout, saved_stdin, g);
 

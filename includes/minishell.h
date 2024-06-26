@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/25 16:09:01 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/26 11:11:24 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,20 @@ typedef struct s_general
 	char		**tab_cmd;
 	char		**tab_dir;
 	char		**tab_pipe;
+	char 		**tab_file;
 	char		*line;
 	char		*prompt;
 	char		*command_before_pipe;
 	char		*command_after_pipe;
 	int			status;
 	int			count;
-	int			nbr_token;
-	int $;
-	int index_dir;
+	int			nbr_dir;
+	int 			$;
+	int 			index_dir;
 	int		nbr_pipe;
 	int			check_dir;
 	int 		check_pipe;
+	int 		nbr_file;
 	t_env		local_env;
 }				t_general;
 
@@ -104,6 +106,7 @@ void echo_verif_3_$(t_echo *eko, t_general *g);
 void			echo_verif_3_n(t_echo *eko, t_general *g);
 int 				direction_double_$(char *str, t_echo *eko, t_general *g, int $);
 int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
+char	*remake_str_bis(char **tab);
 
 ///////////////////// ENV ///////////////////////////
 
@@ -111,18 +114,18 @@ int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// REDIRECTION ///////////////////////////
 void			skip_white_space(char *str, int i, char *output);
-int handle_redirections_and_execute(char *line, t_general *g, int redir_count, char **tab_dir);
+int handle_redirections_and_execute(char *cmd, t_general *g);
+
 
 ///////////////////// PARSING ///////////////////////////
 int				check_special_characters(const char *str);
 void			count_commands(char *command_line, t_general *g);
-int				is_delimiter(char c);
-int				count_tokens(char *str);
+int	count_redirections(char *str);
+int	is_redirection(char c);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 int				verif_quote_2(char *str, int i, int *double_quote_count,
 					int *single_quote_count);
 char			*verif_quote(char *str);
-int				is_redirection(char c);
 void			check_redirection_2(int *expecting_command, int *i, char *str);
 int				is_space(char *str, int *i);
 int				check_redirections(char *str);
@@ -130,13 +133,14 @@ char			**split_delimiters(const char *str, int *result_size);
 int				direction_double(char *str, t_echo *eko, t_general *g,
 					char *line);
 int				direction(char *str, t_echo *eko, t_general *g, char *line);
+char **split_file(char *str, int *result_size);
 
 ///////////////////// BUILTINS ///////////////////////////
 void			ft_exit(char **tab, t_general *g);
 
 ///////////////////// PIPE ///////////////////////////
 char **split_by_pipe(char *cmd);
-void execute_pipeline(char **commands, t_general *g, int *redir_counts, char ***redir_types);
+void execute_pipeline(char **commands, t_general *g);
 int	count_pipe(char *str);
 
 
@@ -147,7 +151,6 @@ int	count_pipe(char *str);
 
 
 int				is_delimiter(char c);
-int				count_tokens(char *str);
 char			**split_str(char *str, int *num_tokens);
 void			count_commands(char *command_line, t_general *g);
 int				check_special_characters(const char *str);

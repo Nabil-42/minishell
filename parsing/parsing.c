@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:09:46 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/25 15:33:27 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:42:49 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,77 +44,7 @@ char	*ft_strncpy(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
-char	**split_str(char *str, int *result_size)
-{
-	char	**result;
-	int		len;
-	int		in_quotes;
-	int		start;
-	int		i;
-	int		part_len;
-	char		*part;
 
-	result = malloc(PATH_MAX * sizeof(char *));
-	*result_size = 0;
-	if (!result)
-	{
-		return (NULL);
-	}
-	len = strlen(str);
-	in_quotes = 0;
-	start = 0;
-	i = 0;
-	while (i < len)
-	{
-		if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\'))
-		{
-			if (in_quotes == 1)
-				in_quotes = 0;
-			else if (in_quotes == 0)
-				in_quotes = 1;
-		}
-		else if (str[i] == '\"' && (i == 0 || str[i - 1] != '\\'))
-		{
-			if (in_quotes == 2)
-				in_quotes = 0;
-			else if (in_quotes == 0)
-				in_quotes = 2;
-		}
-		if (!in_quotes && is_delimiter(str[i]))
-		{
-			if (start < i)
-			{
-				part_len = i - start;
-				part = malloc(part_len + 1);
-				if (!part)
-				{
-					return (NULL);
-				}
-				strncpy(part, str + start, part_len);
-				part[part_len] = '\0';
-				result[*result_size] = part;
-				(*result_size)++;
-			}
-			start = i + 1;
-		}
-		i++;
-	}
-	if (start < len)
-	{
-		part_len = len - start;
-		part = malloc(part_len + 1);
-		if (!part)
-		{
-			return (NULL);
-		}
-		strncpy(part, str + start, part_len);
-		part[part_len] = '\0';
-		result[*result_size] = part;
-		(*result_size)++;
-	}
-	result[*result_size] = NULL; 
-	return (result);
-}
 
 char **split_delimiters(const char *str, int *result_size) 
 {
@@ -133,7 +63,7 @@ char **split_delimiters(const char *str, int *result_size)
             in_double_quotes = !in_double_quotes;
         }
 
-        if (!in_single_quotes && !in_double_quotes && is_delimiter(str[i])) {
+        if (!in_single_quotes && !in_double_quotes && is_redirection(str[i])) {
             delimiter_count++;
             if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')) {
                 i++;
@@ -159,7 +89,7 @@ char **split_delimiters(const char *str, int *result_size)
             in_double_quotes = !in_double_quotes;
         }
 
-        if (!in_single_quotes && !in_double_quotes && is_delimiter(str[i])) {
+        if (!in_single_quotes && !in_double_quotes && is_redirection(str[i])) {
             if (i + 1 < len && str[i] == '>' && str[i + 1] == '>') {
                 result[*result_size] = malloc(3);
                 if (!result[*result_size]) {

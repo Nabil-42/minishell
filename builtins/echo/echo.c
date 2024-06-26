@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/21 21:59:32 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 11:10:05 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,37 @@
 #include "../env/env.h"
 
 #define PATH_MAX 4096
+
+char	*remake_str_bis(char **tab)
+{
+	int		j;
+	int		k;
+	int i;
+	char	*new_str;
+	i = 0;
+
+	if (tab[0] == NULL)
+		return (NULL);
+	new_str = malloc(sizeof(char) * PATH_MAX + 1);
+	if (new_str == NULL)
+		return (NULL);
+	k = 0;
+	while (tab[i] != NULL)
+	{
+		j = 0;
+		while (tab[i][j])
+		{
+			new_str[k] = tab[i][j];
+			++k, ++j;
+		}
+		if (tab[i + 1] != NULL)
+			new_str[k] = ' ';
+		++k, ++i;
+	}
+	k--;
+	new_str[k] = '\0';
+	return (new_str);
+}
 
 char	*remake_str(char **tab, t_echo *eko, int i)
 {
@@ -88,7 +119,7 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 	if (!eko->line)
 		return (free(str), (void)0);
 	tmp = echo_verif_quote(str, eko, g);
-	
+	// printf("TEST tmp = %s\n", str);
 	if (tmp == NULL)
 	{
 		

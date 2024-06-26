@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/25 15:29:06 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/26 10:40:57 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,53 +19,54 @@
 
 extern volatile sig_atomic_t	flag;
 
-void execute_pipeline(char **commands, t_general *g, int *redir_counts, char ***redir_types) 
+void execute_pipeline(char **tab_pipe, t_general *g) 
 {
     int pipe_fd[2];
     pid_t pid;
     int i = 0;
 
-    while (commands[i] != NULL) 
+    while (tab_pipe[i] != NULL) 
     {
-        if (commands[i + 1] != NULL) 
-	{
+        if (tab_pipe[i + 1] != NULL) 
+        {
             if (pipe(pipe_fd) < 0) 
-	    {
+            {
                 perror("pipe");
                 exit(EXIT_FAILURE);
             }
         }
-
+        
         pid = fork();
         if (pid < 0) 
-	{
+	    {
             perror("fork");
             exit(EXIT_FAILURE);
         } 
-	else if (pid == 0)
-	{
-            if (commands[i + 1] != NULL) {
-                if (dup2(pipe_fd[1], STDOUT_FILENO) < 0) {
-                    perror("dup2");
-                    exit(EXIT_FAILURE);
-                }
-                close(pipe_fd[0]);
-                close(pipe_fd[1]);
-            }
-
-            handle_redirections_and_execute(commands[i], g, redir_counts[i], redir_types[i]);
-            printf("teste COMBIEN ?\n");
+	    else if (pid == 0)
+	    {
+            // if (tab_pipe[i + 1] != NULL) {
+            //     if (dup2(pipe_fd[1], STDOUT_FILENO) < 0) {
+            //         perror("dup2");
+            //         exit(EXIT_FAILURE);
+            //     }
+            //     close(pipe_fd[0]);
+            //     close(pipe_fd[1]);
+            // }
+        
+            handle_redirections_and_execute(g->tab_pipe[i], g);
+            free(g->tab_dir);
+            free(g->tab_cmd);
             exit(EXIT_SUCCESS);
         }
 	else {
-            if (commands[i + 1] != NULL) {
-                if (dup2(pipe_fd[0], STDIN_FILENO) < 0) {
-                    perror("dup2");
-                    exit(EXIT_FAILURE);
-                }
-                close(pipe_fd[0]);
-                close(pipe_fd[1]);
-            }
+            // if (tab_pipe[i + 1] != NULL) {
+            //     if (dup2(pipe_fd[0], STDIN_FILENO) < 0) {
+            //         perror("dup2");
+            //         exit(EXIT_FAILURE);
+            //     }
+            //     close(pipe_fd[0]);
+            //     close(pipe_fd[1]);
+            // }
             wait(NULL);
         }
         i++;
@@ -185,7 +186,7 @@ void	pipe_while(t_general *g)
 					// Fermer l'extrémité d'écriture du pipe dans le processus fils
 			}
 			// Exécution de la commande avec execve
-			ft_execve(g->line, g->tab_cmd[k], g);
+			ft_execve(g->tab_cmd[0], g->tab_cmd[0], g);
 			exit(EXIT_FAILURE);
 		}
 		else

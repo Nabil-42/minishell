@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/25 16:15:44 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/26 10:43:39 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,12 @@ void	missingknow(t_echo *eko, t_general *g)
 	printf("%d\n", g->$);
 }
 
-int	check_line(char *line)
-{
-	int	i;
-
-	i = 0;
-	if (*line == '\0')
-		return (1);
-	while (line[i])
-	{
-		if (is_delimiter(line[i]))
-			return (1);
-		++i;
-	}
-	return (0);
-}
-
 int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 {
 	//cest deguuuuuuuuuuuuuuuuueeeuuuuueuuueueuueuueuueuueueuhyhhhh
-	int i =0;
+	// int i =0;
 	
 	local_env = &g->local_env;
-	if (g->tab_dir[0] != NULL)
-	{
-	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(g->tab_dir[0], "<") == 0)
-		return (echo_verif_3(eko, g), free_tab(eko->tab), 1);	
-	}
 	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(tab[1], "$?") == 0)
 		return (missingknow(eko, g), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "echo") == 0)

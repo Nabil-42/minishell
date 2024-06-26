@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 17:16:13 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/26 10:48:40 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,29 +77,6 @@ void	echo_verif_4(t_echo *eko, int *i, char *str)
 		eko->line[eko->j] = '\0';
 	}
 }
-
-void	echo_verif_3(t_echo *eko, t_general *g)
-{
-	if (g->tab_dir[0] == NULL)
-		return ;	
-	g->check_dir = 1;
-	handle_redirections_and_execute(eko->line, g, g->nbr_token, g->tab_dir);
-	// if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
-	// 	{
-	// 		if (g->tab_dir[g->index_dir][1] != '\0')
-	// 		{
-	// 			if (g->tab_dir[g->index_dir][1] == '>')
-	// 				(direction_double(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
-	// 		}
-	// 		else if (g->tab_dir[g->index_dir] != NULL && g->tab_dir[g->index_dir][0] == '>')
-	// 			(direction(g->tab_cmd[g->index_dir + 1], eko, g, eko->line));
-	// 	}
-	// 	g->check_dir = 1;
-	// 	g->index_dir++;
-	// 	printf("%d\n", g->index_dir);
-	// }
-}
-
 char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
 {
 	int	i;
@@ -122,9 +99,6 @@ char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
 	if (eko->line[0] == '\0')
 		return (eko->line);
 	echo_verif_4(eko, &i, str);
-	echo_verif_3(eko, g);
-	if (g->check_dir == 1)
-		return (NULL);
 	return (eko->line);
 }
 
@@ -136,9 +110,6 @@ void	echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
 		free_tab(eko->tab);
 		return ;
 	}
-	echo_verif_3(eko, g);
-	if (g->check_dir == 1)
-		return ;
 	printf("%s", tmp);
 	free_tab(eko->tab);
 }

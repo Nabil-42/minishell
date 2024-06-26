@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nabboud <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/06/25 14:46:29 by nabboud          ###   ########.fr        #
+#    Updated: 2024/06/26 09:59:31 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,8 @@ SRCS		:= ./main.c \
 			./parsing/parsing.c \
 			./parsing/parsing_2.c \
 			./parsing/parsing_3.c \
+			./parsing/split_str.c \
+			./parsing/split_file.c \
 			./builtins/echo/echo.c \
 			./builtins/echo/echo_simple_quote.c \
 			./builtins/echo/echo_double_quote.c \

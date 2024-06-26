@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 12:20:23 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/23 10:50:35 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 20:49:15 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void echo_verif_3_$(t_echo *eko, t_general *g)
 	i = 0;
 	if (g->tab_dir == NULL)
 		return ;
-	while (i < g->nbr_token)
+	while (i < g->nbr_dir)
 	{
 		if (g->tab_dir[i][0] == '|')
 			return ;
@@ -47,7 +47,7 @@ void	echo_verif_3_n(t_echo *eko, t_general *g)
 	i = 0;
 	if (g->tab_dir == NULL)
 		return ;
-	while (i < g->nbr_token)
+	while (i < g->nbr_dir)
 	{
 		if (g->tab_dir[i][0] == '|')
 			return ;

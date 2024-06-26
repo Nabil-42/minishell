@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:25:04 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 10:51:30 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 20:51:45 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	dollar_n(char *str, t_echo *eko, t_general *g)
 {
 	int	i;
 
+	(void)g;
 	i = 0;
 	eko->j = 0;
 	while (str[i])
@@ -78,9 +79,6 @@ int	dollar_n(char *str, t_echo *eko, t_general *g)
 		}
 		copy_normal_char_n(str, eko, &i);
 	}
-	echo_verif_3(eko, g);
-	if (g->check_dir == 1)
-		return (0);
 	eko->line[eko->j] = '\0';
 	printf("%s", eko->line);
 	return (0);

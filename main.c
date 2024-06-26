@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/25 16:05:44 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/26 10:59:17 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,73 +134,52 @@ int	verif_wight_space(char *line)
 	return (0);
 }
 
-int	is_delimiter(char c)
+int	is_redirection(char c)
 {
-	return (c == '|' || c == '<' || c == '>');
+	return (c == '<' || c == '>');
 }
 
-int	count_tokens(char *str)
+int	count_redirections(char *str)
 {
 	int	count;
 	int	i;
-	int	inside_token;
+	int	in_single_quotes;
+	int	in_double_quotes;
 
 	count = 0;
 	i = 0;
-	inside_token = 0;
-	int in_single_quotes = 0;
-	int in_double_quotes = 0;
+	in_single_quotes = 0;
+	in_double_quotes = 0;
 	while (str[i] != '\0')
 	{
 		// Gérer les guillemets simples
 		if (str[i] == '\'')
 		{
 			if (in_single_quotes)
-			{
 				in_single_quotes = 0;
-			}
 			else if (!in_double_quotes)
-			{
 				in_single_quotes = 1;
-			}
-			// Gérer les guillemets doubles
 		}
+		// Gérer les guillemets doubles
 		else if (str[i] == '"')
 		{
 			if (in_double_quotes)
-			{
 				in_double_quotes = 0;
-			}
 			else if (!in_single_quotes)
-			{
 				in_double_quotes = 1;
-			}
 		}
-		// Compter les tokens seulement si on n'est pas dans des guillemets
-		if (!in_single_quotes && !in_double_quotes)
+		// Compter les redirections seulement si on n'est pas dans des guillemets
+		else if (!in_single_quotes && !in_double_quotes)
 		{
-			if (is_delimiter(str[i]))
+			if (is_redirection(str[i]))
 			{
 				// Vérifier pour les délimiteurs doubles
-				if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<'
-						&& str[i + 1] == '<'))
+				if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
 				{
 					count++;
 					i++; // Sauter le deuxième caractère du délimiteur double
 				}
-				else
-				{
-					count++;
-				}
-				inside_token = 0;
-			}
-			else
-			{
-				if (!inside_token)
-				{
-					count++;
-					inside_token = 1;
-				}
+				count++;
 			}
 		}
 		i++;
@@ -233,35 +212,33 @@ void	init(t_general *g)
 	g->command_after_pipe = NULL;
 	g->status = 0;
 	g->count = 0;
-	g->nbr_token = 0;
+	g->nbr_dir = 0;
 	g->nbr_pipe = 0;
 	g->$ = 0;
 	g->index_dir = 0;
 	g->check_dir = 0;
 	g->check_pipe = 0;
+	g->nbr_file = 0;
+	g->tab_file = NULL;
 
 }
 int boucle(t_general *g, t_env *local_env)
 {
-	int k;
-	k = 0;
 
-		if (g->nbr_pipe != 0)
-		{
-			execute_pipeline(g->tab_pipe, g, &g->nbr_pipe, &g->tab_dir);
-		}
-		else {
-			
-			if(builtin(g->tab_cmd[k], local_env, g))
-				;
-			else (pipe_while(g));
-		}
-		if (g->tab_pipe[0] != NULL)
-			free_tab(g->tab_pipe);
-		if (g->tab_dir[0] != NULL)
-			free_tab(g->tab_dir);
-		if (g->tab_cmd[0] != NULL)
-			free_tab(g->tab_cmd);
+	(void)local_env;
+	if (g->nbr_pipe != 0)
+	{
+		execute_pipeline(g->tab_pipe, g);
+	}
+	else {
+		handle_redirections_and_execute(g->line, g);
+	}
+	if (g->tab_pipe[0] != NULL)
+	    free_tab(g->tab_pipe);
+	// if (g->tab_dir[0] != NULL)
+	//     free_tab(g->tab_dir);
+	// if (g->tab_cmd[0] != NULL)
+	//     free_tab(g->tab_cmd);
 		return (0);
 }
 
@@ -271,12 +248,14 @@ int	main(int ac, char **av, char **envp)
 	t_env		local_env;
 
 
+	(void)envp;
 	(void)ac;
 	(void)av;
 	g.status = 0;
 	init(&g);
 	main_signal();
 	init_local_env(&g.local_env, envp);
+	
 	while (1)
 	{
 		g.prompt = ft_get_prompt();
@@ -287,15 +266,8 @@ int	main(int ac, char **av, char **envp)
 		if (*g.line == '\0')
 			continue ;
 		add_history(g.line);
-		g.nbr_token = count_tokens(g.line);
 		g.nbr_pipe = count_pipe(g.line);
-		g.tab_cmd = split_str(g.line, &g.nbr_token);
-		g.tab_dir = split_delimiters(g.line, &g.nbr_token);
 		g.tab_pipe = split_by_pipe(g.line);
-
-		// printf("tab pipe = %s\n", g.tab_cmd[0]);
-		// printf("tab pipe = %s\n", g.tab_cmd[1]);
-		// printf("tab pipe = %s\n", g.tab_cmd[2]);
 		boucle(&g, &local_env);
 		continue;
 		// multiple_pipe(g.line, &g);

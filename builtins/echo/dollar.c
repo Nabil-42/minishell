@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/23 17:08:17 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/25 20:50:57 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,6 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 		}
 		copy_normal_char(str, eko, &i, g);
 	}
-	echo_verif_3(eko, g);
-	if (g->check_pipe == 2)
-		return (0);
 	eko->line[eko->j] = '\0';
 	printf("%s\n", eko->line);
 	return (0);
