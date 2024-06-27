@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/26 21:01:35 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:19:07 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
 char	*remake_str_bis(char **tab);
 
 ///////////////////// ENV ///////////////////////////
-void	delete_envp(char **envp);
+void	ft_export(t_general *g, char **args, t_echo *eko);
 
 
 ///////////////////// REDIRECTION ///////////////////////////

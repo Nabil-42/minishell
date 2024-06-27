@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:37:06 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/20 18:03:35 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/27 08:47:59 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,18 @@ void	main_signal(void)
 	sa.sa_handler = &sig_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
+	
 	if ((sigaction(SIGINT, &sa, NULL) == -1) || (sigaction(SIGQUIT, &sa,
 				NULL) == -1))
 	{
 		perror("sigaction\n");
 		exit(EXIT_FAILURE);
 	}
+
+	sa.sa_handler = SIG_IGN;
+    if (sigaction(SIGQUIT, &sa, NULL) == -1)
+    {
+        perror("sigaction SIGQUIT");
+        exit(EXIT_FAILURE);
+    }
 }

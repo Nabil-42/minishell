@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/25 20:50:57 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:09:46 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,57 @@ char	*extract_env_variable_name(char *str, int *i)
 	if (variable_env == NULL)
 		return (NULL);
 	++(*i);
-	while (((str[*i] >= 'A' && str[*i] <= 'Z') || (str[*i] >= 'a'
-				&& str[*i] <= 'z')) && str[*i] != '\0')
+	if (ft_isalpha(str[*i]) || str[*i] == '_')
 	{
-		variable_env[k] = str[*i];
-		++*i;
-		k++;
+		while (str[*i])
+		{
+			if (ft_isalnum(str[*i]) || str[*i] == '_')
+			{
+				variable_env[k] = str[*i];
+				++*i;
+				k++;
+			}
+			else {
+				printf("%s\n", &str[*i + 1]);
+				return(free(variable_env),NULL);
+			}
+		}
 	}
 	variable_env[k] = '\0';
 	return (variable_env);
 }
 
-int	handle_variable_expansion(char *str, t_echo *eko, int *i)
+// char	*pars_variable_name(char *str)
+// {
+// 	int		i;
+
+// 	i = 0;
+// 	if (!(ft_isalpha(str[i]) || str[i] == '_'))
+// 		return (0);
+// 	while (str[i])
+// 	{ 
+// 		if (ft_isalnum(str[i]) || str[i] == '_'))
+		
+// 		i++;
+// 	}
+// 	return (variable_env);
+// }
+
+int	handle_variable_expansion(char *str, t_echo *eko, int *i, t_general *g)
 {
 	char	*variable_env;
 	char	*name;
 	int		k;
-
+	(void)g;
 	variable_env = extract_env_variable_name(str, i);
 	if (variable_env == NULL)
 		return (0);
-	name = getenv(variable_env);
+	name = ft_getenv(&g->local_env, variable_env);
 	free(variable_env);
 	if (name == NULL)
+	{
 		return (0);
+	}
 	k = 0;
 	while (name[k])
 	{
@@ -88,7 +115,7 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 			return (0);
 		if (str[i] == '$' && str[i + 1] != '\0' && str[eko->i + 1] != '?')
 		{
-			if (!handle_variable_expansion(str, eko, &i))
+			if (!handle_variable_expansion(str, eko, &i, g))
 				return (0);
 			continue ;
 		}

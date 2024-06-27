@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/26 21:44:21 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 13:17:07 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,23 @@ char	**cmd_args(char *line)
 void	ft_execve(char *line, char *tab_cmd, t_general *g)
 {
 	char	**args;
+	char	**envp;
 	char	*path_cmd;
 	int		execve_status;
 
 	(void)line;
+	envp = get_local_env(&g->local_env);
+	delete_env(&g->local_env);	
 	flag = 1;
 	args = cmd_args(tab_cmd);
 	path_cmd = based_path(args[0], g);
 	if (path_cmd == NULL)
 	    return(free_tab(args));
-	execve_status = execve(path_cmd, args, NULL);
+	if (g->check_pipe == 1)
+	{
+		free_tab(g->tab_pipe);
+	}
+	execve_status = execve(path_cmd, args, envp);
 	if (execve_status != 0)
 	{
 		free_tab(args);
@@ -155,7 +162,7 @@ int	count_redirections(char *str)
 	in_double_quotes = 0;
 	while (str[i] != '\0')
 	{
-		// Gérer les guillemets simples
+		
 		if (str[i] == '\'')
 		{
 			if (in_single_quotes)
@@ -163,7 +170,7 @@ int	count_redirections(char *str)
 			else if (!in_double_quotes)
 				in_single_quotes = 1;
 		}
-		// Gérer les guillemets doubles
+		
 		else if (str[i] == '"')
 		{
 			if (in_double_quotes)
@@ -171,16 +178,16 @@ int	count_redirections(char *str)
 			else if (!in_single_quotes)
 				in_double_quotes = 1;
 		}
-		// Compter les redirections seulement si on n'est pas dans des guillemets
+		
 		else if (!in_single_quotes && !in_double_quotes)
 		{
 			if (is_redirection(str[i]))
 			{
-				// Vérifier pour les délimiteurs doubles
+				
 				if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
 				{
 					count++;
-					i++; // Sauter le deuxième caractère du délimiteur double
+					i++; 
 				}
 				count++;
 			}
@@ -233,10 +240,10 @@ int boucle(t_general *g)
 		execute_pipeline(g->tab_pipe, g);
 	}
 	else {
-		handle_redirections_and_execute_simple(g->line, g);
+		handle_redirections_and_execute(g->line, g);
 	}
 	free_tab(g->tab_pipe);
-		return (0);
+	return (0);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -249,7 +256,7 @@ int	main(int ac, char **av, char **envp)
 	g.status = 0;
 	init(&g);
 	main_signal();
-	// init_local_env(&g.local_env, envp);
+	init_local_env(&g.local_env, envp);
 	while (1)
 	{
 		g.prompt = ft_get_prompt();
@@ -266,6 +273,7 @@ int	main(int ac, char **av, char **envp)
 		free(g.line);
 		flag = 0;
 	}
+	delete_env(&g.local_env);
 	rl_clear_history();
 	if (WIFEXITED(g.status))
 		return (WEXITSTATUS(g.status));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/26 21:21:49 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:15:05 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 	//cest deguuuuuuuuuuuuuuuuueeeuuuuueuuueueuueuueuueuueueuhyhhhh
 	// int i =0;
 	
-	local_env = &g->local_env;
+	(void)local_env;
+	(void)&g->local_env;
 	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(tab[1], "$?") == 0)
 		return (missingknow(eko, g), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "echo") == 0)
@@ -52,7 +53,9 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 	if (ft_strcmp(tab[0], "env") == 0)
 		return (ft_env(local_env), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "export") == 0)
-		return (ft_export(local_env, tab), free_tab(eko->tab), 1);
+		return (ft_export(g, tab, eko), free_tab(eko->tab), 1);
+	if (ft_strcmp(tab[0], "unset") == 0)
+		return (ft_unset(local_env, tab), free_tab(eko->tab), 1);
 	if (ft_strcmp(tab[0], "exit") == 0)
 		return (ft_exit(tab, g), free_tab(eko->tab), 1);
 	free_tab(eko->tab);

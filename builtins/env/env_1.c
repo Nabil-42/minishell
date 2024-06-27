@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:17:26 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/26 15:41:46 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:24:21 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,16 +216,24 @@ void	ft_add_var(t_env *env, char *env_str, bool flag)
 	}
 }
 
-void	ft_export(t_env *env, char **args)
+void	ft_export(t_general *g, char **args, t_echo *eko)
 {
 	int	i;
+	char *str;
+	char	*tmp;
 
-	//parsing function
-	i = 1;
+	str = remake_str(args, eko, 1);
+	free_tab(args);
+	eko->line = malloc(sizeof(char) * (eko->len_str + PATH_MAX + 1));
+	tmp = echo_verif_quote(str, eko, g);
+	args = ft_split(tmp, ' ');
+	free(tmp);
+	i = 0;
 	while (args[i])
 	{
-		ft_add_var(env, args[i], true);
-		env->nb_var++;	
+		// printf("%s\n", args[i]);
+		ft_add_var(&g->local_env, args[i], true);
+		g->local_env.nb_var++;	
 		i++;
 	}
 }
@@ -276,18 +284,25 @@ void	ft_env(t_env *env)
 	free(local_env);
 }
 
-// char	*ft_getenv(t_env *env, char *key)
-// {
-// 	t_list	*lst_iter;
-// 	int		hash;
+char	*ft_getenv(t_env *env, char *key)
+{
+	t_list	*lst_iter;
+	t_var	*var;
+	int		hash;
 	
-// 	hash = hash_function(key, MAX_ENV);
-// 	lst_iter = env->env_p[hash];
-// 	while (lst_iter)
-// 	{
-		
-// 			return (lst_iter);
-// 		lst_iter = lst_iter->next;
-// 	}
-// }
+	hash = hash_function(key, MAX_ENV);
+	lst_iter = env->env_p[hash];
+	while (lst_iter)
+	{
+		var = (t_var *)(lst_iter->content);
+		if (var->env_flag && ft_strcmp(key, var->key) == 0)
+		{
+			printf("here %s\n", var->value);
+			return (var->value);		
+			
+		}
+		lst_iter = lst_iter->next;
+	}
+	return (NULL);
+}
 

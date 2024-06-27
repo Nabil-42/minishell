@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_simple_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/26 21:32:22 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 08:39:43 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,13 @@ int	echo_take_of_simple_quote(char *str, t_echo *eko, int n, t_general *g)
 		if (flag == 0)
 		{
 			dollar_check = dollar_double(str, eko);
+			if (dollar_check == -1)
+			{
+				eko->line[eko->j] = '\0';
+				return (-1);
+			}
 			if (dollar_check > 0)
-			     continue ;
+				continue ;
 		}
 		copy_non_special_char_simple(str, eko, g);
 	}

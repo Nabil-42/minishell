@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:16:27 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/20 17:59:25 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/27 08:42:49 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ void	ft_exit(char **tab, t_general *g)
 		exit(g->$);
 	if (tab[2] != NULL)
 	{
-		ft_fprintf(2, "exit: trop d'arguments\n");
+		ft_fprintf(2, "exit: too many arguments\n");
 		exit(1);
 	}
 	if (!is_number(tab[1]))
 	{
-		ft_fprintf(2, "exit: %s: argument numérique nécessaire\n", tab[1]);
+		ft_fprintf(2, "exit: %s: numeric argument required\n", tab[1]);
 		exit(2);
 	}
 	exit_code = ft_atoi_bis(tab[1]);

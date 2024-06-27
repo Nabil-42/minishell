@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_double_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/26 21:31:40 by nabil            ###   ########.fr       */
+/*   Updated: 2024/06/27 08:39:23 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,10 @@ int	echo_take_of_double_quote(char *str, t_echo *eko, int n, t_general *g)
 			return (0);
 		dollar_check = dollar_double(str, eko);
 		if (dollar_check == -1)
+		{
+			eko->line[eko->j] = '\0';
 			return (-1);
+		}
 		if (dollar_check > 0)
 			continue ;
 		copy_non_special_char(str, eko, g);

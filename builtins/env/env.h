@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:24 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/25 14:55:14 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/06/27 14:19:00 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,12 @@ typedef struct s_env
 
 
 void	ft_env(t_env *env);
-void	ft_export(t_env *env, char **args);
+
 void	init_local_env(t_env *local_env, char **envp);
+void	delete_env(t_env *env);
+char	**get_local_env(t_env *env);
+void	ft_add_var(t_env *env, char *env_str, bool flag);
+void	ft_unset(t_env *env, char **args);
+char	*ft_getenv(t_env *env, char *key);
 
 #endif
