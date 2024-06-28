@@ -70,8 +70,7 @@ char	*based_path(char *cmd, t_general *g)
 		free(tmp);
 		++i;
 	}
-	free_tab(tab);
-	return (verif_directoty(cmd, status, g), NULL);
+	return (free_tab(tab), verif_directoty(cmd, status, g), NULL);
 }
 
 char	*ft_get_prompt(void)
@@ -142,59 +141,6 @@ int	verif_wight_space(char *line)
 		i++;
 	}
 	return (0);
-}
-
-int	is_redirection(char c)
-{
-	return (c == '<' || c == '>');
-}
-
-int	count_redirections(char *str)
-{
-	int	count;
-	int	i;
-	int	in_single_quotes;
-	int	in_double_quotes;
-
-	count = 0;
-	i = 0;
-	in_single_quotes = 0;
-	in_double_quotes = 0;
-	while (str[i] != '\0')
-	{
-		
-		if (str[i] == '\'')
-		{
-			if (in_single_quotes)
-				in_single_quotes = 0;
-			else if (!in_double_quotes)
-				in_single_quotes = 1;
-		}
-		
-		else if (str[i] == '"')
-		{
-			if (in_double_quotes)
-				in_double_quotes = 0;
-			else if (!in_single_quotes)
-				in_double_quotes = 1;
-		}
-		
-		else if (!in_single_quotes && !in_double_quotes)
-		{
-			if (is_redirection(str[i]))
-			{
-				
-				if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
-				{
-					count++;
-					i++; 
-				}
-				count++;
-			}
-		}
-		i++;
-	}
-	return (count);
 }
 
 void	multiple_pipe(char *line, t_general *g)
