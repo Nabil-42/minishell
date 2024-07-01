@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/27 14:15:05 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 20:03:39 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 #include "../lib/libft/includes/libft.h"
 #include "env/env.h"
 
-void	init_eko(t_echo *eko, char *line, t_general *g)
+void	init_eko(t_echo *eko, t_general *g)
 {
-	(void)line;
 	eko->len_str = 200;
 	eko->i = 0;
 	eko->j = 0;
@@ -24,15 +23,12 @@ void	init_eko(t_echo *eko, char *line, t_general *g)
 	eko->line = NULL;
 	eko->flag_i = 0;
 	eko->flag = 0;
-	eko->tab = NULL;	
 }
 
 void	missingknow(t_echo *eko, t_general *g)
 {
-	echo_verif_3_$(eko, g);
-	if (g->check_dir == 1)
-		return ;
-	printf("%d\n", g->$);
+	(void)eko;
+	g->flag_eko_n = 2;
 }
 
 int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
@@ -43,44 +39,54 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 	(void)local_env;
 	(void)&g->local_env;
 	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(tab[1], "$?") == 0)
-		return (missingknow(eko, g), free_tab(eko->tab), 1);
+		return (missingknow(eko, g), free_tab(eko->tab), free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "echo") == 0)
-		return (echo(tab, eko, g), free_tab(eko->tab), 1);
+		return (echo(g->petit_tab, eko, g), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "cd") == 0)
-		return (cd_project(tab, g), free_tab(eko->tab), 1);
+		return (cd_project(tab, g), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "pwd") == 0)
-		return (pwd(tab), free_tab(eko->tab), 1);
+		return (pwd(tab, g), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "env") == 0)
-		return (ft_env(local_env), free_tab(eko->tab), 1);
+		return (ft_env(local_env), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "export") == 0)
-		return (ft_export(g, tab, eko), free_tab(eko->tab), 1);
+		return (ft_export(g, tab, eko), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "unset") == 0)
-		return (ft_unset(local_env, tab), free_tab(eko->tab), 1);
+		return (ft_unset(local_env, tab), free_tab(eko->tab), free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "exit") == 0)
-		return (ft_exit(tab, g), free_tab(eko->tab), 1);
-	free_tab(eko->tab);
+		return (ft_exit(tab, g), free_tab(eko->tab), free_tab(g->petit_tab), 1);
+	free_tab(eko->tab), free_tab(g->petit_tab);
 	return (0);
 }
 
 int	builtin(char *line, t_env *local_env, t_general *g)
 {
-	t_echo	eko;
+	t_echo eko;
 	int		result;
-	init_eko(&eko, line, g);
+	char *test;
+	
+	eko.tab = NULL;
+	
+	test = remake_str_bis(g->tab_cmd);
+	printf("HAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaH = %s", g->tab_cmd[0]);
+	g->petit_tab = ft_split(test, ' ');
 	eko.tab = ft_split(line, ' ');
-	// printf("eko.tab = %s", eko.tab[2]);
+	init_eko(&eko, g);
+	if(!eko.tab[0])
+	     return (free_tab(eko.tab), 0);
 	if (ft_strcmp(eko.tab[0], "echo") != 0 
 		&& ft_strcmp(eko.tab[0], "cd") != 0
 		&& ft_strcmp(eko.tab[0], "pwd") != 0
 		&& ft_strcmp(eko.tab[0],"env") != 0
 		&& ft_strcmp(eko.tab[0], "exit") != 0
 		&& eko.tab[1] == NULL)
-		return (free_tab(eko.tab), 0);
-	// if (ft_strcmp(eko.tab[0], "echo") == 0
-	// 	&& eko.tab[1] == NULL)
-	// {
-	// 	return (free_tab(eko.tab), 1);
-	// }
+		return (free_tab(eko.tab), free_tab(g->petit_tab), 0);
+	if (ft_strcmp(eko.tab[0], "echo") == 0
+		&& eko.tab[1] == NULL)
+	{
+		g->flag_eko_n = 6;
+		free_tab(g->petit_tab);
+		return (1);
+	}
 	result = execute_command(eko.tab, &eko, local_env, g);
 	
 	return (result);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:17:26 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/27 14:24:21 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:30:39 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,19 +219,14 @@ void	ft_add_var(t_env *env, char *env_str, bool flag)
 void	ft_export(t_general *g, char **args, t_echo *eko)
 {
 	int	i;
-	char *str;
-	char	*tmp;
 
-	str = remake_str(args, eko, 1);
+	echo(args, eko, g);
 	free_tab(args);
-	eko->line = malloc(sizeof(char) * (eko->len_str + PATH_MAX + 1));
-	tmp = echo_verif_quote(str, eko, g);
-	args = ft_split(tmp, ' ');
-	free(tmp);
+	args = ft_split(eko->line, ' ');
+	free(eko->line);
 	i = 0;
 	while (args[i])
 	{
-		// printf("%s\n", args[i]);
 		ft_add_var(&g->local_env, args[i], true);
 		g->local_env.nb_var++;	
 		i++;
@@ -297,9 +292,7 @@ char	*ft_getenv(t_env *env, char *key)
 		var = (t_var *)(lst_iter->content);
 		if (var->env_flag && ft_strcmp(key, var->key) == 0)
 		{
-			printf("here %s\n", var->value);
 			return (var->value);		
-			
 		}
 		lst_iter = lst_iter->next;
 	}

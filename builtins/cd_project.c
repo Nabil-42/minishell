@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_project.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/27 11:54:59 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 10:27:55 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,66 @@
 #include "../lib/libft/includes/libft.h"
 #include "env/env.h"
 
-int	cd_based_path(char *cmd, t_general *g)
+int	check_access_in_path(char *cmd, char *path) 
 {
-	int		i;
-	int		status;
-	char	**tab;
-	char	*str;
-	char	*tmp;
-	char	*path_env;
+    char *str;
+    char *tmp;
+    int status;
 
-	status = access(cmd, X_OK);
-	if (status == 0)
-		return (1);
-	path_env = getenv("PATH");
-	tab = ft_split(path_env, ':');
-	i = 0;
-	while (tab[i])
-	{
-		str = ft_strjoin(tab[i], "/");
-		tmp = ft_strjoin(str, cmd);
-		free(str);
-		status = access(tmp, X_OK);
-		if (status == 0)
-			return (1);
-		free(tmp);
-		++i;
-	}
-	if (*cmd != '$')
-	{
-		g->$ = 1;
-		ft_fprintf(2, " No such file or directory");
-	}
-	return (0);
+    str = ft_strjoin(path, "/");
+    if (!str) return 0;
+
+    tmp = ft_strjoin(str, cmd);
+    free(str);
+    if (!tmp) return 0;
+
+    status = access(tmp, X_OK);
+    free(tmp);
+    return (status == 0);
 }
 
-void	cd_project(char **tab, t_general *g)
+int cd_based_path(char *cmd, t_general *g) 
 {
-	char	*user;
-	char	*tmp;
-	char	path[PATH_MAX];
+    int status;
+    char **tab;
+    char *path_env;
+    int i;
+
+    status = access(cmd, X_OK);
+    if (status == 0)
+    	return 1;
+    path_env = getenv("PATH");
+    tab = ft_split(path_env, ':');
+    if (!tab)
+    	return 0;
+    i = -1;
+    while (tab[++i] != NULL) 
+    {
+        if (check_access_in_path(cmd, tab[i])) 
+	     return (free_tab(tab), 1);
+    }
+    free_tab(tab);
+    if (*cmd != '$') 
+    {
+        g->status = 1;
+	g->$ = 1;
+        ft_fprintf(2, "No such file or directory\n");
+    }
+    return 0;
+}
+
+void	cd_project_2(t_general *g)
+{
+		g->$ = 1;
+		ft_fprintf(2, " too many arguments\n");
+		g->flag_eko_n = 3;
+		return ;
+}
 
 
-	if (tab[1] == NULL)
-	{
+void	cd_project_bis(char *user, t_general *g, char *path, char *tmp)
+{
+	
 		tmp = ft_strjoin("OLDPWD=",  getcwd(path, PATH_MAX));
 		ft_add_var(&g->local_env, tmp, true);
 		free(tmp);
@@ -67,13 +84,23 @@ void	cd_project(char **tab, t_general *g)
 		tmp = ft_strjoin("PWD=",  getcwd(path, PATH_MAX));
 		ft_add_var(&g->local_env, tmp, true);
 		free(tmp);
+		g->flag_eko_n = 3;
 		return ;
-	}
+}
+
+void	cd_project(char **tab, t_general *g)
+{
+	char	*user;
+	char	*tmp;
+	char	path[PATH_MAX];
+
+	tmp = NULL;
+	user = NULL;
+	if (tab[1] == NULL)
+	     return (cd_project_bis(user, g, path, tmp));
 	else if (tab[2] != NULL)
 	{
-		g->$ = 1;
-		ft_fprintf(2, " too many arguments\n");
-		return ;
+		return (cd_project_2(g));
 	}
 	if (cd_based_path(tab[1], g) == 1)
 	{
@@ -86,4 +113,5 @@ void	cd_project(char **tab, t_general *g)
 	tmp = ft_strjoin("PWD=",  getcwd(path, PATH_MAX));
 	ft_add_var(&g->local_env, tmp, true);
 	free(tmp);
+	g->flag_eko_n = 3;
 }

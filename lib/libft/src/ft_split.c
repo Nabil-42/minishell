@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 09:55:39 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/26 14:44:30 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/01 11:58:07 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	**ft_split(char const *s, char c)
 	size_t	len;
 	int		nb_strs;
 	char	**strs_tab;
-
 	nb_strs = ft_countstrs(s, c);
 	strs_tab = malloc((sizeof (void *)) * (nb_strs + 1));
 	if (!strs_tab)

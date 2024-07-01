@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/26 21:16:05 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/01 19:19:31 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
 			++i;
 	}
 	if (eko->line[0] == '\0')
-		return (eko->line);
+	     return (eko->line);
 	echo_verif_4(eko, &i, str);
 	return (eko->line);
 }
 
-void	echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
+void echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
 {
 	if (tmp[0] == '\0')
 	{
@@ -113,6 +113,5 @@ void	echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
 		free_tab(eko->tab);
 		return ;
 	}
-	printf("%s", tmp);
 	free_tab(eko->tab);
 }

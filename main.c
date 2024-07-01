@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/27 13:17:07 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:38:51 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,85 +21,6 @@
 
 extern volatile sig_atomic_t	flag;
 
-char	*verif_directoty(char *cmd, int status, t_general *g)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] == '\\' || cmd[i] == ';')
-			return (printf("minishell: %s: 6 command not found\n", cmd),
-			g->$ = (128 + status), NULL);
-		if (cmd[i] == '/')
-		{
-			g->$ = 1;
-			return (printf("minishell: %s: No such file or directory\n", cmd),
-				g->$ = (128 + status), NULL);
-			
-		}
-		++i;
-	}
-	return (printf("minishell: %s: command not found\n", cmd), 
-		g->$ = (128 + status), NULL);
-}
-
-char	*based_path(char *cmd, t_general *g)
-{
-	int		i;
-	int		status;
-	char	**tab;
-	char	*str;
-	char	*tmp;
-	char	*path_env;
-
-	status = access(cmd, X_OK);
-	if (status == 0)
-		return (cmd);
-	path_env = getenv("PATH");
-	tab = ft_split(path_env, ':');
-	i = 0;
-	while (tab[i])
-	{
-		str = ft_strjoin(tab[i], "/");
-		tmp = ft_strjoin(str, cmd);
-		free(str);
-		status = access(tmp, X_OK);
-		if (status == 0)
-			return (free_tab(tab), tmp);
-		free(tmp);
-		++i;
-	}
-	return (free_tab(tab), verif_directoty(cmd, status, g), NULL);
-}
-
-char	*ft_get_prompt(void)
-{
-	char	path[PATH_MAX];
-	char	*prompt;
-	char	*tmp;
-	char	*handl;
-
-	handl = getcwd(path, PATH_MAX);
-	if (handl == NULL)
-		return (NULL);
-	tmp = ft_strjoin("minishell:", handl);
-	if (!tmp)
-		return (NULL);
-	prompt = ft_strjoin(tmp, " ");
-	free(tmp);
-	if (!prompt)
-		return (NULL);
-	return (prompt);
-}
-
-char	**cmd_args(char *line)
-{
-	char	**tab;
-
-	tab = ft_split(line, ' ');
-	return (tab);
-}
 
 void	ft_execve(char *line, char *tab_cmd, t_general *g)
 {
@@ -126,37 +47,12 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 		free_tab(args);
 		free(path_cmd);
 		return (printf("minishell: %s: trouver msg derreur\n", args[0]),
-			g->$ = (128 + execve_status), (void)1);
+			g->$ = 2, (void)1);
 	}
 }
-int	verif_wight_space(char *line)
-{
-	int	i;
 
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] > 32)
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
-void	multiple_pipe(char *line, t_general *g)
-{
-	char	*new_line;
 
-	flag = 1;
-	new_line = verif_quote(line);
-	if (new_line == NULL || *new_line == '\0')
-		return (free(new_line));
-	check_redirections(new_line);
-	check_special_characters(new_line);
-	count_commands(new_line, g);
-	free(g->line);
-	g->line = new_line;
-}
 void	init(t_general *g)
 {
 	g->tab_cmd = NULL;
@@ -176,11 +72,15 @@ void	init(t_general *g)
 	g->check_pipe = 0;
 	g->nbr_file = 0;
 	g->tab_file = NULL;
+	g->handle_eko = NULL;
+	g->flag_eko_n = 0;
+	g->path = NULL;
+	g->petit_tab = NULL;
 
 }
 int boucle(t_general *g)
 {
-
+	
 	if (g->nbr_pipe != 0)
 	{
 		execute_pipeline(g->tab_pipe, g);
@@ -208,10 +108,13 @@ int	main(int ac, char **av, char **envp)
 		g.prompt = ft_get_prompt();
 		g.line = readline(g.prompt);
 		free(g.prompt);
+		g.line = trim_space(g.line);
 		if (g.line == NULL)
 			break ;
 		if (*g.line == '\0')
-			continue ;
+		{
+		     continue;
+		}
 		add_history(g.line);
 		g.nbr_pipe = count_pipe(g.line);
 		g.tab_pipe = split_by_pipe(g.line);

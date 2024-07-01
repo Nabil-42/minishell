@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_double_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/27 08:39:23 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:27:54 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	handle_consecutive_quotes(char *str, t_echo *eko)
 {
 	if (str[eko->i] == '"' && str[eko->i + 1] == '"')
 	{
-		eko->line[eko->j] = ' ';
+		eko->line[eko->j] = '\0';
 		eko->i += 2;
 		return (2);
 	}

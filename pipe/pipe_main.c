@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/27 12:44:29 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 18:48:21 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,74 +17,74 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
+extern volatile sig_atomic_t	flag;
 
 void execute_pipeline(char **tab_pipe, t_general *g) 
 {
-    int pipe_fd[2];
+    int pipe_fds[2];
+    int input_fd = 0; // Input file descriptor for the first command
     pid_t pid;
     int i = 0;
-    int in_fd = STDIN_FILENO;
+    flag = 1;
 
     while (tab_pipe[i] != NULL) {
         if (tab_pipe[i + 1] != NULL) {
-            if (pipe(pipe_fd) < 0) {
+            if (pipe(pipe_fds) == -1) {
                 perror("pipe");
                 exit(EXIT_FAILURE);
             }
         }
-        
-        pid = fork();
-        if (pid < 0) {
+
+        // Fork a new process
+        if ((pid = fork()) == -1) {
             perror("fork");
             exit(EXIT_FAILURE);
-        } else if (pid == 0) {
-            if (in_fd != STDIN_FILENO) {
-                if (dup2(in_fd, STDIN_FILENO) < 0) {
-                    perror("dup2");
+        }
+
+        if (pid == 0) { // Child process
+            if (i > 0) { // If not the first command, get input from the previous pipe
+                if (dup2(input_fd, 0) == -1) {
+                    perror("dup2 input_fd");
                     exit(EXIT_FAILURE);
                 }
-                close(in_fd);
-            }
-            if (tab_pipe[i + 1] != NULL) {
-                if (dup2(pipe_fd[1], STDOUT_FILENO) < 0) {
-                    perror("dup2");
-                    exit(EXIT_FAILURE);
-                }
-                close(pipe_fd[0]);
-                close(pipe_fd[1]);
+                close(input_fd);
             }
 
-            printf("COMBIEN\n");
-            g->check_pipe = 1;
-            handle_redirections_and_execute(tab_pipe[i], g);
-            
-            exit(EXIT_FAILURE);
-        } else {
-            if (in_fd != STDIN_FILENO) {
-                close(in_fd);
+            if (tab_pipe[i + 1] != NULL) { // If not the last command, output to the current pipe
+                if (dup2(pipe_fds[1], 1) == -1) {
+                    perror("dup2 pipe_fds[1]");
+                    exit(EXIT_FAILURE);
+                }
+                close(pipe_fds[1]);
+                close(pipe_fds[0]);
+            }
+
+            // Execute the current command
+            handle_redirections_and_execute(tab_pipe[i],g);
+        } else { // Parent process
+            wait(NULL); // Wait for the child process to complete
+            if (input_fd != 0) {
+                close(input_fd);
             }
             if (tab_pipe[i + 1] != NULL) {
-                close(pipe_fd[1]);
-                in_fd = pipe_fd[0];
+                close(pipe_fds[1]);
+                input_fd = pipe_fds[0]; // Save the input for the next command
             }
-            wait(NULL);
         }
         i++;
     }
-
-    if (in_fd != STDIN_FILENO) {
-        close(in_fd);
-    }
 }
 
-void	pipe_while(t_general *g, char *str)
+void	pipe_while(t_general *g)
 {
 	int		pipefd[2];
 	pid_t	pid;
 	int		i;
 	int		k;
 
-	int num_pipes = g->count; 
+	int num_pipes = g->count;
+        flag = 1;
+
 	i = 0;
 	k = 0;
 	int prev_pipe_read = -1;
@@ -120,10 +120,7 @@ void	pipe_while(t_general *g, char *str)
 			
 			
 			ft_execve(g->tab_cmd[0], g->tab_cmd[0], g);
-            free_tab(g->tab_pipe);free_tab(g->tab_dir);
-	    	free_tab(g->tab_cmd);
-	    	free(str);
-	    	free_tab(g->tab_file);
+            free_tab(g->tab_cmd);
 			exit(EXIT_FAILURE);
 		}
 		else

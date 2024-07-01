@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/06/27 14:19:07 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:38:34 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,6 @@
 
 # define PATH_MAX 4096
 
-
-
-typedef struct s_general
-{
-	char		**tab_cmd;
-	char		**tab_dir;
-	char		**tab_pipe;
-	char 		**tab_file;
-	char		*line;
-	char		*prompt;
-	char		*command_before_pipe;
-	char		*command_after_pipe;
-	int			status;
-	int			count;
-	int			nbr_dir;
-	int 			$;
-	int 			index_dir;
-	int		nbr_pipe;
-	int			check_dir;
-	int 		check_pipe;
-	int 		nbr_file;
-	t_env		local_env;
-}				t_general;
-
-
 typedef struct s_echo
 {
 	int			flag;
@@ -73,6 +48,36 @@ typedef struct s_echo
 
 }				t_echo;
 
+
+typedef struct s_general
+{
+	char 		**petit_tab;
+	char		**tab_cmd;
+	char		**tab_dir;
+	char		**tab_pipe;
+	char 		**tab_file;
+	char		*line;
+	char		*prompt;
+	char 		*handle_eko;
+	char		*command_before_pipe;
+	char		*command_after_pipe;
+	char		*path;
+	int		flag_eko_n;
+	int			status;
+	int			count;
+	int			nbr_dir;
+	int 			$;
+	int 			index_dir;
+	int		nbr_pipe;
+	int			check_dir;
+	int 		check_pipe;
+	int 		nbr_file;
+	t_env		local_env;
+	t_echo		bis;
+}				t_general;
+
+
+
 typedef struct s_signals
 {
 	int			i;
@@ -82,7 +87,7 @@ int 	direction_double_$(char *str, t_echo *eko, t_general *g, int $);
 int 	direction_$(char *str, t_echo *eko, t_general *g, int $);
 
 ///////////////////// ECHO ////////////////////////
-
+void	init_eko(t_echo *eko, t_general *g);
 int				echo_take_of_simple_quote(char *str, t_echo *eko, int n, t_general *g);
 char			*remake_str(char **tab, t_echo *eko, int i);
 void			prepare_echo(char **tab, t_echo *eko, char **str, char **tmp);
@@ -107,6 +112,7 @@ void			echo_verif_3_n(t_echo *eko, t_general *g);
 int 				direction_double_$(char *str, t_echo *eko, t_general *g, int $);
 int 				direction_$(char *str, t_echo *eko, t_general *g, int $);
 char	*remake_str_bis(char **tab);
+int	dollar_bis(char *str, t_echo *eko, t_general *g);
 
 ///////////////////// ENV ///////////////////////////
 void	ft_export(t_general *g, char **args, t_echo *eko);
@@ -130,10 +136,11 @@ void			check_redirection_2(int *expecting_command, int *i, char *str);
 int				is_space(char *str, int *i);
 int				check_redirections(char *str);
 char			**split_delimiters(const char *str, int *result_size);
-int				direction_double(char *str, t_echo *eko, t_general *g,
-					char *line);
-int				direction(char *str, t_echo *eko, t_general *g, char *line);
 char **split_file(char *str, int *result_size);
+char	**cmd_args(char *line);
+char	*ft_get_prompt(void);
+char *trim_space(char *str);
+char **split_delimiters(const char *str, int *result_size);
 
 ///////////////////// BUILTINS ///////////////////////////
 void			ft_exit(char **tab, t_general *g);
@@ -142,6 +149,8 @@ void			ft_exit(char **tab, t_general *g);
 char **split_by_pipe(char *cmd);
 void execute_pipeline(char **commands, t_general *g);
 int	count_pipe(char *str);
+void	echo_bis(char **tab, t_echo *eko, t_general *g);
+
 
 
 
@@ -158,11 +167,11 @@ char			*based_path(char *cmd, t_general *g);
 char			*verif_quote(char *str);
 void			main_signal(void);
 void			sig_handler(int sig);
-void			pipe_while(t_general *g, char *str);
+void			pipe_while(t_general *g);
 void			ft_execve(char *line, char *tab_cmd, t_general *g);
 int				builtin(char *line, t_env *local_env, t_general *g);
 void			cd_project(char **tab, t_general *g);
-void			pwd(char **tab);
+void			pwd(char **tab, t_general *g);
 void			export(char **tab);
 int				dollar_double(char *str, t_echo *eko);
 int				echo_take_of_double_quote(char *str, t_echo *eko, int n, t_general *g);

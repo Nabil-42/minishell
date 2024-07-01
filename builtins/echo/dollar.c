@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/27 14:09:46 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:30:22 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*extract_env_variable_name(char *str, int *i)
 				k++;
 			}
 			else {
-				printf("%s\n", &str[*i + 1]);
 				return(free(variable_env),NULL);
 			}
 		}
@@ -43,22 +42,6 @@ char	*extract_env_variable_name(char *str, int *i)
 	variable_env[k] = '\0';
 	return (variable_env);
 }
-
-// char	*pars_variable_name(char *str)
-// {
-// 	int		i;
-
-// 	i = 0;
-// 	if (!(ft_isalpha(str[i]) || str[i] == '_'))
-// 		return (0);
-// 	while (str[i])
-// 	{ 
-// 		if (ft_isalnum(str[i]) || str[i] == '_'))
-		
-// 		i++;
-// 	}
-// 	return (variable_env);
-// }
 
 int	handle_variable_expansion(char *str, t_echo *eko, int *i, t_general *g)
 {
@@ -82,6 +65,14 @@ int	handle_variable_expansion(char *str, t_echo *eko, int *i, t_general *g)
 	}
 	return (1);
 }
+
+void	copy_normal_char_bis(char *str, t_echo *eko, int *i, t_general *g)
+{
+	(void)g;
+	(eko->line[eko->j++] = str[*i]);
+	++(*i);
+}
+
 void	copy_normal_char(char *str, t_echo *eko, int *i, t_general *g)
 {
 	char	*itoua;
@@ -111,9 +102,7 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 	eko->j = 0;
 	while (str[i])
 	{
-		if (g->check_dir == 1)
-			return (0);
-		if (str[i] == '$' && str[i + 1] != '\0' && str[eko->i + 1] != '?')
+		if (str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != '?')
 		{
 			if (!handle_variable_expansion(str, eko, &i, g))
 				return (0);
@@ -122,6 +111,26 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 		copy_normal_char(str, eko, &i, g);
 	}
 	eko->line[eko->j] = '\0';
-	printf("%s\n", eko->line);
+	return (0);
+}
+
+int	dollar_bis(char *str, t_echo *eko, t_general *g)
+{
+	int	i;
+
+	i = 0;
+	eko->j = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && (str[i + 1] != '\0' && str[i + 1] != '?'))
+		{
+			if (!handle_variable_expansion(str, eko, &i, g))
+				return (0);
+			continue ;
+		}
+		copy_normal_char_bis(str, eko, &i, g);
+
+	}
+	eko->line[eko->j] = '\0';
 	return (0);
 }

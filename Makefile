@@ -6,7 +6,7 @@
 #    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/06/26 09:59:31 by nabil            ###   ########.fr        #
+#    Updated: 2024/07/01 17:20:27 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,10 +30,15 @@ LIBFT		:= $(LIBFTDIR)/libft.a
 HDRS		:= ./includes
 SRCS		:= ./main.c \
 			./signals/signals.c \
+			./utils/count_redir.c \
+			./utils/trim.c \
+			./utils/split_delimiters.c \
 			./pipe/pipe_main.c \
 			./parsing/parsing.c \
 			./parsing/parsing_2.c \
 			./parsing/parsing_3.c \
+			./parsing/parsing_4.c \
+			./parsing/parsing_5.c \
 			./parsing/split_str.c \
 			./parsing/split_file.c \
 			./builtins/echo/echo.c \

@@ -58,6 +58,10 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "readline.h": "c",
-    "libft.h": "c"
+    "libft.h": "c",
+    "*.tcc": "c",
+    "memory_resource": "c",
+    "memory": "c",
+    "streambuf": "c"
   }
 }

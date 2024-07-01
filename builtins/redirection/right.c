@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/27 10:43:59 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/01 20:04:06 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,11 +135,31 @@ int	apply_redirection(int fd, char *redir_type, t_general *g)
 void	exe_cmd(char *cmd, t_general *g)
 {
 	if (builtin(cmd, &g->local_env, g))
-		return ;
+	{
+		if (g->flag_eko_n == 0 && g->handle_eko[0] != ' ')
+			printf("%s\n", g->handle_eko);
+		else if (g->flag_eko_n == 1)
+			printf("%s", g->handle_eko);
+		else if(g->flag_eko_n == 2)
+			return (printf("%d\n", g->$), (void)0);
+		else if(g->flag_eko_n == 3)
+			return;
+		else if (g->flag_eko_n == 4)
+		{
+			printf("%s\n", g->path);
+			free(g->path);
+		}
+		else if (g->flag_eko_n == 6)
+			printf("\n");
+		if (g->handle_eko != NULL)
+		     free(g->handle_eko);
+	}
 	else if (g->nbr_pipe > 0)
 		return (ft_execve(cmd, cmd, g));
 	else
-		(pipe_while(g, cmd));
+		(pipe_while(g));
+
+	
 }
 
 int	handle_redirections_and_execute(char *cmd, t_general *g)
@@ -148,7 +168,8 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	int		saved_stdout;
 	int		saved_stdin;
 	int		i;
-	char	*str;
+	// char	*str;
+	t_echo	ikou;
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
@@ -160,9 +181,16 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		return (-1);
 	}
 	g->tab_cmd = split_str(cmd, &g->nbr_dir);
-	// printf("tab_cmd[%d] = %s\n",i, g->tab_cmd[0]);
-	//     printf("tab_cmd[%d] = %s\n",i, g->tab_cmd[1]);
-	//     printf("tab_cmd[%d] = %s\n",i, g->tab_cmd[2]);
+	if (ft_strcmp(g->tab_cmd[0], "''") == 0 || ft_strcmp(g->tab_cmd[0], "\"\"") == 0)
+	{
+		return (printf("minishell: %s: command not found\n", cmd), 
+		g->$ = 42, -1);
+	}
+	
+	echo_bis(g->tab_cmd, &ikou, g);
+	// printf("nabil = %s\n", ikou.line);
+	    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
+	//     printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
 	g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
 	//     printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[1]);
@@ -171,7 +199,8 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	// printf("tab_dir[%d] = %s\n",i, g->tab_file[0]);
 	// printf("tab_dir[%d] = %s\n",i, g->tab_file[1]);
 	// printf("tab_dir[%d] = %s\n",i, g->tab_file[2]);
-	str = remake_str_bis(g->tab_cmd);
+	// str = remake_str_bis(g->tab_cmd);
+	// printf("NABIL = %s\n", str);
 	while (i < g->nbr_file)
 	{
 		fd = handle_single_redirection(g->tab_file[i], g->tab_dir[i], g);
@@ -189,63 +218,11 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		}
 		i++;
 	}
-	exe_cmd(str, g);
+	exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);
-	free(str);
 	free_tab(g->tab_dir);
 	free_tab(g->tab_cmd);
 	free_tab(g->tab_file);
 	return (2);
 }
 
-int	direction(char *str, t_echo *eko, t_general *g, char *line)
-{
-	char	output[1024];
-	int		fd;
-	int		saved_stdout;
-	int		i;
-
-	i = 0;
-	(void)g;
-	(void)eko;
-	skip_white_space(str, i, output);
-	fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		return (0);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (saved_stdout < 0)
-		(perror("dup"), close(fd), exit(EXIT_FAILURE));
-	if (dup2(fd, STDOUT_FILENO) < 0)
-		(perror("dup2"), close(fd), exit(EXIT_FAILURE));
-	(close(fd), printf("%s\n", line));
-	if (dup2(saved_stdout, STDOUT_FILENO) < 0)
-		(perror("dup2"), close(saved_stdout), exit(EXIT_FAILURE));
-	close(saved_stdout);
-	return (0);
-}
-
-int direction_$(char *str, t_echo *eko, t_general *g, int $)
-{
-	char output[1024];
-	int fd;
-	int saved_stdout;
-	int i;
-
-	i = 0;
-	(void)g;
-	(void)eko;
-	skip_white_space(str, i, output);
-	fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		(perror("open"), exit(EXIT_FAILURE));
-	saved_stdout = dup(STDOUT_FILENO);
-	if (saved_stdout < 0)
-		(perror("dup"), close(fd), exit(EXIT_FAILURE));
-	if (dup2(fd, STDOUT_FILENO) < 0)
-		(perror("dup2"), close(fd), exit(EXIT_FAILURE));
-	(close(fd), printf("%d\n", $));
-	if (dup2(saved_stdout, STDOUT_FILENO) < 0)
-		(perror("dup2"), close(saved_stdout), exit(EXIT_FAILURE));
-	close(saved_stdout);
-	return (0);
-}

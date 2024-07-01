@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/26 16:05:16 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/01 19:25:56 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,16 @@ void	echo_2(t_general *g, char *str, t_echo *eko, char *tmp)
 	if (eko->tab[1] && ft_strcmp(eko->tab[1], "-n") == 0)
 	{
 		echo_args(str, eko, tmp, g);
-		free(eko->line);
+		g->flag_eko_n = 1;
 		free(str);
 		return ;
 	}
 	if (*tmp == '\0' && str[0] != 39 && str[1] != 39)
 	{
 		dollar(str, eko, g);
-		free(eko->line);
 		free(str);
 		return ;
 	}
-	printf("%s\n", tmp);
-	free(eko->line);
 	free(str);
 }
 
@@ -121,9 +118,50 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 	tmp = echo_verif_quote(str, eko, g);
 	if (tmp == NULL)
 	{
-		free(eko->line);
 		free(str);
 		return ;
 	}
 	echo_2(g, str, eko, tmp);
+	g->handle_eko = eko->line;
 }
+
+void	echo_2_bis(t_general *g, char *str, t_echo *eko, char *tmp)
+{
+	(void)g;
+	if (*tmp == '\0' && str[0] != 39 && str[1] != 39)
+	{
+		dollar_bis(str, eko, g);
+		free(str);
+		return ;
+	}
+	free(str);
+}
+
+void	echo_bis(char **tab, t_echo *eko, t_general *g)
+{
+	char	*str;
+	char	*tmp;
+
+	str = NULL;
+	tmp = NULL;
+	init_eko(eko, g);
+	str = remake_str(tab, eko, 0);
+	if (!str)
+	{
+		free_tab(tab);
+		free(str);
+		return ;
+	}
+	eko->line = malloc(sizeof(char) * (eko->len_str + PATH_MAX + 1));
+	if (!eko->line)
+		return (free(str), (void)0);
+	tmp = echo_verif_quote(str, eko, g);
+	if (tmp == NULL)
+	{
+		free(str);
+		return ;
+	}
+	echo_2_bis(g, str, eko, tmp);
+	g->handle_eko = eko->line;
+}
+
