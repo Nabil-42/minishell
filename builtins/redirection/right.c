@@ -191,7 +191,7 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	}
 	g->flag_eko_n = 0;
 	echo_bis(g->tab_cmd, &ikou, g);
-	//printf("nabil = %s\n", ikou.line);
+	//printf(" = %s\n", ikou.line);
 	//    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
 	//     printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
 	g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
@@ -203,7 +203,7 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	// printf("tab_dir[%d] = %s\n",i, g->tab_file[1]);
 	// printf("tab_dir[%d] = %s\n",i, g->tab_file[2]);
 	// str = remake_str_bis(g->tab_cmd);
-	// printf("NABIL = %s\n", str);
+	// printf(" = %s\n", str);
 	while (i < g->nbr_file)
 	{
 		fd = handle_single_redirection(g->tab_file[i], g->tab_dir[i], g);
