@@ -67,8 +67,10 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 	eko.tab = NULL;
 	
 	test = remake_str_bis(g->tab_cmd);
-	printf("HAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaH = %s", g->tab_cmd[0]);
+	//printf("HAHAAAAAAAAAAA test = %s\n", test);
+	//printf("HAHAAAAAAAAAAAA cmd 0 = %s\n", g->tab_cmd[0]);
 	g->petit_tab = ft_split(test, ' ');
+	//printf("HAHAAAAAAAAAAAA petit tab = %s\n", g->petit_tab[1]);
 	eko.tab = ft_split(line, ' ');
 	init_eko(&eko, g);
 	if(!eko.tab[0])
