@@ -70,7 +70,8 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 	//printf("HAHAAAAAAAAAAA test = %s\n", test);
 	//printf("HAHAAAAAAAAAAAA cmd 0 = %s\n", g->tab_cmd[0]);
 	g->petit_tab = ft_split(test, ' ');
-	//printf("HAHAAAAAAAAAAAA petit tab = %s\n", g->petit_tab[1]);
+	free(test);
+	//printf("HAHAAAAAAAAAAAA petit tab = %s\n", g->petit_tab[0]);
 	eko.tab = ft_split(line, ' ');
 	init_eko(&eko, g);
 	if(!eko.tab[0])
@@ -81,11 +82,12 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 		&& ft_strcmp(eko.tab[0],"env") != 0
 		&& ft_strcmp(eko.tab[0], "exit") != 0
 		&& eko.tab[1] == NULL)
-		return (free_tab(eko.tab), free_tab(g->petit_tab), 0);
+		return (free_tab(eko.tab), free_tab(g->petit_tab),0);
 	if (ft_strcmp(eko.tab[0], "echo") == 0
 		&& eko.tab[1] == NULL)
 	{
 		g->flag_eko_n = 6;
+		free_tab(eko.tab);
 		free_tab(g->petit_tab);
 		return (1);
 	}

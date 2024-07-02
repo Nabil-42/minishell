@@ -102,6 +102,7 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 
 	str = NULL;
 	tmp = NULL;
+	//printf("OUAIS ?\n");
 	if (tab[1] && ft_strcmp(tab[1], "-n") == 0)
 		str = remake_str(tab, eko, 2);
 	else

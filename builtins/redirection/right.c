@@ -150,9 +150,12 @@ void	exe_cmd(char *cmd, t_general *g)
 			free(g->path);
 		}
 		else if (g->flag_eko_n == 6)
-			printf("\n");
+			return (printf("\n"), (void)0);
 		if (g->handle_eko != NULL)
-		     free(g->handle_eko);
+		{
+		    free(g->handle_eko);
+			g->handle_eko = NULL;
+		}
 	}
 	else if (g->nbr_pipe > 0)
 		return (ft_execve(cmd, cmd, g));
@@ -186,7 +189,7 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		return (printf("minishell: %s: command not found\n", cmd), 
 		g->$ = 42, -1);
 	}
-	
+	g->flag_eko_n = 0;
 	echo_bis(g->tab_cmd, &ikou, g);
 	//printf("nabil = %s\n", ikou.line);
 	//    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
@@ -220,6 +223,11 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	}
 	exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);
+	if (ikou.line != NULL) 
+	{
+        free(ikou.line);
+        ikou.line = NULL; 
+    }
 	free_tab(g->tab_dir);
 	free_tab(g->tab_cmd);
 	free_tab(g->tab_file);
