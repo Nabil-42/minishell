@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 20:03:39 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/03 00:01:01 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 	if (ft_strcmp(tab[0], "pwd") == 0)
 		return (pwd(tab, g), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "env") == 0)
-		return (ft_env(local_env), free_tab(eko->tab),free_tab(g->petit_tab), 1);
+		return (ft_env(local_env, g), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "export") == 0)
 		return (ft_export(g, tab, eko), free_tab(eko->tab),free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "unset") == 0)
-		return (ft_unset(local_env, tab), free_tab(eko->tab), free_tab(g->petit_tab), 1);
+		return (ft_unset(local_env, tab, g), free_tab(eko->tab), free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "exit") == 0)
 		return (ft_exit(tab, g), free_tab(eko->tab), free_tab(g->petit_tab), 1);
 	free_tab(eko->tab), free_tab(g->petit_tab);

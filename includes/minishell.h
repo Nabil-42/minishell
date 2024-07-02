@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/01 19:38:34 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/03 00:02:52 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ int	dollar_bis(char *str, t_echo *eko, t_general *g);
 
 ///////////////////// ENV ///////////////////////////
 void	ft_export(t_general *g, char **args, t_echo *eko);
-
+void	ft_env(t_env *env, t_general *g);
+void	ft_unset(t_env *env, char **args, t_general *g);
 
 ///////////////////// REDIRECTION ///////////////////////////
 void			skip_white_space(char *str, int i, char *output);

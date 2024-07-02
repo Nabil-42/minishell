@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:17:26 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/01 19:30:39 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/03 00:01:30 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,10 +220,9 @@ void	ft_export(t_general *g, char **args, t_echo *eko)
 {
 	int	i;
 
+	g->flag_eko_n = 3;
 	echo(args, eko, g);
-	free_tab(args);
 	args = ft_split(eko->line, ' ');
-	free(eko->line);
 	i = 0;
 	while (args[i])
 	{
@@ -233,13 +232,14 @@ void	ft_export(t_general *g, char **args, t_echo *eko)
 	}
 }
 
-void	ft_unset(t_env *env, char **args)
+void	ft_unset(t_env *env, char **args, t_general *g)
 {
 	t_list	**lst;
 	int		hash;
 	int		i;
 
 	//parsing function
+	g->flag_eko_n = 3;
 	i = 1;
 	while (args[i])
 	{	
@@ -261,11 +261,12 @@ void	delete_envp(char **envp)
 }
 
 
-void	ft_env(t_env *env)
+void	ft_env(t_env *env, t_general *g)
 {
 	char	**local_env;
 	int		i;
 
+	g->flag_eko_n = 3;
 	local_env = get_local_env(env);
 	i = 0;
 	while (local_env[i])

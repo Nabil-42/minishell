@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 20:04:06 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/02 23:54:28 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	exe_cmd(char *cmd, t_general *g)
 			return (printf("\n"), (void)0);
 		if (g->handle_eko != NULL)
 		{
-		    free(g->handle_eko);
+		   	free(g->handle_eko);
 			g->handle_eko = NULL;
 		}
 	}
@@ -225,9 +225,9 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	restore_standard_fds(saved_stdout, saved_stdin, g);
 	if (ikou.line != NULL) 
 	{
-        free(ikou.line);
-        ikou.line = NULL; 
-    }
+        	free(ikou.line);
+        	ikou.line = NULL; 
+   	}
 	free_tab(g->tab_dir);
 	free_tab(g->tab_cmd);
 	free_tab(g->tab_file);

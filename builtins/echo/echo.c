@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/01 19:25:56 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/02 23:55:01 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,6 @@ void	echo_bis(char **tab, t_echo *eko, t_general *g)
 		return ;
 	}
 	echo_2_bis(g, str, eko, tmp);
-	g->handle_eko = eko->line;
+	// g->handle_eko = eko->line;
 }
 
