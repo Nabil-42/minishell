@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 19:30:22 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/03 18:06:25 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*extract_env_variable_name(char *str, int *i)
 				k++;
 			}
 			else {
-				return(free(variable_env),NULL);
+				break;
 			}
 		}
 	}
