@@ -192,14 +192,14 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	g->flag_eko_n = 0;
 	echo_bis(g->tab_cmd, &ikou, g);
 	//printf(" = %s\n", ikou.line);
-	    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
-	     printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
+	    //printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
+	     //printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
 	g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
-	     printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
+	     //printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[1]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[2]);
 	g->tab_file = split_file(cmd, &g->nbr_file);
-	printf("tab_file[%d] = %s\n",i, g->tab_file[0]);
+	//printf("tab_file[%d] = %s\n",i, g->tab_file[0]);
 	//printf("tab_file[%d] = %s\n",i, g->tab_file[1]);
 	//printf("tab_file[%d] = %s\n",i, g->tab_file[2]);
 	// str = remake_str_bis(g->tab_cmd);
