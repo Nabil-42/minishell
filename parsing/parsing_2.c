@@ -51,7 +51,7 @@ char	*verif_quote(char *str)
 		if (str[i] != '"' && str[i] != '\'')
 		{
 			if (str[i] == ' ')
-				++j;
+				++i;
 			new_str[j] = str[i];
 			j++;
 		}

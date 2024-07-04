@@ -61,7 +61,7 @@ void	restore_standard_fds(int saved_stdout, int saved_stdin, t_general *g)
 	if (dup2(saved_stdout, STDOUT_FILENO) < 0 || dup2(saved_stdin,
 			STDIN_FILENO) < 0)
 	{
-		g->$ = 500;
+		g->$ = 0;
 		// perror("dup2");
 	}
 	close(saved_stdout);
@@ -93,7 +93,7 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	if (fd < 0)
 	{
 		g->$ = 2;
-		ft_fprintf(2, "%s: No such file or directory\n", filename);
+		//ft_fprintf(2, "%s: No such file or directory\n", filename);
 		return (-1);
 	}
 	return (fd);
@@ -158,7 +158,7 @@ void	exe_cmd(char *cmd, t_general *g)
 		}
 	}
 	else if (g->nbr_pipe > 0)
-		return (ft_execve(cmd, cmd, g));
+		return (execute_pipeline(g->tab_pipe, g));
 	else
 		(pipe_while(g));
 
@@ -179,7 +179,7 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	i = 0;
 	if (saved_stdout < 0 || saved_stdin < 0)
 	{
-		perror("dup");
+		// perror("dup");
 		g->$ = 2;
 		return (-1);
 	}
@@ -192,16 +192,16 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	g->flag_eko_n = 0;
 	echo_bis(g->tab_cmd, &ikou, g);
 	//printf(" = %s\n", ikou.line);
-	//    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
-	//     printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
+	    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
+	     printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
 	g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
-	//     printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
+	     printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[1]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[2]);
 	g->tab_file = split_file(cmd, &g->nbr_file);
-	// printf("tab_file[%d] = %s\n",i, g->tab_file[0]);
-	// printf("tab_dir[%d] = %s\n",i, g->tab_file[1]);
-	// printf("tab_dir[%d] = %s\n",i, g->tab_file[2]);
+	printf("tab_file[%d] = %s\n",i, g->tab_file[0]);
+	//printf("tab_file[%d] = %s\n",i, g->tab_file[1]);
+	//printf("tab_file[%d] = %s\n",i, g->tab_file[2]);
 	// str = remake_str_bis(g->tab_cmd);
 	// printf(" = %s\n", str);
 	while (i < g->nbr_file)
@@ -211,6 +211,8 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		{
 			restore_standard_fds(saved_stdout, saved_stdin, g);
 			g->$ = 2;
+			++i;
+			continue;
 		}
 		if (apply_redirection(fd, g->tab_dir[i], g) < 0)
 		{

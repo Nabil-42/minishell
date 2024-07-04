@@ -88,6 +88,7 @@ void	pipe_while(t_general *g)
 	i = 0;
 	k = 0;
 	int prev_pipe_read = -1;
+    
 	while (i <= num_pipes)
 	{
 		if (i < num_pipes && pipe(pipefd) == -1)

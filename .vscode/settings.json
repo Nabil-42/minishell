@@ -62,6 +62,7 @@
     "*.tcc": "c",
     "memory_resource": "c",
     "memory": "c",
-    "streambuf": "c"
+    "streambuf": "c",
+    "sstream": "c"
   }
 }

@@ -25,11 +25,12 @@ char *get_next_token(char *str, int *i)
 {
     int quote = 0;
     int start = *i;
-    while (str[*i] && (str[*i] != ' ' && quote % 2 != 2))
+    while (str[*i] && !is_redirection(str[*i]))
     {
-    printf("ici %c\n", str[*i]);
         if (str[*i] == '"')
             quote += 1;
+        if (str[*i] == ' ' && quote == 2)
+            break;
         (*i)++;
     }
     int len = *i - start;
@@ -85,7 +86,7 @@ char **split_file(char *str, int *result_size)
             if (str[i] && str[i] != ' ')
             {
                 
-                char *token = get_next_token(str, &i);
+                char *token = verif_quote(get_next_token(str, &i));
                 if (token)
                 {
                     result[*result_size] = token;
