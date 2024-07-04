@@ -1,0 +1,7 @@
+[main 57f6e28] auto commit: update
+ 6 files changed, 48 insertions(+), 29 deletions(-)
+git@github.com: Permission denied (publickey).
+fatal: Impossible de lire le dépôt distant.
+
+Veuillez vérifier que vous avez les droits d'accès
+et que le dépôt existe.
