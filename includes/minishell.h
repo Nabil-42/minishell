@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/03 00:02:52 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/04 19:56:30 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_general
 	int			check_dir;
 	int 		check_pipe;
 	int 		nbr_file;
+	int 		flag_error;
 	t_env		local_env;
 	t_echo		bis;
 }				t_general;
@@ -151,7 +152,7 @@ char **split_by_pipe(char *cmd);
 void execute_pipeline(char **commands, t_general *g);
 int	count_pipe(char *str);
 void	echo_bis(char **tab, t_echo *eko, t_general *g);
-
+int	handle_redirections_and_execute_bis(char *cmd, t_general *g);
 
 
 

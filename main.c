@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/01 19:38:51 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/04 23:15:32 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	flag = 1;
 	args = cmd_args(tab_cmd);
 	path_cmd = based_path(args[0], g);
+	// printf("path %s\n", path_cmd);
 	if (path_cmd == NULL)
 	    return(free_tab(args));
 	if (g->check_pipe == 1)
@@ -44,6 +45,7 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	execve_status = execve(path_cmd, args, envp);
 	if (execve_status != 0)
 	{
+		perror("execve");
 		free_tab(args);
 		free(path_cmd);
 		return (printf("minishell: %s: trouver msg derreur\n", args[0]),
@@ -76,6 +78,7 @@ void	init(t_general *g)
 	g->flag_eko_n = 0;
 	g->path = NULL;
 	g->petit_tab = NULL;
+	g->flag_error = 0;
 
 }
 int boucle(t_general *g)

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 18:48:21 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/04 23:09:35 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,30 @@
 
 extern volatile sig_atomic_t	flag;
 
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <stdio.h>
+
 void execute_pipeline(char **tab_pipe, t_general *g) 
 {
     int pipe_fds[2];
     int input_fd = 0; // Input file descriptor for the first command
     pid_t pid;
     int i = 0;
-    flag = 1;
 
     while (tab_pipe[i] != NULL) {
-        if (tab_pipe[i + 1] != NULL) {
-            if (pipe(pipe_fds) == -1) {
+        if (tab_pipe[i + 1] != NULL) 
+        {
+            if (pipe(pipe_fds) == -1) 
+            {
                 perror("pipe");
                 exit(EXIT_FAILURE);
             }
         }
 
-        // Fork a new process
-        if ((pid = fork()) == -1) {
+        if ((pid = fork()) == -1) 
+        {
             perror("fork");
             exit(EXIT_FAILURE);
         }
@@ -50,8 +56,10 @@ void execute_pipeline(char **tab_pipe, t_general *g)
                 close(input_fd);
             }
 
-            if (tab_pipe[i + 1] != NULL) { // If not the last command, output to the current pipe
-                if (dup2(pipe_fds[1], 1) == -1) {
+            if (tab_pipe[i + 1] != NULL) 
+            { // If not the last command, output to the current pipe
+                if (dup2(pipe_fds[1], 1) == -1) 
+                {
                     perror("dup2 pipe_fds[1]");
                     exit(EXIT_FAILURE);
                 }
@@ -60,9 +68,12 @@ void execute_pipeline(char **tab_pipe, t_general *g)
             }
 
             // Execute the current command
-            handle_redirections_and_execute(tab_pipe[i],g);
+            
+            handle_redirections_and_execute(tab_pipe[i], g);
+
+            // If execve fails, terminate the child process
+            exit(EXIT_FAILURE);
         } else { // Parent process
-            wait(NULL); // Wait for the child process to complete
             if (input_fd != 0) {
                 close(input_fd);
             }
@@ -70,10 +81,12 @@ void execute_pipeline(char **tab_pipe, t_general *g)
                 close(pipe_fds[1]);
                 input_fd = pipe_fds[0]; // Save the input for the next command
             }
+            wait(NULL); // Wait for the child process to complete
         }
         i++;
     }
 }
+
 
 void	pipe_while(t_general *g)
 {
