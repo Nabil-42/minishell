@@ -55,6 +55,11 @@ char	*verif_quote(char *str)
 			new_str[j] = str[i];
 			j++;
 		}
+		if (str[i] == '"')
+		{
+			new_str[j] = 39;
+			j++;
+		}
 		i++;
 	}
 	new_str[j] = '\0';
