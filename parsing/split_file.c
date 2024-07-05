@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 23:14:24 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/04 18:02:49 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/05 11:58:18 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ char *get_next_token(char *str, int *i)
 {
     int quote = 0;
     int start = *i;
-    while (str[*i] && (str[*i]))
+    while (str[*i] && (str[*i] != ' ' || quote % 2 != 0))
     {
     // printf("ici %c\n", str[*i]);
         if (str[*i] == '"')
             quote += 1;
+        
         (*i)++;
     }
     int len = *i - start;

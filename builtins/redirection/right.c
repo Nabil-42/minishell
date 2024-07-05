@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/04 23:17:04 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/05 17:46:00 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 {
 	int	fd;
 
+	// printf("handle line = %s\n ", filename);
 	if (strcmp(redir_type, ">") == 0)
 	{
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -190,23 +191,50 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		g->$ = 42, -1);
 	}
 	g->flag_eko_n = 0;
-	echo_bis(g->tab_cmd, &ikou, g);
+	
 	// printf(" ikou = %s\n", ikou.line);
 	//    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
+	//     printf("tab_cmd[1] = %s\n", g->tab_cmd[1]);
 	//     printf("tab_cmd[2] = %s\n", g->tab_cmd[2]);
 	g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
 	//     printf("tab_dir[%d] = %s\n",i, g->tab_dir[0]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[1]);
 	//         printf("tab_dir[%d] = %s\n",i, g->tab_dir[2]);
 	g->tab_file = split_file(cmd, &g->nbr_file);
-	printf("tab_file[%d] = %s\n",i, g->tab_file[0]);
-	printf("tab_dir[%d] = %s\n",i, g->tab_file[1]);
-	printf("tab_dir[%d] = %s\n",i, g->tab_file[2]);
+	// printf("tab_file[%d] = %s\n",0, g->tab_file[0]);
+	// printf("tab_file[%d] = %s\n",1, g->tab_file[1]);
+	// printf("tab_file[%d] = %s\n",2, g->tab_file[2]);
+	// printf("nbr dir %d\n", g->nbr_dir);
+	// printf("file = %d\n", g->nbr_file);
 	// str = remake_str_bis(g->tab_cmd);
 	// printf(" = %s\n", str);
 	while (i < g->nbr_file)
 	{
-		fd = handle_single_redirection(verif_quote(g->tab_file[i]), g->tab_dir[i], g);
+		if (g->tab_cmd[i + 1] != NULL)
+		{
+			if (ft_strncmp(g->tab_cmd[i + 1], " ./", 3) == 0)
+			{
+				g->tab_file[i + 1] = ft_strdup(g->tab_cmd[i + 1] + 1);
+				g->nbr_file += 1;
+			}
+		}
+		if (g->nbr_file > g->nbr_dir)
+		{
+			if (is_space_bis(g->tab_file[i + 1]))
+				fd = handle_single_redirection((g->tab_file[i + 1]), g->tab_dir[i], g);	
+			else (fd = handle_single_redirection(verif_quote((g->tab_file[i + 1])), g->tab_dir[i], g));
+			g->nbr_file -= 1;
+		}
+		else {
+			if (is_space_bis(g->tab_file[i]))
+			{
+				free(g->tab_cmd[1]);
+				g->tab_cmd[1] = NULL;
+				fd = handle_single_redirection(verif_quote_bis(g->tab_file[i]), g->tab_dir[i], g);
+			}
+			else (fd = handle_single_redirection(verif_quote((g->tab_file[i])), g->tab_dir[i], g));
+			
+			}
 		if (fd < 0)
 		{
 			restore_standard_fds(saved_stdout, saved_stdin, g);
@@ -221,6 +249,8 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		}
 		i++;
 	}
+	echo_bis(g->tab_cmd, &ikou, g);
+	// printf("dollar = %d\n", g->$);
 	exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);
 	if (ikou.line != NULL) 
@@ -228,9 +258,9 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
         	free(ikou.line);
         	ikou.line = NULL; 
    	}
+	free_tab(g->tab_file);
 	free_tab(g->tab_dir);
 	free_tab(g->tab_cmd);
-	free_tab(g->tab_file);
 	return (2);
 }
 

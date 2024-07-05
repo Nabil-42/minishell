@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/04 19:56:30 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/05 17:37:24 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,5 +181,8 @@ int				dollar(char *str, t_echo *eko, t_general *g);
 int				dollar_n(char *str, t_echo *eko, t_general *g);
 int				direction_double_n(char *str, t_echo *eko, t_general *g,
 					char *line);
+int	is_space_bis(char *str);
+char	*verif_quote_bis(char *str);
+
 
 #endif

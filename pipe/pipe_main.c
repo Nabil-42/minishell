@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/04 23:09:35 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/05 17:47:34 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void execute_pipeline(char **tab_pipe, t_general *g)
             // Execute the current command
             
             handle_redirections_and_execute(tab_pipe[i], g);
-
+            
+            
             // If execve fails, terminate the child process
             exit(EXIT_FAILURE);
         } else { // Parent process
