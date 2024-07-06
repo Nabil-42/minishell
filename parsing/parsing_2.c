@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/05 17:37:15 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:34:19 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	verif_quote_2(char *str, int i, int *double_quote_count,
 		i++;
 	}
 	if (*double_quote_count % 2 != 0 || *single_quote_count % 2 != 0)
-		return (printf("minishell: %s: 3 command not found\n", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 3 command not found\n", str), 1);
 	return (0);
 }
 char	*verif_quote_bis(char *str)
@@ -72,10 +72,10 @@ char	*verif_quote(char *str)
 	i = 0;
 	if (verif_quote_2(str, i, &double_quote_count, &single_quote_count))
 		return (NULL);
-	new_str = malloc(sizeof(char) * (strlen(str) + 1));
+	new_str = malloc(sizeof(char) * (strlen(str) + 10));
 	if (!new_str)
 		return (NULL);
-	while (str[i])
+	while (str[i] != '\0')
 	{
 		if (str[i] != '"' && str[i] != '\'')
 		{
@@ -133,7 +133,7 @@ int	check_redirections(char *str)
 		if (is_redirection(str[i]))
 		{
 			if (expecting_command)
-				return (printf("minishell: %s: 1 command not found\n", str));
+				return (ft_fprintf(2, "minishell: %s: 4 command not found\n", str));
 			if (str[i] == '<' && str[i + 1] == '<')
 				i += 2;
 			else if (str[i] == '>' && str[i + 1] == '>')
@@ -146,6 +146,6 @@ int	check_redirections(char *str)
 			(check_redirection_2(&expecting_command, &i, str));
 	}
 	if (expecting_command)
-		return (printf("minishell: %s: 2 command not found\n", str));
+		return (ft_fprintf(2, "minishell: %s: 5 command not found\n", str));
 	return (0);
 }

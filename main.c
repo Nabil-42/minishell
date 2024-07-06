@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/04 23:15:32 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 11:40:18 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,38 @@ void	init(t_general *g)
 	g->flag_error = 0;
 
 }
-int boucle(t_general *g)
+void boucle(t_general *g)
 {
-	
+	if ((g->nbr_pipe != 0 && g->tab_pipe[0] == NULL)
+		|| (g->nbr_pipe >= 1 && g->tab_pipe[g->nbr_pipe] == NULL))
+	{
+		ft_fprintf(2, " 1 error synthax\n");
+		g->$ = 2;
+		free_tab(g->tab_pipe);
+		return;
+	}
+	if (g->tab_pipe[g->nbr_pipe + 1] != NULL
+		&& g->nbr_pipe != 0)
+	{
+		ft_fprintf(2, "2 error synthax\n");
+		g->$ = 127;
+		free_tab(g->tab_pipe);
+		free_tab(g->tab_cmd);
+		return;
+	}
+	if ((g->nbr_dir != 0 && g->tab_cmd[0] == NULL))
+	{
+		ft_fprintf(2, "3 error synthax\n");
+		g->$ = 2;
+		free_tab(g->tab_pipe);
+		free_tab(g->tab_cmd);
+		return;
+	}
+	if (g->tab_cmd)
+	{
+		free_tab(g->tab_cmd);
+		g->tab_cmd = NULL;
+	}
 	if (g->nbr_pipe != 0)
 	{
 		execute_pipeline(g->tab_pipe, g);
@@ -92,7 +121,12 @@ int boucle(t_general *g)
 		handle_redirections_and_execute(g->line, g);
 	}
 	free_tab(g->tab_pipe);
-	return (0);
+	if (g->tab_file)
+		free_tab(g->tab_file);
+	if (g->tab_dir)
+		free_tab(g->tab_dir);
+	if (g->tab_cmd)
+		free_tab(g->tab_cmd);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -121,6 +155,13 @@ int	main(int ac, char **av, char **envp)
 		add_history(g.line);
 		g.nbr_pipe = count_pipe(g.line);
 		g.tab_pipe = split_by_pipe(g.line);
+		g.tab_cmd = split_str(g.line, &g.nbr_dir);
+		g.nbr_dir = count_redirections(g.line);
+		// printf("0 %s\n", g.tab_cmd[0]);
+		// printf("1 %s\n", g.tab_cmd[1]);
+		// printf("pipe 1 %s\n", g.tab_pipe[2]);
+		// printf("nbr dir %d\n", g.nbr_dir);
+		// printf("nbr pipe %d\n", g.nbr_pipe);
 		boucle(&g);
 		free(g.line);
 		flag = 0;

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:07:44 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/25 20:30:17 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:34:22 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_special_characters(const char *str)
 		if (*str == ';' || *str == '\\' || *str == '&' || *str == '('
 			|| *str == ')')
 		{
-			return (printf("minishell: %s: 8 command not found\n", str));
+			return (ft_fprintf(2, "minishell: %s: 6 command not found\n", str));
 		}
 		str++;
 	}

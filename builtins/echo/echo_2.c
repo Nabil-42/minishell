@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 19:19:31 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:34:05 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	echo_verif_1(t_echo *eko, char *str, int *i, t_general *g)
 		}
 		if (eko->flag == 1)
 			return (2);
-		return (printf("minishell: %s: command not found\n", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 1 command not found\n", str), 1);
 	}
 	return (0);
 }
@@ -60,7 +60,7 @@ int	echo_verif_2(t_echo *eko, char *str, int *i, t_general *g)
 		}
 		if (eko->flag == 1)
 			return (2);
-		return (printf("minishell: %s: command not found\n", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 2 command not found\n", str), 1);
 	}
 	return (0);
 }

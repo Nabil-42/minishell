@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/03 18:09:14 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:34:51 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int cd_based_path(char *cmd, t_general *g)
     {
         g->status = 1;
 	g->$ = 1;
-        ft_fprintf(2, "No such file or directory\n");
+        ft_fprintf(2, "1 No such file or directory\n");
     }
     return 0;
 }

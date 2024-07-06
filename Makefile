@@ -6,7 +6,7 @@
 #    By: nabil <nabil@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/07/01 17:20:27 by nabil            ###   ########.fr        #
+#    Updated: 2024/07/05 23:23:19 by nabil            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRCS		:= ./main.c \
 			./signals/signals.c \
 			./utils/count_redir.c \
 			./utils/trim.c \
+			./utils/error.c \
 			./utils/split_delimiters.c \
 			./pipe/pipe_main.c \
 			./parsing/parsing.c \

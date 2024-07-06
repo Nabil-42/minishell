@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/05 17:37:24 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/05 23:25:11 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	ft_unset(t_env *env, char **args, t_general *g);
 ///////////////////// REDIRECTION ///////////////////////////
 void			skip_white_space(char *str, int i, char *output);
 int handle_redirections_and_execute(char *cmd, t_general *g);
+int	handle_single_redirection(char *filename, char *redir_type, t_general *g);
 
 
 ///////////////////// PARSING ///////////////////////////
@@ -183,6 +184,10 @@ int				direction_double_n(char *str, t_echo *eko, t_general *g,
 					char *line);
 int	is_space_bis(char *str);
 char	*verif_quote_bis(char *str);
+int handle_error_1(int save_stdin, int save_stdout, t_general *g);
+int handle_error_2(t_general *g, char *cmd);
+void handle_error_3(t_general *g, int *fd, int *i);
+
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/05 17:46:00 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:34:56 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	if (fd < 0)
 	{
 		g->$ = 2;
-		ft_fprintf(2, "%s: No such file or directory\n", filename);
+		ft_fprintf(2, "%s: 2 No such file or directory\n", filename);
 		return (-1);
 	}
 	return (fd);
@@ -172,26 +172,17 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	int		saved_stdout;
 	int		saved_stdin;
 	int		i;
-	// char	*str;
 	t_echo	ikou;
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
 	i = 0;
-	if (saved_stdout < 0 || saved_stdin < 0)
-	{
-		// perror("dup");
-		g->$ = 2;
-		return (-1);
-	}
+	if (handle_error_1(saved_stdin, saved_stdout, g) == -1)
+		return 1;
+	g->nbr_dir = 0;
 	g->tab_cmd = split_str(cmd, &g->nbr_dir);
-	if (ft_strcmp(g->tab_cmd[0], "''") == 0 || ft_strcmp(g->tab_cmd[0], "\"\"") == 0)
-	{
-		return (printf("minishell: %s: command not found\n", cmd), 
-		g->$ = 42, -1);
-	}
-	g->flag_eko_n = 0;
-	
+	if (handle_error_2(g, cmd) == -1)
+		return 1;	
 	// printf(" ikou = %s\n", ikou.line);
 	//    printf("tab_cmd[0] = %s\n", g->tab_cmd[0]);
 	//     printf("tab_cmd[1] = %s\n", g->tab_cmd[1]);
@@ -206,35 +197,9 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	// printf("tab_file[%d] = %s\n",2, g->tab_file[2]);
 	// printf("nbr dir %d\n", g->nbr_dir);
 	// printf("file = %d\n", g->nbr_file);
-	// str = remake_str_bis(g->tab_cmd);
-	// printf(" = %s\n", str);
 	while (i < g->nbr_file)
 	{
-		if (g->tab_cmd[i + 1] != NULL)
-		{
-			if (ft_strncmp(g->tab_cmd[i + 1], " ./", 3) == 0)
-			{
-				g->tab_file[i + 1] = ft_strdup(g->tab_cmd[i + 1] + 1);
-				g->nbr_file += 1;
-			}
-		}
-		if (g->nbr_file > g->nbr_dir)
-		{
-			if (is_space_bis(g->tab_file[i + 1]))
-				fd = handle_single_redirection((g->tab_file[i + 1]), g->tab_dir[i], g);	
-			else (fd = handle_single_redirection(verif_quote((g->tab_file[i + 1])), g->tab_dir[i], g));
-			g->nbr_file -= 1;
-		}
-		else {
-			if (is_space_bis(g->tab_file[i]))
-			{
-				free(g->tab_cmd[1]);
-				g->tab_cmd[1] = NULL;
-				fd = handle_single_redirection(verif_quote_bis(g->tab_file[i]), g->tab_dir[i], g);
-			}
-			else (fd = handle_single_redirection(verif_quote((g->tab_file[i])), g->tab_dir[i], g));
-			
-			}
+		handle_error_3(g, &fd, &i);
 		if (fd < 0)
 		{
 			restore_standard_fds(saved_stdout, saved_stdin, g);
@@ -255,12 +220,9 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	restore_standard_fds(saved_stdout, saved_stdin, g);
 	if (ikou.line != NULL) 
 	{
-        	free(ikou.line);
-        	ikou.line = NULL; 
+            free(ikou.line);
+	    ikou.line = NULL; 
    	}
-	free_tab(g->tab_file);
-	free_tab(g->tab_dir);
-	free_tab(g->tab_cmd);
 	return (2);
 }
 

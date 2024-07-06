@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/04 21:08:08 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 13:40:08 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,18 @@ char	*verif_directoty(char *cmd, int status, t_general *g)
 	while (cmd[i])
 	{
 		if (cmd[i] == '\\' || cmd[i] == ';')
-			return (printf("minishell: %s: 6 command not found\n", cmd),
+			return (ft_fprintf(2, "minishell: %s: 7 command not found\n", cmd),
 			g->$ = 52, NULL);
 		if (cmd[i] == '/')
 		{
 			g->$ = 1;
-			return (printf("minishell: %s: No such file or directory\n", cmd),
+			return (printf("minishell: %s: 3 No such file or directory\n", cmd),
 				g->$ = 62, NULL);
 			
 		}
 		++i;
 	}
-	return (printf("minishell: %s: command not found\n", cmd), 
-		g->$ = 22, NULL);
+	return ( NULL);
 }
 
 char	*based_path(char *cmd, t_general *g)
