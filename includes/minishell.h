@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/05 23:25:11 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/06 21:31:24 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_general
 	char		*command_before_pipe;
 	char		*command_after_pipe;
 	char		*path;
+	char 		*handle_ikou;
 	int		flag_eko_n;
 	int			status;
 	int			count;

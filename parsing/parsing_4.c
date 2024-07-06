@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/06 13:40:08 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 00:24:26 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	verif_wight_space(char *line)
 char	*verif_directoty(char *cmd, int status, t_general *g)
 {
 	int	i;
-	(void)status;
 	i = 0;
 	while (cmd[i])
 	{
@@ -47,10 +46,8 @@ char	*verif_directoty(char *cmd, int status, t_general *g)
 			g->$ = 52, NULL);
 		if (cmd[i] == '/')
 		{
-			g->$ = 1;
-			return (printf("minishell: %s: 3 No such file or directory\n", cmd),
-				g->$ = 62, NULL);
-			
+			g->$ = (128 + status);
+			return (ft_fprintf(2, "3 No such file or directory\n"),NULL);
 		}
 		++i;
 	}

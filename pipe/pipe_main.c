@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/06 13:19:44 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 00:37:36 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,74 +81,92 @@ void execute_pipeline(char **tab_pipe, t_general *g)
 }
 
 
-void	pipe_while(t_general *g)
+void pipe_while(t_general *g)
 {
-	int		pipefd[2];
-	pid_t	pid;
-	int		i;
-	int		k;
+    int		pipefd[2];
+    int     comm_pipe[2];  // Pipe pour la communication du fils au parent
+    pid_t	pid;
+    int		i;
+    int		k;
+    int     num_pipes = g->count;
+    flag = 1;
 
-	int num_pipes = g->count;
-        flag = 1;
+    if (pipe(comm_pipe) == -1)  // Créer une pipe pour la communication entre le fils et le parent
+    {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
 
-	i = 0;
-	k = 0;
-	int prev_pipe_read = -1;
-	while (i <= num_pipes)
-	{
-		if (i < num_pipes && pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{ 
-			if (prev_pipe_read != -1)
-			{
-				dup2(prev_pipe_read, 0);
-				close(prev_pipe_read);  
-			}
-			if (i < num_pipes)
-			{
-				close(pipefd[0]);  
-					
-				dup2(pipefd[1], 1);
-			
-				close(pipefd[1]);  
-					
-			}
-			
-			
-			ft_execve(g->tab_cmd[0], g->tab_cmd[0], g);
-            free_tab(g->tab_cmd);
-			exit(EXIT_FAILURE);
-		}
-		else
-		{ 
-			if (prev_pipe_read != -1)
-			{
-				close(prev_pipe_read);
-			}
-			if (i < num_pipes)
-			{
-				close(pipefd[1]);          
-				prev_pipe_read = pipefd[0];
-			}
-			waitpid(pid, &g->status, 0);
-			i++;
-			k++;
-		}
-	}
-	if (prev_pipe_read != -1)
-	{
-		close(prev_pipe_read);
-	}
+    i = 0;
+    k = 0;
+    int prev_pipe_read = -1;
+    while (i <= num_pipes)
+    {
+        if (i < num_pipes && pipe(pipefd) == -1)
+        {
+            perror("pipe");
+            exit(EXIT_FAILURE);
+        }
+        pid = fork();
+        if (pid == -1)
+        {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
+        else if (pid == 0)
+        { 
+            if (prev_pipe_read != -1)
+            {
+                dup2(prev_pipe_read, 0);
+                close(prev_pipe_read);  
+            }
+            if (i < num_pipes)
+            {
+                close(pipefd[0]);  
+                dup2(pipefd[1], 1);
+                close(pipefd[1]);  
+            }
+
+            close(comm_pipe[0]);  // Ferme la lecture dans la pipe de communication
+
+            // Exécution de la commande, par exemple, vous pouvez envoyer un code de retour
+
+            ft_execve(g->tab_cmd[0], g->tab_cmd[0], g);
+            int return_value = g->$; // Remplacez par votre propre valeur
+            write(comm_pipe[1], &return_value, sizeof(return_value));
+            exit(EXIT_FAILURE);
+        }
+        else
+        { 
+            if (prev_pipe_read != -1)
+            {
+                close(prev_pipe_read);
+            }
+            if (i < num_pipes)
+            {
+                close(pipefd[1]);          
+                prev_pipe_read = pipefd[0];
+            }
+
+            waitpid(pid, &g->status, 0);
+
+            if (i == num_pipes)  // Lire la valeur envoyée par le dernier fils
+            {
+                close(comm_pipe[1]);  // Ferme l'écriture dans la pipe de communication
+                int received_value;
+                read(comm_pipe[0], &received_value, 3);
+                g->$ = (int)received_value;
+                close(comm_pipe[0]);  // Ferme la lecture dans la pipe de communication
+            }
+
+            i++;
+            k++;
+        }
+    }
+    if (prev_pipe_read != -1)
+    {
+        close(prev_pipe_read);
+    }
 }
 
 char **split_by_pipe(char *cmd) 

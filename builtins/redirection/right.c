@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/06 13:34:56 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 00:02:11 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	}
 	if (fd < 0)
 	{
-		g->$ = 2;
+		g->$ = 1;
 		ft_fprintf(2, "%s: 2 No such file or directory\n", filename);
 		return (-1);
 	}
@@ -137,6 +137,7 @@ void	exe_cmd(char *cmd, t_general *g)
 {
 	if (builtin(cmd, &g->local_env, g))
 	{
+		
 		if (g->flag_eko_n == 0 && g->handle_eko[0] != ' ')
 			printf("%s\n", g->handle_eko);
 		else if (g->flag_eko_n == 1)
@@ -215,6 +216,8 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		i++;
 	}
 	echo_bis(g->tab_cmd, &ikou, g);
+	if (ikou.line)
+		g->handle_ikou = ikou.line;
 	// printf("dollar = %d\n", g->$);
 	exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);

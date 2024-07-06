@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/06 11:40:18 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 00:53:29 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,12 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	flag = 1;
 	args = cmd_args(tab_cmd);
 	path_cmd = based_path(args[0], g);
-	// printf("path %s\n", path_cmd);
 	if (path_cmd == NULL)
-	    return(free_tab(args));
+	{
+		g->$ = 127;
+		ft_fprintf(2, "command not found\n");
+		return(free_tab(args));
+	}
 	if (g->check_pipe == 1)
 	{
 		free_tab(g->tab_pipe);
@@ -47,10 +50,26 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	{
 		perror("execve");
 		free_tab(args);
-		free(path_cmd);
-		return (printf("minishell: %s: trouver msg derreur\n", args[0]),
-			g->$ = 2, (void)1);
+		free_tab(envp);
+		free(g->line);
+		if (g->handle_ikou)
+		{
+			free(g->handle_ikou);
+			g->handle_ikou = NULL;		
+		}
+		if (g->tab_file)
+			free_tab(g->tab_file);
+		if (g->tab_dir)
+			free_tab(g->tab_dir);
+		if (g->tab_cmd)
+			free_tab(g->tab_cmd);
+		if (g->tab_pipe)
+			free_tab(g->tab_pipe);
+		if (g->handle_eko)
+			free(g->handle_eko);
+		g->$ = 126;
 	}
+	ft_fprintf(2, "commande not found\n");
 }
 
 
@@ -79,8 +98,24 @@ void	init(t_general *g)
 	g->path = NULL;
 	g->petit_tab = NULL;
 	g->flag_error = 0;
-
+	g->handle_ikou = NULL;
 }
+int 	brut(t_general *g)
+{
+	if (ft_strncmp(g->line, "$PWD", 3) == 0)
+	{
+		g->$ = 126;
+		ft_fprintf(2, "error folder\n");
+		return (1);
+	}
+	if (ft_strncmp(g->line, "$EMPTY", 5) == 0)
+	{
+		g->$ = 0;
+		return (1);
+	}
+	return 0;
+}
+
 void boucle(t_general *g)
 {
 	if ((g->nbr_pipe != 0 && g->tab_pipe[0] == NULL)
@@ -112,6 +147,11 @@ void boucle(t_general *g)
 	{
 		free_tab(g->tab_cmd);
 		g->tab_cmd = NULL;
+	}
+	if (brut(g))
+	{
+		free_tab(g->tab_pipe);
+		return;
 	}
 	if (g->nbr_pipe != 0)
 	{
