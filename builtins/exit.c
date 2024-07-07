@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:16:27 by nabil             #+#    #+#             */
-/*   Updated: 2024/06/27 08:42:49 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 11:21:06 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_exit(char **tab, t_general *g)
 	int	exit_code;
 
 	if (tab[1] == NULL)
-		exit(g->$);
+		exit(g->exval);
 	if (tab[2] != NULL)
 	{
 		ft_fprintf(2, "exit: too many arguments\n");

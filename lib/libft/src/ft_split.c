@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 09:55:39 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/01 11:58:07 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 11:08:59 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ char	**ft_split(char const *s, char c)
 	size_t	len;
 	int		nb_strs;
 	char	**strs_tab;
+
 	nb_strs = ft_countstrs(s, c);
-	strs_tab = malloc((sizeof (void *)) * (nb_strs + 1));
+	strs_tab = malloc((sizeof(void *)) * (nb_strs + 1));
 	if (!strs_tab)
 		return (strs_tab);
 	i = 0;

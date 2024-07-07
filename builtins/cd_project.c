@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_project.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/06 13:34:51 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 11:20:45 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int cd_based_path(char *cmd, t_general *g)
     if (*cmd != '$') 
     {
         g->status = 1;
-	g->$ = 1;
+	g->exval = 1;
         ft_fprintf(2, "1 No such file or directory\n");
     }
     return 0;
@@ -64,7 +64,7 @@ int cd_based_path(char *cmd, t_general *g)
 
 void	cd_project_2(t_general *g)
 {
-		g->$ = 1;
+		g->exval = 1;
 		ft_fprintf(2, " too many arguments\n");
 		g->flag_eko_n = 3;
 		return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/05 20:51:32 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 11:20:29 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_eko(t_echo *eko, t_general *g)
 	eko->len_str = 200;
 	eko->i = 0;
 	eko->j = 0;
-	eko->$ = g->$;
+	eko->exval = g->exval;
 	eko->line = NULL;
 	eko->flag_i = 0;
 	eko->flag = 0;
@@ -38,7 +38,7 @@ int	execute_command(char **tab, t_echo *eko, t_env *local_env, t_general *g)
 	
 	(void)local_env;
 	(void)&g->local_env;
-	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(tab[1], "$?") == 0)
+	if (ft_strcmp(tab[0], "echo") == 0 && ft_strcmp(tab[1], "exval?") == 0)
 		return (missingknow(eko, g), free_tab(eko->tab), free_tab(g->petit_tab), 1);
 	if (ft_strcmp(tab[0], "echo") == 0)
 		return (echo(g->petit_tab, eko, g), free_tab(eko->tab),free_tab(g->petit_tab), 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/03 18:06:25 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 11:21:22 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	copy_normal_char(char *str, t_echo *eko, int *i, t_general *g)
 	if (str[*i] == '$' && str[*i + 1] == '?')
 	{
 		k = 0;
-		itoua = ft_itoa(g->$);
+		itoua = ft_itoa(g->exval);
 		while (itoua[k])
 		{
 			eko->line[eko->j] = itoua[k];

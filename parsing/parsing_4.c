@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 00:24:26 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 11:22:18 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ char	*verif_directoty(char *cmd, int status, t_general *g)
 	{
 		if (cmd[i] == '\\' || cmd[i] == ';')
 			return (ft_fprintf(2, "minishell: %s: 7 command not found\n", cmd),
-			g->$ = 52, NULL);
+			g->exval = 52, NULL);
 		if (cmd[i] == '/')
 		{
-			g->$ = (128 + status);
+			g->exval = (128 + status);
 			return (ft_fprintf(2, "3 No such file or directory\n"),NULL);
 		}
 		++i;

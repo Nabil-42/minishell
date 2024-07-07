@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:37:06 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 13:26:56 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 12:25:34 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 #include <libft.h>
 #include <signal.h>
 
-volatile sig_atomic_t	flag = 0;
+volatile sig_atomic_t	g_flag = 0;
 
 void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (flag == 1)
+		if (g_flag == 1)
 		{
-			flag = 0;
+			g_flag = 0;
 			printf("\n");
 		}
 		else
@@ -44,18 +44,16 @@ void	main_signal(void)
 	sa.sa_handler = &sig_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-	
 	if ((sigaction(SIGINT, &sa, NULL) == -1) || (sigaction(SIGQUIT, &sa,
 				NULL) == -1))
 	{
 		perror("sigaction\n");
 		exit(EXIT_FAILURE);
 	}
-
 	sa.sa_handler = SIG_IGN;
-    if (sigaction(SIGQUIT, &sa, NULL) == -1)
-    {
-        perror("sigaction SIGQUIT");
-        exit(EXIT_FAILURE);
-    }
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+	{
+		perror("sigaction SIGQUIT");
+		exit(EXIT_FAILURE);
+	}
 }

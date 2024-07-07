@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_double_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/01 19:27:54 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 11:21:31 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	copy_non_special_char(char *str, t_echo *eko, t_general *g)
 	if (str[eko->i] == '$' && str[eko->i + 1] == '?')
 	{
 		k = 0;
-		itoua = ft_itoa(g->$);
+		itoua = ft_itoa(g->exval);
 		while (itoua[k])
 		{
 			eko->line[eko->j] = itoua[k];

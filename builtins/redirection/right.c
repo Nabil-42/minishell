@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 00:02:11 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 12:07:33 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	restore_standard_fds(int saved_stdout, int saved_stdin, t_general *g)
 	if (dup2(saved_stdout, STDOUT_FILENO) < 0 || dup2(saved_stdin,
 			STDIN_FILENO) < 0)
 	{
-		g->$ = 1;
+		g->exval = 1;
 		// perror("dup2");
 	}
 	close(saved_stdout);
@@ -88,12 +88,12 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	else
 	{
 		fprintf(stderr, "Unknown redirection type: %s\n", redir_type);
-		g->$ = 602;
+		g->exval = 602;
 		return (-1);
 	}
 	if (fd < 0)
 	{
-		g->$ = 1;
+		g->exval = 1;
 		ft_fprintf(2, "%s: 2 No such file or directory\n", filename);
 		return (-1);
 	}
@@ -108,7 +108,7 @@ int	apply_redirection(int fd, char *redir_type, t_general *g)
 		{
 			// perror("dup2");
 			close(fd);
-			g->$ = 998;
+			g->exval = 998;
 			return (-1);
 		}
 	}
@@ -118,14 +118,14 @@ int	apply_redirection(int fd, char *redir_type, t_general *g)
 		{
 			// perror("dup2");
 			close(fd);
-			g->$ = 997;
+			g->exval = 997;
 			return (-1);
 		}
 	}
 	else
 	{
 		fprintf(stderr, "Unknown redirection type: %s\n", redir_type);
-		g->$ = 999;
+		g->exval = 999;
 		close(fd);
 		return (-1);
 	}
@@ -143,7 +143,7 @@ void	exe_cmd(char *cmd, t_general *g)
 		else if (g->flag_eko_n == 1)
 			printf("%s", g->handle_eko);
 		else if(g->flag_eko_n == 2)
-			return (printf("%d\n", g->$), (void)0);
+			return (printf("%d\n", g->exval), (void)0);
 		else if(g->flag_eko_n == 3)
 			return;
 		else if (g->flag_eko_n == 4)
@@ -204,26 +204,26 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		if (fd < 0)
 		{
 			restore_standard_fds(saved_stdout, saved_stdin, g);
-			g->$ = 1;
+			g->exval = 1;
 			++i;
 			return 1;
 		}
 		if (apply_redirection(fd, g->tab_dir[i], g) < 0)
 		{
 			restore_standard_fds(saved_stdout, saved_stdin, g);
-			g->$ = 2;
+			g->exval = 2;
 		}
 		i++;
 	}
 	echo_bis(g->tab_cmd, &ikou, g);
 	if (ikou.line)
 		g->handle_ikou = ikou.line;
-	// printf("dollar = %d\n", g->$);
+	// printf("dollar = %d\n", g->exval);
 	exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);
 	if (ikou.line != NULL) 
 	{
-            free(ikou.line);
+        free(ikou.line);
 	    ikou.line = NULL; 
    	}
 	return (2);

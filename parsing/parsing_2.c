@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/06 13:34:19 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 15:21:24 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,14 @@ int	is_space(char *str, int *i)
 
 int	is_space_bis(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (!isspace(str[i]) && str[i])
 	{
 		++i;
 		if (isspace(str[i]))
-		     return (1);
+			return (1);
 	}
 	return (0);
 }
@@ -133,7 +133,8 @@ int	check_redirections(char *str)
 		if (is_redirection(str[i]))
 		{
 			if (expecting_command)
-				return (ft_fprintf(2, "minishell: %s: 4 command not found\n", str));
+				return (ft_fprintf(2, "minishell: %s: 4 command not found\n",
+						str));
 			if (str[i] == '<' && str[i + 1] == '<')
 				i += 2;
 			else if (str[i] == '>' && str[i + 1] == '>')
