@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 23:04:41 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 12:11:55 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:20:21 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	brut(t_general *g)
 	if (ft_strncmp(g->line, "$PWD", 3) == 0)
 	{
 		g->exval = 126;
-		ft_fprintf(2, "error folder\n");
+		ft_fprintf(2, " Is a directory\n");
 		return (1);
 	}
 	if (ft_strncmp(g->line, "$EMPTY", 5) == 0)
@@ -99,7 +99,7 @@ void	init_tab(t_general *g)
 	add_history(g->line);
 	g->nbr_pipe = count_pipe(g->line);
 	g->tab_pipe = split_by_pipe(g->line);
-	g->tab_cmd = split_str(g->line, &g->nbr_dir);
+	g->tab_cmd = split_str(g->line, &g->nbr_dir, g);
 	g->nbr_dir = count_redirections(g->line);
 	boucle(g);
 	free(g->line);

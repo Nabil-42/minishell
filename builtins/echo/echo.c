@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/02 23:55:01 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 22:29:17 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ char	*remake_str_bis(char **tab)
 {
 	int		j;
 	int		k;
-	int i;
+	int		i;
 	char	*new_str;
-	i = 0;
 
+	i = 0;
 	if (tab[0] == NULL)
 		return (NULL);
 	new_str = malloc(sizeof(char) * PATH_MAX + 1);
@@ -36,11 +36,13 @@ char	*remake_str_bis(char **tab)
 		while (tab[i][j])
 		{
 			new_str[k] = tab[i][j];
-			++k, ++j;
+			++k;
+			++j;
 		}
 		if (tab[i + 1] != NULL)
 			new_str[k] = ' ';
-		++k, ++i;
+		++k;
+		++i;
 	}
 	k--;
 	new_str[k] = '\0';
@@ -65,11 +67,13 @@ char	*remake_str(char **tab, t_echo *eko, int i)
 		while (tab[i][j])
 		{
 			new_str[k] = tab[i][j];
-			++k, ++j;
+			++k;
+			++j;
 		}
 		if (tab[i + 1] != NULL)
 			new_str[k] = ' ';
-		++k, ++i;
+		++k;
+		++i;
 	}
 	k--;
 	new_str[k] = '\0';
@@ -102,7 +106,6 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 
 	str = NULL;
 	tmp = NULL;
-	//printf("OUAIS ?\n");
 	if (tab[1] && ft_strcmp(tab[1], "-n") == 0)
 		str = remake_str(tab, eko, 2);
 	else
@@ -163,6 +166,4 @@ void	echo_bis(char **tab, t_echo *eko, t_general *g)
 		return ;
 	}
 	echo_2_bis(g, str, eko, tmp);
-	// g->handle_eko = eko->line;
 }
-

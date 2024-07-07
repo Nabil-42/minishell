@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/29 16:48:38 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 21:38:34 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 void	pwd(char **tab, t_general *g)
 {
+	char	*path;
+
 	(void)tab;
-	char *path;
 	g->flag_eko_n = 4;
 	path = malloc(sizeof(char) * PATH_MAX);
 	getcwd(path, PATH_MAX);

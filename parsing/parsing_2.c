@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 19:46:29 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 20:43:31 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,17 @@ char	*verif_quote_bis(char *str)
 	return (new_str[j] = '\0', new_str);
 }
 
+void	verif_quote_rest(char *str, int i, int *j, char *new_str)
+{
+	if (str[i] != '"' && str[i] != '\'')
+	{
+		if (str[i] == ' ')
+			++*j;
+		new_str[*j] = str[i];
+		++*j;
+	}
+}
+
 char	*verif_quote(char *str)
 {
 	int		double_quote_count;
@@ -61,48 +72,21 @@ char	*verif_quote(char *str)
 		return (NULL);
 	while (str[i] != '\0')
 	{
-		if (str[i] != '"' && str[i] != '\'')
-		{
-			if (str[i] == ' ')
-				++j;
-			new_str[j] = str[i];
-			j++;
-		}
+		verif_quote_rest(str, i, &j, new_str);
 		i++;
 	}
 	new_str[j] = '\0';
 	return (new_str);
 }
 
-void	check_redirection_2(int *expecting_command, int *i, char *str)
+void	check_redir_bis(char *str, int *i)
 {
-	*expecting_command = 0;
-	while (str[*i] && !isspace(str[*i]) && !is_redirection(str[*i]))
-		i++;
-}
-
-int	is_space(char *str, int *i)
-{
-	if (isspace(str[*i]))
-	{
-		++*i;
-		return (1);
-	}
-	return (0);
-}
-
-int	is_space_bis(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (!isspace(str[i]) && str[i])
-	{
-		++i;
-		if (isspace(str[i]))
-			return (1);
-	}
-	return (0);
+	if (str[*i] == '<' && str[*i + 1] == '<')
+		*i += 2;
+	else if (str[*i] == '>' && str[*i + 1] == '>')
+		*i += 2;
+	else
+		(++*i);
 }
 
 int	check_redirections(char *str)
@@ -121,12 +105,7 @@ int	check_redirections(char *str)
 			if (expecting_command)
 				return (ft_fprintf(2, "minishell: %s: 4 command not found\n",
 						str));
-			if (str[i] == '<' && str[i + 1] == '<')
-				i += 2;
-			else if (str[i] == '>' && str[i + 1] == '>')
-				i += 2;
-			else
-				(i++);
+			check_redir_bis(str, &i);
 			expecting_command = 1;
 		}
 		else

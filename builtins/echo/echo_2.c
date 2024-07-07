@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 15:09:59 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 22:23:21 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	echo_verif_1(t_echo *eko, char *str, int *i, t_general *g)
 	}
 	return (0);
 }
+
 int	echo_verif_2(t_echo *eko, char *str, int *i, t_general *g)
 {
 	eko->flag = 0;
@@ -64,6 +65,7 @@ int	echo_verif_2(t_echo *eko, char *str, int *i, t_general *g)
 	}
 	return (0);
 }
+
 void	echo_verif_4(t_echo *eko, int *i, char *str)
 {
 	if (eko->dir != *i)
@@ -77,35 +79,36 @@ void	echo_verif_4(t_echo *eko, int *i, char *str)
 		eko->line[eko->j] = '\0';
 	}
 }
+
 char	*echo_verif_quote(char *str, t_echo *eko, t_general *g)
 {
 	int	i;
 	int	k;
+
 	eko->line[0] = '\0';
 	i = 0;
-	
 	while (str[i])
 	{
 		k = echo_verif_1(eko, str, &i, g);
 		if (k == 2)
-		      continue;
-		else if (k== 1)
-		      return (NULL);
+			continue ;
+		else if (k == 1)
+			return (NULL);
 		k = echo_verif_2(eko, str, &i, g);
 		if (k == 2)
-		      continue;
+			continue ;
 		else if (k == 1)
-		      return (NULL);
+			return (NULL);
 		if (eko->flag_i == 0)
 			++i;
 	}
 	if (eko->line[0] == '\0')
-	     return (eko->line);
+		return (eko->line);
 	echo_verif_4(eko, &i, str);
 	return (eko->line);
 }
 
-void echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
+void	echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
 {
 	if (tmp[0] == '\0')
 	{

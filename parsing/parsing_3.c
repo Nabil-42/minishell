@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:07:44 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/06 13:34:22 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/07 20:52:01 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,34 @@ int	is_delimiter_pipe(char c)
 	return (c == '|');
 }
 
+int	count_pipe_bis(char *str, int i, int *in_single_quotes,
+		int *in_double_quotes)
+{
+	int	count;
+
+	count = 0;
+	if (str[i] == '\'')
+	{
+		if (*in_single_quotes)
+			*in_single_quotes = 0;
+		else if (!*in_single_quotes)
+			*in_single_quotes = 1;
+	}
+	else if (str[i] == '"')
+	{
+		if (*in_double_quotes)
+			*in_double_quotes = 0;
+		else if (!*in_single_quotes)
+			*in_double_quotes = 1;
+	}
+	else if (!*in_single_quotes && !*in_double_quotes)
+	{
+		if (is_delimiter_pipe(str[i]))
+			count++;
+	}
+	return (count);
+}
+
 int	count_pipe(char *str)
 {
 	int	count;
@@ -59,28 +87,7 @@ int	count_pipe(char *str)
 	in_double_quotes = 0;
 	while (str[i] != '\0')
 	{
-		// Gérer les guillemets simples
-		if (str[i] == '\'')
-		{
-			if (in_single_quotes)
-				in_single_quotes = 0;
-			else if (!in_double_quotes)
-				in_single_quotes = 1;
-		}
-		// Gérer les guillemets doubles
-		else if (str[i] == '"')
-		{
-			if (in_double_quotes)
-				in_double_quotes = 0;
-			else if (!in_single_quotes)
-				in_double_quotes = 1;
-		}
-		// Compter les pipes seulement si on n'est pas dans des guillemets
-		else if (!in_single_quotes && !in_double_quotes)
-		{
-			if (is_delimiter_pipe(str[i]))
-				count++;
-		}
+		count += count_pipe_bis(str, i, &in_single_quotes, &in_double_quotes);
 		i++;
 	}
 	return (count);

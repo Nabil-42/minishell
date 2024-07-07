@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/06/20 15:38:14 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 22:19:44 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,23 @@ int	dollar_double(char *str, t_echo *eko)
 	result = expand_variable(variable_env, eko);
 	free(variable_env);
 	return (result);
+}
+int	dollar_bis(char *str, t_echo *eko, t_general *g)
+{
+	int	i;
+
+	i = 0;
+	eko->j = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && (str[i + 1] != '\0' && str[i + 1] != '?'))
+		{
+			if (!handle_variable_expansion(str, eko, &i, g))
+				return (0);
+			continue ;
+		}
+		copy_normal_char_bis(str, eko, &i, g);
+	}
+	eko->line[eko->j] = '\0';
+	return (0);
 }

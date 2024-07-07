@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 11:22:18 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 20:57:24 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,25 @@ int	verif_wight_space(char *line)
 char	*verif_directoty(char *cmd, int status, t_general *g)
 {
 	int	i;
+
 	i = 0;
 	while (cmd[i])
 	{
 		if (cmd[i] == '\\' || cmd[i] == ';')
 			return (ft_fprintf(2, "minishell: %s: 7 command not found\n", cmd),
-			g->exval = 52, NULL);
+				g->exval = 52, NULL);
 		if (cmd[i] == '/')
 		{
 			g->exval = (128 + status);
-			return (ft_fprintf(2, "3 No such file or directory\n"),NULL);
+			return (NULL);
 		}
 		++i;
 	}
-	return ( NULL);
+	return (NULL);
 }
 
 char	*based_path(char *cmd, t_general *g)
 {
-	int		i;
 	int		status;
 	char	**tab;
 	char	*str;
@@ -68,17 +68,17 @@ char	*based_path(char *cmd, t_general *g)
 		return (cmd);
 	path_env = getenv("PATH");
 	tab = ft_split(path_env, ':');
-	i = 0;
-	while (tab[i])
+	g->i_based_p = 0;
+	while (tab[g->i_based_p])
 	{
-		str = ft_strjoin(tab[i], "/");
+		str = ft_strjoin(tab[g->i_based_p], "/");
 		tmp = ft_strjoin(str, cmd);
 		free(str);
 		status = access(tmp, X_OK);
 		if (status == 0)
 			return (free_tab(tab), tmp);
 		free(tmp);
-		++i;
+		++g->i_based_p;
 	}
 	return (free_tab(tab), verif_directoty(cmd, status, g), NULL);
 }

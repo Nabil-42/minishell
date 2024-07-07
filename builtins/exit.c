@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:16:27 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 11:21:06 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:40:08 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,23 @@
 
 int	is_number(const char *str)
 {
-	// Ignore leading white spaces
 	while (isspace(*str))
 		str++;
-	// Ignore leading double quotes
 	if (*str == '"')
 		str++;
-	// Check for leading plus or minus sign
 	if (*str == '+' || *str == '-')
 		str++;
-	// Ignore leading double quotes again if any after the sign
 	if (*str == '"')
 		str++;
-	// Check if the next character is a digit
 	if (!isdigit(*str))
 		return (0);
-	// Loop through the rest of the string
 	while (*str)
 	{
-		// Ignore double quotes in between
 		if (*str == '"')
 		{
 			str++;
 			continue ;
 		}
-		// If any non-digit character is found, return 0
 		if (!isdigit(*str))
 			return (0);
 		str++;

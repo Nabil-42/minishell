@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 11:21:22 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 22:21:21 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ char	*extract_env_variable_name(char *str, int *i)
 				++*i;
 				k++;
 			}
-			else {
-				break;
-			}
+			else
+				break ;
 		}
 	}
 	variable_env[k] = '\0';
@@ -48,6 +47,7 @@ int	handle_variable_expansion(char *str, t_echo *eko, int *i, t_general *g)
 	char	*variable_env;
 	char	*name;
 	int		k;
+
 	(void)g;
 	variable_env = extract_env_variable_name(str, i);
 	if (variable_env == NULL)
@@ -94,6 +94,7 @@ void	copy_normal_char(char *str, t_echo *eko, int *i, t_general *g)
 		(eko->line[eko->j++] = str[*i]);
 	++(*i);
 }
+
 int	dollar(char *str, t_echo *eko, t_general *g)
 {
 	int	i;
@@ -109,27 +110,6 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 			continue ;
 		}
 		copy_normal_char(str, eko, &i, g);
-	}
-	eko->line[eko->j] = '\0';
-	return (0);
-}
-
-int	dollar_bis(char *str, t_echo *eko, t_general *g)
-{
-	int	i;
-
-	i = 0;
-	eko->j = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && (str[i + 1] != '\0' && str[i + 1] != '?'))
-		{
-			if (!handle_variable_expansion(str, eko, &i, g))
-				return (0);
-			continue ;
-		}
-		copy_normal_char_bis(str, eko, &i, g);
-
 	}
 	eko->line[eko->j] = '\0';
 	return (0);

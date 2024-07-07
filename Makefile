@@ -6,7 +6,7 @@
 #    By: nabboud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/07/07 12:38:58 by nabboud          ###   ########.fr        #
+#    Updated: 2024/07/07 22:11:06 by nabboud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS		:= ./main.c \
 			./pipe/pipe_while_bis.c \
 			./parsing/parsing.c \
 			./parsing/parsing_2.c \
+			./parsing/parsing_2_bis.c \
 			./parsing/parsing_3.c \
 			./parsing/parsing_4.c \
 			./parsing/parsing_5.c \
@@ -56,6 +57,9 @@ SRCS		:= ./main.c \
 			./builtins/echo/dollar_n.c \
 			./builtins/echo/dollar_double.c \
 			./builtins/env/env_1.c \
+			./builtins/env/env_2.c \
+			./builtins/env/env_3.c \
+			./builtins/env/env_4.c \
 			./builtins/redirection/right.c \
 			./builtins/redirection/right_double.c \
 			./builtins/builtin.c \
