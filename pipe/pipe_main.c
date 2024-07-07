@@ -6,12 +6,12 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 15:26:59 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/07 19:38:58 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../lib/libft/includes/libft.h"
 #include "../includes/minishell.h"
+#include "../lib/libft/includes/libft.h"
 #include <errno.h>
 #include <libft.h>
 #include <readline/history.h>
@@ -19,148 +19,74 @@
 
 extern volatile sig_atomic_t	g_flag;
 
-void execute_pipeline(char **tab_pipe, t_general *g) 
+pid_t	init_pipeline(char **tab_pipe, int i, int *pipe_fds)
 {
-    int pipe_fds[2];
-    int input_fd = 0;
-    pid_t pid;
-    int i = 0;
-	g_flag = 1;
-	
-    while (tab_pipe[i] != NULL) {
-        if (tab_pipe[i + 1] != NULL) {
-            if (pipe(pipe_fds) == -1) {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-        }
+	pid_t	pid;
 
-        if ((pid = fork()) == -1) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
-
-        if (pid == 0) { 
-            if (i > 0) { 
-                if (dup2(input_fd, 0) == -1) {
-                    perror("dup2 input_fd");
-                    exit(EXIT_FAILURE);
-                }
-                close(input_fd);
-            }
-
-            if (tab_pipe[i + 1] != NULL) { 
-                if (dup2(pipe_fds[1], 1) == -1) {
-                    perror("dup2 pipe_fds[1]");
-                    exit(EXIT_FAILURE);
-                }
-                close(pipe_fds[1]);
-                close(pipe_fds[0]);
-            }
-
-            handle_redirections_and_execute(tab_pipe[i], g);
-
-            exit(EXIT_FAILURE);
-        } else { 
-            if (input_fd != 0) {
-                close(input_fd);
-            }
-            if (tab_pipe[i + 1] != NULL) {
-                close(pipe_fds[1]);
-                input_fd = pipe_fds[0]; 
-            } else {
-                close(pipe_fds[0]);
-            }
-        }
-        i++;
-    }
-    while (wait(NULL) > 0);
+	if (tab_pipe[i + 1] != NULL)
+		if (pipe(pipe_fds) == -1)
+			(perror("pipe"), exit(EXIT_FAILURE));
+	pid = fork();
+	if (pid == -1)
+		(perror("fork"), exit(EXIT_FAILURE));
+	return (pid);
 }
 
+void	enfant_pipeline(int i, int input_fd, char **tab_pipe, int *pipe_fds)
+{
+	if (i > 0)
+	{
+		if (dup2(input_fd, 0) == -1)
+			(perror("dup2 input_fd"), exit(EXIT_FAILURE));
+		close(input_fd);
+	}
+	if (tab_pipe[i + 1] != NULL)
+	{
+		if (dup2(pipe_fds[1], 1) == -1)
+			(perror("dup2 pipe_fds[1]"), exit(EXIT_FAILURE));
+		close(pipe_fds[1]);
+		close(pipe_fds[0]);
+	}
+}
 
-// void pipe_while(t_general *g)
-// {
-//     int		pipefd[2];
-//     int     comm_pipe[2];
-//     pid_t	pid;
-//     int		i;
-//     int		k;
-//     int     num_pipes = g->count;
-//     g_flag = 1;
+void	parent_pipeline(int *input_fd, char **tab_pipe, int i, int *pipe_fds)
+{
+	if (*input_fd != 0)
+		close(*input_fd);
+	if (tab_pipe[i + 1] != NULL)
+	{
+		close(pipe_fds[1]);
+		*input_fd = pipe_fds[0];
+	}
+	else
+		(close(pipe_fds[0]));
+}
 
-//     if (pipe(comm_pipe) == -1) 
-//     {
-//         perror("pipe");
-//         exit(EXIT_FAILURE);
-//     }
+void	execute_pipeline(char **tab_pipe, t_general *g)
+{
+	int		pipe_fds[2];
+	int		input_fd;
+	pid_t	pid;
+	int		i;
 
-//     i = 0;
-//     k = 0;
-//     int prev_pipe_read = -1;
-//     while (i <= num_pipes)
-//     {
-//         if (i < num_pipes && pipe(pipefd) == -1)
-//         {
-//             perror("pipe");
-//             exit(EXIT_FAILURE);
-//         }
-//         pid = fork();
-//         if (pid == -1)
-//         {
-//             perror("fork");
-//             exit(EXIT_FAILURE);
-//         }
-//         else if (pid == 0)
-//         { 
-//             if (prev_pipe_read != -1)
-//             {
-//                 dup2(prev_pipe_read, 0);
-//                 close(prev_pipe_read);  
-//             }
-//             if (i < num_pipes)
-//             {
-//                 close(pipefd[0]);  
-//                 dup2(pipefd[1], 1);
-//                 close(pipefd[1]);  
-//             }
-
-//             close(comm_pipe[0]);  
-//             ft_execve(g->tab_cmd[0], g->tab_cmd[0], g);
-//             int return_value = g->exval; // Remplacez par votre propre valeur
-//             write(comm_pipe[1], &return_value, sizeof(return_value));
-//             exit(EXIT_FAILURE);
-//         }
-//         else
-//         { 
-//             if (prev_pipe_read != -1)
-//             {
-//                 close(prev_pipe_read);
-//             }
-//             if (i < num_pipes)
-//             {
-//                 close(pipefd[1]);          
-//                 prev_pipe_read = pipefd[0];
-//             }
-
-//             waitpid(pid, &g->status, 0);
-
-//             if (i == num_pipes)  
-//             {
-//                 close(comm_pipe[1]);  
-//                 int received_value;
-//                 read(comm_pipe[0], &received_value, 3);
-//                 g->exval = (int)received_value;
-//                 close(comm_pipe[0]);
-//             }
-
-//             i++;
-//             k++;
-//         }
-//     }
-//     if (prev_pipe_read != -1)
-//     {
-//         close(prev_pipe_read);
-//     }
-// }
-
-
+	input_fd = 0;
+	i = 0;
+	g_flag = 1;
+	while (tab_pipe[i] != NULL)
+	{
+		pid = init_pipeline(tab_pipe, i, pipe_fds);
+		if (pid == 0)
+		{
+			enfant_pipeline(i, input_fd, tab_pipe, pipe_fds);
+			handle_redirections_and_execute(tab_pipe[i], g);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			parent_pipeline(&input_fd, tab_pipe, i, pipe_fds);
+		}
+		i++;
+	}
+	while (wait(NULL) > 0)
+		;
+}
