@@ -14,6 +14,33 @@
 #include "../../lib/libft/includes/libft.h"
 #include "../env/env.h"
 
+int	echo_verif_1_bis(t_echo *eko, char *str, int *i, t_general *g)
+{
+	eko->flag_i = 0;
+	eko->flag = 0;
+	if ((str[*i] == '"'))
+	{
+		while (str[*i])
+		{
+			++*i;
+			if (str[*i] == '"')
+			{
+				echo_take_of_double_quote(str, eko, *i, g);
+				++*i;
+				eko->flag_i = 1;
+				eko->dir = *i;
+				eko->flag = 1;
+			}
+			if (eko->flag == 1)
+				break ;
+		}
+		if (eko->flag == 1)
+			return (2);
+		return (ft_fprintf(2, "minishell: %s: 1 Command not found ", str), 1);
+	}
+	return (0);
+}
+
 int	echo_verif_1(t_echo *eko, char *str, int *i, t_general *g)
 {
 	eko->flag_i = 0;
@@ -36,7 +63,7 @@ int	echo_verif_1(t_echo *eko, char *str, int *i, t_general *g)
 		}
 		if (eko->flag == 1)
 			return (2);
-		return (ft_fprintf(2, "minishell: %s: 1 command not found\n", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 1 Command not found ", str), 1);
 	}
 	return (0);
 }
@@ -61,7 +88,7 @@ int	echo_verif_2(t_echo *eko, char *str, int *i, t_general *g)
 		}
 		if (eko->flag == 1)
 			return (2);
-		return (ft_fprintf(2, "minishell: %s: 2 command not found\n", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 2 Command not found ", str), 1);
 	}
 	return (0);
 }

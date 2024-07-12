@@ -16,6 +16,7 @@
 
 void	exe_cmd(char *cmd, t_general *g)
 {
+	//printf("HAAAAAAAAAAAAAAAAAAAAAAAAAAAA %s/n", cmd);
 	if (builtin(cmd, &g->local_env, g))
 	{
 		if (g->flag_eko_n == 0 && g->handle_eko[0] != ' ')

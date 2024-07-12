@@ -73,7 +73,7 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 	eko.tab = ft_split(line, ' ');
 	init_eko(&eko, g);
 	if (!eko.tab[0])
-		return (free_tab(eko.tab), 0);
+		return (free_tab(g->petit_tab),free_tab(eko.tab), 0);
 	if (ft_strcmp(eko.tab[0], "echo") != 0 && ft_strcmp(eko.tab[0], "cd") != 0
 		&& ft_strcmp(eko.tab[0], "pwd") != 0 && ft_strcmp(eko.tab[0],
 			"env") != 0 && ft_strcmp(eko.tab[0], "exit") != 0
@@ -86,5 +86,12 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 		return (free_tab(g->petit_tab), 1);
 	}
 	result = execute_command(eko.tab, &eko, local_env, g);
+	if (result == 0)
+	{
+		free_tab(g->petit_tab);
+		g->petit_tab = NULL;
+		free_tab(eko.tab);
+		eko.tab = NULL;
+	}	
 	return (result);
 }
