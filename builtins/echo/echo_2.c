@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:07:16 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 22:23:21 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 18:01:11 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	echo_verif_1(t_echo *eko, char *str, int *i, t_general *g)
 		}
 		if (eko->flag == 1)
 			return (2);
-		return (ft_fprintf(2, "minishell: %s: 1 Command not found ", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 1 Command not found \n", str), 1);
 	}
 	return (0);
 }
@@ -88,7 +88,7 @@ int	echo_verif_2(t_echo *eko, char *str, int *i, t_general *g)
 		}
 		if (eko->flag == 1)
 			return (2);
-		return (ft_fprintf(2, "minishell: %s: 2 Command not found ", str), 1);
+		return (ft_fprintf(2, "minishell: %s: 2 Command not found \n", str), 1);
 	}
 	return (0);
 }
@@ -140,8 +140,6 @@ void	echo_args(char *str, t_echo *eko, char *tmp, t_general *g)
 	if (tmp[0] == '\0')
 	{
 		dollar_n(str, eko, g);
-		free_tab(eko->tab);
 		return ;
 	}
-	free_tab(eko->tab);
 }

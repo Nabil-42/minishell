@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 22:08:52 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 16:29:07 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 
 void	exe_cmd(char *cmd, t_general *g)
 {
-	//printf("HAAAAAAAAAAAAAAAAAAAAAAAAAAAA %s/n", cmd);
 	if (builtin(cmd, &g->local_env, g))
-	{
-		if (g->flag_eko_n == 0 && g->handle_eko[0] != ' ')
+	{	
+		if (g->flag_eko_n >= 10)
+			return;
+		else if (g->flag_eko_n == 0 && g->handle_eko[0] != ' ')
 			printf("%s\n", g->handle_eko);
 		else if (g->flag_eko_n == 1)
 			printf("%s", g->handle_eko);
@@ -92,12 +93,10 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 		if (h_r_a_e_bis(fd, saved_stdout, saved_stdin, g))
 			return (1);
 	}
-	echo_bis(g->tab_cmd, &ikou, g);
+	ikou.line = vide_quote(g->tab_cmd);
 	if (ikou.line)
 		g->handle_ikou = ikou.line;
 	exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);
-	if (ikou.line != NULL)
-		(free(ikou.line), ikou.line = NULL);
 	return (2);
 }

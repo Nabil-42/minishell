@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 23:04:41 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 21:20:21 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 16:22:21 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	synthax(t_general *g)
 	if ((g->nbr_pipe != 0 && g->tab_pipe[0] == NULL) || (g->nbr_pipe >= 1
 			&& g->tab_pipe[g->nbr_pipe] == NULL))
 		return (ft_fprintf(2, " 1 error synthax\n"), g->exval = 2,
-			free_tab(g->tab_pipe), 1);
+			free_tab(g->tab_pipe), free_tab(g->tab_cmd), 1);
 	if (g->tab_pipe[g->nbr_pipe + 1] != NULL && g->nbr_pipe != 0)
 	{
 		ft_fprintf(2, "2 error synthax\n");
@@ -72,6 +72,9 @@ void	full_free(t_general *g)
 		(free_tab(g->tab_pipe), g->tab_pipe = NULL);
 	if (g->handle_eko)
 		(free(g->handle_eko), g->handle_eko = NULL);
+	if (g->handle_ikou)
+		(free(g->handle_ikou), g->handle_eko = NULL);
+	
 }
 
 void	boucle(t_general *g)

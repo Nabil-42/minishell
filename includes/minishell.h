@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 13:48:52 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/07 22:20:56 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 15:52:45 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ int	verif_quote_2(char *str, int i, int *double_quote_count,
 
 
 ///////////////////// BUILTINS ///////////////////////////
-void		ft_exit(char **tab, t_general *g);
+void		ft_exit(char **tab, t_general *g, t_echo *eko);
 
 
 
@@ -235,6 +235,7 @@ int			brut(t_general *g);
 void		full_free(t_general *g);
 void		boucle(t_general *g);
 void		init_tab(t_general *g);
+char 		*vide_quote(char **tab);
 
 
 #endif

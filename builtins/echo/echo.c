@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/07 22:29:17 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 18:16:53 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ void	echo_2(t_general *g, char *str, t_echo *eko, char *tmp)
 		free(str);
 		return ;
 	}
-	if (*tmp == '\0' && str[0] != 39 && str[1] != 39)
+	if (*tmp == '\0' && str[0] != 39 && str[1] != 39
+		&& str[0] != '"' && str[1] != '"')
 	{
 		dollar(str, eko, g);
 		free(str);
@@ -112,6 +113,7 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 		(str = remake_str(tab, eko, 1));
 	if (!str)
 	{
+		g->flag_eko_n = 10;
 		free_tab(tab);
 		free(str);
 		return ;
@@ -122,11 +124,14 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 	tmp = echo_verif_quote(str, eko, g);
 	if (tmp == NULL)
 	{
+		g->flag_eko_n = 11;
+		free(eko->line);
 		free(str);
 		return ;
 	}
 	echo_2(g, str, eko, tmp);
 	g->handle_eko = eko->line;
+
 }
 
 void	echo_2_bis(t_general *g, char *str, t_echo *eko, char *tmp)

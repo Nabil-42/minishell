@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_5.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 21:02:53 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 20:54:20 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 11:20:31 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,36 @@ void	multiple_pipe(char *line, t_general *g)
 	count_commands(new_line, g);
 	free(g->line);
 	g->line = new_line;
+}
+
+char *vide_quote(char **tab)
+{
+	int i;
+	int j;
+	char *str = NULL;
+	char *new_str;
+
+	str = remake_str_bis(tab);
+	if (!str)
+	{
+		return NULL;
+	}
+	new_str = malloc(sizeof(char) * (strlen(str) + 1));
+	if (!new_str)
+		return (free(str), NULL);	
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		while (str[i] == '"' || str[i] == 39)
+			++i;
+		if (str[i] == '\0')
+			break;
+		new_str[j] = str[i];
+		++i;
+		++j;
+	}
+	new_str[j] = '\0';
+	free(str);
+	return (new_str);
 }

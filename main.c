@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/07 15:09:07 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 16:27:56 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	{
 		g->exval = 127;
 		ft_fprintf(2, "No such file or directory command not found\n");
-		return (free_tab(args));
+		return (full_free(g), free_tab(args), free_tab(envp));
 	}
 	if (g->check_pipe == 1)
 	{
@@ -122,7 +122,10 @@ int	main(int ac, char **av, char **envp)
 		if (g.line == NULL)
 			break ;
 		if (*g.line == '\0')
+		{
+			free(g.line);
 			continue ;
+		}
 		init_tab(&g);
 	}
 	delete_env(&g.local_env);
