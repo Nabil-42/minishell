@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 22:21:21 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/13 18:33:12 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 	eko->j = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != '?')
+		if (str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != '?'
+			&& str[i + 1] != ' ')
 		{
 			if (!handle_variable_expansion(str, eko, &i, g))
 				return (0);
