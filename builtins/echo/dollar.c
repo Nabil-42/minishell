@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/13 18:33:12 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/13 20:20:23 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 			&& str[i + 1] != ' ')
 		{
 			if (!handle_variable_expansion(str, eko, &i, g))
-				return (0);
+				++i;
 			continue ;
 		}
 		copy_normal_char(str, eko, &i, g);
