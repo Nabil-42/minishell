@@ -6,7 +6,7 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 17:37:06 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 12:25:34 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/15 11:18:56 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (g_flag == 1)
-		{
-			g_flag = 0;
-			printf("\n");
-		}
-		else
-		{
+		// if (g_flag == 1)
+		// {
+		// 	g_flag = 0;
+		// 	printf("\n");
+		// }
+		// else
+		// {
 			printf("\n");
 			rl_on_new_line();
 			rl_replace_line("", 0);
 			rl_redisplay();
-		}
+		// }
 	}
 }
 
