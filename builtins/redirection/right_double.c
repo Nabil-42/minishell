@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right_double.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:16:58 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 21:50:52 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/19 18:53:29 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ void	restore_standard_fds(int saved_stdout, int saved_stdin, t_general *g)
 	close(saved_stdin);
 }
 
+void try_acces(char *filename)
+{
+	if (access(filename, F_OK) < -1)
+		perror("");
+
+}
+
 int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 {
 	int	fd;
@@ -84,14 +91,9 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	{
 		fd = open(filename, O_RDONLY);
 	}
-	else
-	{
-		fprintf(stderr, "Unknown redirection type: %s\n", redir_type);
-		return (g->exval = 602, -1);
-	}
 	if (fd < 0)
 	{
-		ft_fprintf(2, "%s: 2 No such file or directory\n", filename);
+		perror("execve");
 		return (g->exval = 1, -1);
 	}
 	return (fd);

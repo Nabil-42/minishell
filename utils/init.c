@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 23:04:41 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/13 16:22:21 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/19 19:10:48 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	synthax(t_general *g)
 	}
 	if ((g->nbr_dir != 0 && g->tab_cmd[0] == NULL))
 	{
+		//  && ft_strcmp("<<", g->tab_dir[0])
 		ft_fprintf(2, "3 error synthax\n");
 		g->exval = 2;
 		free_tab(g->tab_pipe);

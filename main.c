@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/13 16:27:56 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/19 18:55:54 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,12 @@ void	ft_execve(char *line, char *tab_cmd, t_general *g)
 	(void)line;
 	envp = get_local_env(&g->local_env);
 	delete_env(&g->local_env);
-	g_flag = 1;
 	args = cmd_args(tab_cmd);
 	path_cmd = based_path(args[0], g);
 	if (path_cmd == NULL)
 	{
 		g->exval = 127;
-		ft_fprintf(2, "No such file or directory command not found\n");
+		perror("access");
 		return (full_free(g), free_tab(args), free_tab(envp));
 	}
 	if (g->check_pipe == 1)
@@ -102,6 +101,7 @@ void	init(t_general *g)
 	g->flag_error = 0;
 	g->handle_ikou = NULL;
 	g->status = 0;
+	g_flag = 0;
 }
 
 int	main(int ac, char **av, char **envp)

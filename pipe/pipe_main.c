@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/15 11:22:36 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/07/19 17:23:38 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ pid_t	init_pipeline(char **tab_pipe, int i, int *pipe_fds)
 	if (tab_pipe[i + 1] != NULL)
 		if (pipe(pipe_fds) == -1)
 			(perror("pipe"), exit(EXIT_FAILURE));
-	SIG_IGN(SIGINT);
 	pid = fork();
 	if (pid == -1)
 		(perror("fork"), exit(EXIT_FAILURE));
@@ -78,14 +77,12 @@ void	execute_pipeline(char **tab_pipe, t_general *g)
 		pid = init_pipeline(tab_pipe, i, pipe_fds);
 		if (pid == 0)
 		{
-			SIG_DFL(SIGINT);
 			enfant_pipeline(i, input_fd, tab_pipe, pipe_fds);
 			handle_redirections_and_execute(tab_pipe[i], g);
 			exit(EXIT_FAILURE);
 		}
 		else
 		{
-			// SIG_DFL(SIGINT);
 			parent_pipeline(&input_fd, tab_pipe, i, pipe_fds);
 		}
 		i++;
