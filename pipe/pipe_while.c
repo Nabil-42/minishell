@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/19 17:22:23 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/25 21:38:26 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	child(t_general *g, int *pipefd, int *comm_pipe)
 {
 	int	return_value;
 
-	// SIG_DFL(SIGINT);
+	signal(SIGQUIT, sig_handler);
 	if (g->prev_pipe_read != -1)
 		(dup2(g->prev_pipe_read, 0), close(g->prev_pipe_read));
 	if (g->i_pipe < g->count)
@@ -45,7 +45,7 @@ void	child(t_general *g, int *pipefd, int *comm_pipe)
 
 void	parent(t_general *g, int *pipefd, pid_t pid, int *comm_pipe)
 {
-	// SIG_DFL(SIGINT);
+	// signal(SIGQUIT, SIG_IGN);
 	if (g->prev_pipe_read != -1)
 		close(g->prev_pipe_read);
 	if (g->i_pipe < g->count)

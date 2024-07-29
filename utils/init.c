@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 23:04:41 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/19 19:10:48 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/25 20:41:08 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	synthax(t_general *g)
 		free_tab(g->tab_cmd);
 		return (1);
 	}
-	if ((g->nbr_dir != 0 && g->tab_cmd[0] == NULL))
+	if ((g->nbr_dir != 0 && g->tab_cmd[0] == NULL) && ft_strncmp("<<", g->line, 2) != 0)
 	{
-		//  && ft_strcmp("<<", g->tab_dir[0])
+		  
 		ft_fprintf(2, "3 error synthax\n");
 		g->exval = 2;
 		free_tab(g->tab_pipe);
@@ -74,7 +74,7 @@ void	full_free(t_general *g)
 	if (g->handle_eko)
 		(free(g->handle_eko), g->handle_eko = NULL);
 	if (g->handle_ikou)
-		(free(g->handle_ikou), g->handle_eko = NULL);
+		(free(g->handle_ikou), g->handle_ikou = NULL);
 	
 }
 

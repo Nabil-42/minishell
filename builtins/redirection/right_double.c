@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:16:58 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/19 18:53:29 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/30 01:20:44 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,31 @@ void	restore_standard_fds(int saved_stdout, int saved_stdin, t_general *g)
 	close(saved_stdin);
 }
 
-void try_acces(char *filename)
+void herdoc(t_general *g, char *eof)
 {
-	if (access(filename, F_OK) < -1)
-		perror("");
+ 	char *line;
+    	int fd;
 
+    fd = open("heredoc_temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0) 
+    {
+        perror("open");
+        g->exval = 1;
+        return;
+    }
+
+    while ((line = readline("")) != NULL) 
+    {
+        if (strcmp(line, eof) == 0) 
+	{
+            free(line);
+            break;
+        }
+        write(fd, line, strlen(line));
+        write(fd, "\n", 1);
+        free(line);
+    }
+    close(fd);
 }
 
 int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
@@ -91,9 +111,32 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	{
 		fd = open(filename, O_RDONLY);
 	}
+	else if (strcmp(redir_type, "<<") == 0)
+	{
+		herdoc(g, filename);
+        	fd = open("heredoc_temp.txt", O_RDONLY);
+        	if (fd < 0)
+		{
+           		 perror("open");
+           		 return (g->exval = 1, -1);
+        	}
+        	if (dup2(fd, STDIN_FILENO) < 0) 
+		{
+            		perror("dup2");
+            		close(fd);
+            		return (g->exval = 997, -1);
+        	}
+        	close(fd);
+        	return 0;
+	}
+	else
+	{
+		fprintf(stderr, "Unknown redirection type: %s\n", redir_type);
+		return (g->exval = 602, -1);
+	}
 	if (fd < 0)
 	{
-		perror("execve");
+		ft_fprintf(2, "%s: 2 No such file or directory\n", filename);
 		return (g->exval = 1, -1);
 	}
 	return (fd);

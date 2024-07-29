@@ -6,7 +6,7 @@
 /*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/19 18:55:54 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/25 21:18:49 by nabil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,10 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	init(&g);
-	main_signal();
 	init_local_env(&g.local_env, envp);
 	while (1)
 	{
+		main_signal();
 		g.prompt = ft_get_prompt();
 		g.line = readline(g.prompt);
 		free(g.prompt);
