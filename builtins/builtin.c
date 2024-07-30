@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 15:54:43 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/19 18:51:04 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/30 10:42:29 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,12 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 	eko.tab = ft_split(line, ' ');
 	init_eko(&eko, g);
 	if (!eko.tab[0])
-		return (free_tab(g->petit_tab),free_tab(eko.tab), 0);
+		return (free_tab(g->petit_tab), free_tab(eko.tab), 0);
 	if (ft_strcmp(eko.tab[0], "echo") != 0 && ft_strcmp(eko.tab[0], "cd") != 0
 		&& ft_strcmp(eko.tab[0], "pwd") != 0 && ft_strcmp(eko.tab[0],
 			"env") != 0 && ft_strcmp(eko.tab[0], "exit") != 0
-		&& eko.tab[1] == NULL)
+		&& eko.tab[1] == NULL && ft_strcmp(eko.tab[0], "export") != 0
+		&& ft_strcmp(eko.tab[0], "unset") != 0)
 		return (free_tab(eko.tab), free_tab(g->petit_tab), 0);
 	if ((ft_strcmp(eko.tab[0], "echo") == 0 && eko.tab[1] == NULL)
 		|| (ft_strcmp(g->petit_tab[0], "echo") == 0 && g->petit_tab[1] == NULL))
@@ -96,6 +97,6 @@ int	builtin(char *line, t_env *local_env, t_general *g)
 		g->petit_tab = NULL;
 		free_tab(eko.tab);
 		eko.tab = NULL;
-	}	
+	}
 	return (result);
 }

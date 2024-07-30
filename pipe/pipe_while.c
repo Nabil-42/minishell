@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_while.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/25 21:38:26 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/30 10:51:53 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	child(t_general *g, int *pipefd, int *comm_pipe)
 {
 	int	return_value;
 
-	signal(SIGQUIT, sig_handler);
 	if (g->prev_pipe_read != -1)
 		(dup2(g->prev_pipe_read, 0), close(g->prev_pipe_read));
 	if (g->i_pipe < g->count)
@@ -45,7 +44,7 @@ void	child(t_general *g, int *pipefd, int *comm_pipe)
 
 void	parent(t_general *g, int *pipefd, pid_t pid, int *comm_pipe)
 {
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (g->prev_pipe_read != -1)
 		close(g->prev_pipe_read);
 	if (g->i_pipe < g->count)
@@ -68,7 +67,6 @@ void	pipe_while(t_general *g)
 	{
 		if (g->i_pipe < g->count && pipe(pipefd) == -1)
 			(perror("pipe"), exit(EXIT_FAILURE));
-		// SIG_IGN(SIGINT);
 		pid = fork();
 		if (pid == -1)
 			(perror("fork"), exit(EXIT_FAILURE));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right_double.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:16:58 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/30 01:20:44 by nabil            ###   ########.fr       */
+/*   Updated: 2024/07/30 11:01:12 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,24 +111,24 @@ int	handle_single_redirection(char *filename, char *redir_type, t_general *g)
 	{
 		fd = open(filename, O_RDONLY);
 	}
-	else if (strcmp(redir_type, "<<") == 0)
-	{
-		herdoc(g, filename);
-        	fd = open("heredoc_temp.txt", O_RDONLY);
-        	if (fd < 0)
-		{
-           		 perror("open");
-           		 return (g->exval = 1, -1);
-        	}
-        	if (dup2(fd, STDIN_FILENO) < 0) 
-		{
-            		perror("dup2");
-            		close(fd);
-            		return (g->exval = 997, -1);
-        	}
-        	close(fd);
-        	return 0;
-	}
+	// else if (strcmp(redir_type, "<<") == 0)
+	// {
+	// 	herdoc(g, filename);
+    //     	fd = open("heredoc_temp.txt", O_RDONLY);
+    //     	if (fd < 0)
+	// 	{
+    //        		 perror("open");
+    //        		 return (g->exval = 1, -1);
+    //     	}
+    //     	if (dup2(fd, STDIN_FILENO) < 0) 
+	// 	{
+    //         		perror("dup2");
+    //         		close(fd);
+    //         		return (g->exval = 997, -1);
+    //     	}
+    //     	close(fd);
+    //     	return 0;
+	// }
 	else
 	{
 		fprintf(stderr, "Unknown redirection type: %s\n", redir_type);
