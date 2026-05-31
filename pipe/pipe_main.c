@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 21:12:17 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/19 17:23:38 by nabil            ###   ########.fr       */
+/*   Updated: 2024/08/09 22:32:12 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,16 @@ void	enfant_pipeline(int i, int input_fd, char **tab_pipe, int *pipe_fds)
 	{
 		if (dup2(input_fd, 0) == -1)
 			(perror("dup2 input_fd"), exit(EXIT_FAILURE));
-		close(input_fd);
 	}
 	if (tab_pipe[i + 1] != NULL)
 	{
 		if (dup2(pipe_fds[1], 1) == -1)
 			(perror("dup2 pipe_fds[1]"), exit(EXIT_FAILURE));
-		close(pipe_fds[1]);
-		close(pipe_fds[0]);
 	}
+	if (input_fd != 0)
+		close(input_fd);
+	close(pipe_fds[1]);
+	close(pipe_fds[0]);
 }
 
 void	parent_pipeline(int *input_fd, char **tab_pipe, int i, int *pipe_fds)
@@ -59,7 +60,19 @@ void	parent_pipeline(int *input_fd, char **tab_pipe, int i, int *pipe_fds)
 		*input_fd = pipe_fds[0];
 	}
 	else
+	{
 		(close(pipe_fds[0]));
+		(close(pipe_fds[1]));
+	}
+}
+
+static int	child_exec(char **tab_pipe, t_general *g, int i)
+{
+	int	status;
+
+	status = handle_redirections_and_execute(tab_pipe[i], g);
+	delete_env(&g->local_env);
+	return (status);
 }
 
 void	execute_pipeline(char **tab_pipe, t_general *g)
@@ -68,7 +81,9 @@ void	execute_pipeline(char **tab_pipe, t_general *g)
 	int		input_fd;
 	pid_t	pid;
 	int		i;
+	int		valeur;
 
+	valeur = 0;
 	input_fd = 0;
 	i = 0;
 	g_flag = 1;
@@ -78,15 +93,13 @@ void	execute_pipeline(char **tab_pipe, t_general *g)
 		if (pid == 0)
 		{
 			enfant_pipeline(i, input_fd, tab_pipe, pipe_fds);
-			handle_redirections_and_execute(tab_pipe[i], g);
-			exit(EXIT_FAILURE);
+			exit(child_exec(tab_pipe, g, i));
 		}
 		else
-		{
 			parent_pipeline(&input_fd, tab_pipe, i, pipe_fds);
-		}
 		i++;
 	}
-	while (wait(NULL) > 0)
-		;
+	while (wait(&valeur) > 0)
+		if (WIFEXITED(valeur))
+			g->exval = WEXITSTATUS(valeur);
 }

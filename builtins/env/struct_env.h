@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   struct_env.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/08/08 13:41:35 by tissad           ###   ########.fr       */
+/*   Created: 2024/07/30 12:21:45 by tissad            #+#    #+#             */
+/*   Updated: 2024/07/30 16:34:23 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../lib/libft/includes/libft.h"
+#ifndef STRUCT_ENV_H
+# define STRUCT_ENV_H
 
-void	pwd(char **tab, t_general *g)
+# define MAX_ENV 512
+# include <libft.h>
+# include <stdbool.h>
+
+typedef struct s_var
 {
-	(void)tab;
-	g->flag_eko_n = 4;
-	g->path = ft_getenv(&g->local_env, "PWD");
-}
+	bool	env_flag;
+	char	*key;
+	char	*value;
+	int		op;
+}			t_var;
+
+typedef struct s_env
+{
+	t_list	*env_p[MAX_ENV];
+	int		nb_var;
+}			t_env;
+
+#endif

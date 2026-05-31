@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 16:46:58 by nabboud           #+#    #+#             */
-/*   Updated: 2024/07/25 21:18:49 by nabil            ###   ########.fr       */
+/*   Updated: 2024/08/12 00:51:39 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,58 +21,54 @@
 
 extern volatile sig_atomic_t	g_flag;
 
-void	fail_execve(int execve_status, char **args, char **envp, t_general *g)
+int	ft_execve_bis(char *path_cmd, char **args, t_general *g)
 {
-	if (execve_status != 0)
-	{
-		perror("execve");
-		free_tab(args);
-		free_tab(envp);
-		free(g->line);
-		if (g->handle_ikou)
-		{
-			free(g->handle_ikou);
-			g->handle_ikou = NULL;
-		}
-		if (g->tab_file)
-			free_tab(g->tab_file);
-		if (g->tab_dir)
-			free_tab(g->tab_dir);
-		if (g->tab_cmd)
-			free_tab(g->tab_cmd);
-		if (g->tab_pipe)
-			free_tab(g->tab_pipe);
-		if (g->handle_eko)
-			free(g->handle_eko);
-		g->exval = 126;
-	}
-	ft_fprintf(2, "commande not found\n");
-}
-
-void	ft_execve(char *line, char *tab_cmd, t_general *g)
-{
-	char	**args;
 	char	**envp;
-	char	*path_cmd;
 	int		execve_status;
 
-	(void)line;
+	g->i_based_p = -1;
 	envp = get_local_env(&g->local_env);
-	delete_env(&g->local_env);
-	args = cmd_args(tab_cmd);
-	path_cmd = based_path(args[0], g);
 	if (path_cmd == NULL)
 	{
-		g->exval = 127;
-		perror("access");
-		return (full_free(g), free_tab(args), free_tab(envp));
+		(delete_env(&g->local_env), full_free(g), free_tab(args));
+		return (free_tab(envp), exit(g->exval), 0);
 	}
 	if (g->check_pipe == 1)
-	{
 		free_tab(g->tab_pipe);
+	if (args[1] == NULL && g->nbr_dir > 0 && g->tab_file[0] == NULL)
+	{
+		(delete_env(&g->local_env), ft_fprintf(2, "syntax error\n"));
+		(full_free(g), free_tab(args), free_tab(envp), free(path_cmd));
+		return ((g->exval = 2), 2);
 	}
 	execve_status = execve(path_cmd, args, envp);
-	fail_execve(execve_status, args, envp, g);
+	if (execve_status != 0)
+	{
+		(((free(path_cmd)), (free_tab(args)), (("minishell :execve"))));
+		free_tab(envp);
+	}
+	return (execve_status);
+}
+
+int	ft_execve(char *line, char *tab_cmd, t_general *g)
+{
+	int		i;
+	char	*path_cmd;
+	char	*tmp;
+	char	**expand_args;
+
+	(void) line;
+	expand_args = ft_split_quote(tab_cmd);
+	i = 0;
+	while (expand_args[i])
+	{
+		tmp = expand_hd(expand_args[i], g);
+		expand_args[i] = tmp;
+		i++;
+	}
+	g->i_based_p = 0;
+	path_cmd = based_path(expand_args[0], g);
+	return (ft_execve_bis(path_cmd, expand_args, g));
 }
 
 void	init(t_general *g)
@@ -130,8 +126,5 @@ int	main(int ac, char **av, char **envp)
 	}
 	delete_env(&g.local_env);
 	rl_clear_history();
-	if (WIFEXITED(g.status))
-		return (WEXITSTATUS(g.status));
-	else
-		return (0);
+	return (0);
 }

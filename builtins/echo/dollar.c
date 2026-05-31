@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:06:47 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/13 20:20:23 by nabil            ###   ########.fr       */
+/*   Updated: 2024/08/11 22:38:31 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../lib/libft/includes/libft.h"
-#include "../env/env.h"
+#include "minishell.h"
+#include <libft.h>
 
 char	*extract_env_variable_name(char *str, int *i)
 {
@@ -63,6 +62,7 @@ int	handle_variable_expansion(char *str, t_echo *eko, int *i, t_general *g)
 	{
 		eko->line[eko->j++] = name[k++];
 	}
+	free(name);
 	return (1);
 }
 
@@ -107,7 +107,10 @@ int	dollar(char *str, t_echo *eko, t_general *g)
 			&& str[i + 1] != ' ')
 		{
 			if (!handle_variable_expansion(str, eko, &i, g))
-				++i;
+			{
+				if (str[i] != '\0')
+					++i;
+			}
 			continue ;
 		}
 		copy_normal_char(str, eko, &i, g);

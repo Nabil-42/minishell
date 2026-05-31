@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   parsenv.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/08/08 13:41:35 by tissad           ###   ########.fr       */
+/*   Created: 2024/06/25 08:44:16 by tissad            #+#    #+#             */
+/*   Updated: 2024/08/03 00:37:31 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../lib/libft/includes/libft.h"
+#ifndef PARSENV_H
+# define PARSENV_H
 
-void	pwd(char **tab, t_general *g)
-{
-	(void)tab;
-	g->flag_eko_n = 4;
-	g->path = ft_getenv(&g->local_env, "PWD");
-}
+# define EQUAL 1
+# define ANDEQUAL 2
+# define NOTHING 0
+
+void	*pars_var(char *str_cmd, char *print_error);
+char	**get_args(char *str);
+
+#endif

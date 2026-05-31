@@ -3,61 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   cd_project.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tissad <tissad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/07 21:41:11 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/08/11 22:14:00 by tissad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../lib/libft/includes/libft.h"
 #include "env/env.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
-int	check_access_in_path(char *cmd, char *path)
+char	*cd_based_path(char *path, t_general *g)
 {
-	char	*str;
-	char	*tmp;
-	int		status;
+	struct stat	path_stat;
 
-	str = ft_strjoin(path, "/");
-	if (!str)
-		return (0);
-	tmp = ft_strjoin(str, cmd);
-	free(str);
-	if (!tmp)
-		return (0);
-	status = access(tmp, X_OK);
-	free(tmp);
-	return (status == 0);
-}
-
-int	cd_based_path(char *cmd, t_general *g)
-{
-	int		status;
-	char	**tab;
-	char	*path_env;
-	int		i;
-
-	status = access(cmd, X_OK);
-	if (status == 0)
-		return (1);
-	path_env = getenv("PATH");
-	tab = ft_split(path_env, ':');
-	if (!tab)
-		return (0);
-	i = -1;
-	while (tab[++i] != NULL)
-		if (check_access_in_path(cmd, tab[i]))
-			return (free_tab(tab), 1);
-	free_tab(tab);
-	if (*cmd != '$')
+	path = expand_hd(ft_strdup(path), g);
+	if (stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+			return (path);
+	}
+	else
+	{
+		g->exval = 1;
+		return (free(path), ("minishell: stat:"), NULL);
+	}
+	if (*path != '$')
 	{
 		g->status = 1;
 		g->exval = 1;
-		ft_fprintf(2, "1 No such file or directory\n");
+		ft_fprintf(2, "minishell: No such file or directory\n");
 	}
-	return (0);
+	free(path);
+	return (NULL);
 }
 
 void	cd_project_2(t_general *g)
@@ -68,46 +49,43 @@ void	cd_project_2(t_general *g)
 	return ;
 }
 
-void	cd_project_bis(char *user, t_general *g, char *path, char *tmp)
+void	cd_without_args(t_general *g)
 {
-	tmp = ft_strjoin("OLDPWD=", getcwd(path, PATH_MAX));
-	ft_add_var(&g->local_env, tmp, true);
-	free(tmp);
-	user = getenv("USER");
-	tmp = ft_strjoin("/home/", user);
-	chdir(tmp);
-	free(tmp);
-	tmp = ft_strjoin("PWD=", getcwd(path, PATH_MAX));
-	ft_add_var(&g->local_env, tmp, true);
-	free(tmp);
+	char	*home;
+
+	ft_set_var(&g->local_env, ft_strdup("OLDPWD"), \
+	ft_getenv(&g->local_env, "PWD"));
+	home = ft_getenv(&g->local_env, "HOME");
+	if (chdir(home) != 0)
+	{
+		perror("minishell: chdir");
+		free(home);
+		return ;
+	}
+	ft_set_var(&g->local_env, ft_strdup("PWD"), home);
 	g->flag_eko_n = 3;
 	return ;
 }
 
 void	cd_project(char **tab, t_general *g)
 {
-	char	*user;
-	char	*tmp;
-	char	path[PATH_MAX];
+	char	*new_path;
+	char	path_buf[PATH_MAX];
 
-	tmp = NULL;
-	user = NULL;
 	if (tab[1] == NULL)
-		return (cd_project_bis(user, g, path, tmp));
+		return (cd_without_args(g));
 	else if (tab[2] != NULL)
-	{
 		return (cd_project_2(g));
-	}
-	if (cd_based_path(tab[1], g) == 1)
+	new_path = cd_based_path(tab[1], g);
+	if (new_path)
 	{
-		getcwd(path, PATH_MAX);
-		tmp = ft_strjoin("OLDPWD=", getcwd(path, PATH_MAX));
-		ft_add_var(&g->local_env, tmp, true);
-		free(tmp);
-		chdir(tab[1]);
+		ft_set_var(&g->local_env, ft_strdup("OLDPWD"), ft_getenv(&g->local_env,
+				"PWD"));
+		if (chdir(new_path) != 0)
+			perror("minishell: chdir");
+		ft_set_var(&g->local_env, ft_strdup("PWD"), \
+		ft_strdup(getcwd(path_buf, PATH_MAX)));
+		free(new_path);
 	}
-	tmp = ft_strjoin("PWD=", getcwd(path, PATH_MAX));
-	ft_add_var(&g->local_env, tmp, true);
-	free(tmp);
 	g->flag_eko_n = 3;
 }

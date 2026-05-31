@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/18 17:14:54 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/19 18:41:43 by nabil            ###   ########.fr       */
+/*   Created: 2024/08/08 14:26:18 by nabboud           #+#    #+#             */
+/*   Updated: 2024/08/12 12:21:49 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,32 @@
 #include "../../lib/libft/includes/libft.h"
 #include "../env/env.h"
 
-void	exe_cmd(char *cmd, t_general *g)
+int	exe_cmd(char *cmd, t_general *g)
 {
 	if (builtin(cmd, &g->local_env, g))
-	{	
+	{
 		if (g->flag_eko_n >= 10)
-			return;
+			return (0);
 		else if (g->flag_eko_n == 0 && g->handle_eko[0] != ' ')
 			printf("%s\n", g->handle_eko);
 		else if (g->flag_eko_n == 1)
 			printf("%s", g->handle_eko);
 		else if (g->flag_eko_n == 2)
-			return (printf("%d\n", g->exval), (void)0);
+			return (printf("%d\n", g->exval), (g->exval = 0), 0);
 		else if (g->flag_eko_n == 3)
-			return ;
+			return (0);
 		else if (g->flag_eko_n == 4)
 			(printf("%s\n", g->path), free(g->path));
 		else if (g->flag_eko_n == 6)
-			return (printf("\n"), (void)0);
+			return (printf("\n"), 0);
 		if (g->handle_eko != NULL)
-		{
-			free(g->handle_eko);
-			g->handle_eko = NULL;
-		}
+			(free(g->handle_eko), g->handle_eko = NULL);
 	}
 	else if (g->nbr_pipe > 0)
 		return (ft_execve(cmd, cmd, g));
 	else
 		(pipe_while(g));
+	return (0);
 }
 
 int	h_r_a_e(int saved_stdin, int saved_stdout, t_general *g, char *cmd)
@@ -54,6 +52,11 @@ int	h_r_a_e(int saved_stdin, int saved_stdout, t_general *g, char *cmd)
 		return (1);
 	g->tab_dir = split_delimiters(cmd, &g->nbr_dir);
 	g->tab_file = split_file(cmd, &g->nbr_file);
+	printf("file 0 = %s\n", g->tab_file[0]);
+	printf("file 1 = %s\n", g->tab_file[1]);
+	printf("file 2 = %s\n", g->tab_file[2]);
+	printf("file 3 = %s\n", g->tab_file[3]);
+	printf("file 4 = %s\n", g->tab_file[4]);
 	return (0);
 }
 
@@ -81,22 +84,24 @@ int	handle_redirections_and_execute(char *cmd, t_general *g)
 	int		saved_stdout;
 	int		saved_stdin;
 	t_echo	ikou;
+	int		handle;
 
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
 	g->i_right = 0;
 	if (h_r_a_e(saved_stdin, saved_stdout, g, cmd))
-		return (1);
+		return (delete_env(&g->local_env), full_free(g), 1);
 	while (g->i_right < g->nbr_file)
 	{
 		handle_error_3(g, &fd, &g->i_right);
 		if (h_r_a_e_bis(fd, saved_stdout, saved_stdin, g))
-			return (1);
+			return (close(fd), delete_env(&g->local_env), full_free(g), 1);
+		close(fd);
 	}
 	ikou.line = vide_quote(g->tab_cmd);
 	if (ikou.line)
 		g->handle_ikou = ikou.line;
-	exe_cmd(ikou.line, g);
+	handle = exe_cmd(ikou.line, g);
 	restore_standard_fds(saved_stdout, saved_stdin, g);
-	return (2);
+	return (full_free(g), handle);
 }

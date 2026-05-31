@@ -6,7 +6,7 @@
 #    By: nabboud <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/02 17:56:57 by tissad            #+#    #+#              #
-#    Updated: 2024/07/07 22:11:06 by nabboud          ###   ########.fr        #
+#    Updated: 2024/08/08 13:50:30 by nabboud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS		:= ./main.c \
 			./utils/init.c \
 			./utils/split_by_pipe.c \
 			./utils/error.c \
+			./utils/ft_split_quote.c \
 			./utils/split_delimiters.c \
 			./utils/split_delimiters_bis.c \
 			./pipe/pipe_main.c \
@@ -46,9 +47,12 @@ SRCS		:= ./main.c \
 			./parsing/parsing_3.c \
 			./parsing/parsing_4.c \
 			./parsing/parsing_5.c \
+			./parsing/parsenv.c \
+			./parsing/parsargsenv.c \
 			./parsing/split_str.c \
 			./parsing/split_file.c \
 			./builtins/echo/echo.c \
+			./builtins/echo/echo_poubelle.c \
 			./builtins/echo/echo_simple_quote.c \
 			./builtins/echo/echo_double_quote.c \
 			./builtins/echo/echo_2.c \
@@ -56,13 +60,17 @@ SRCS		:= ./main.c \
 			./builtins/echo/dollar.c \
 			./builtins/echo/dollar_n.c \
 			./builtins/echo/dollar_double.c \
-			./builtins/env/env_1.c \
-			./builtins/env/env_2.c \
-			./builtins/env/env_3.c \
-			./builtins/env/env_4.c \
+			./builtins/env/env_init.c \
+			./builtins/env/env_clean.c \
+			./builtins/env/utils.c \
+			./builtins/env/ft_env.c \
+			./builtins/env/ft_export.c \
+			./builtins/env/ft_unset.c \
 			./builtins/redirection/right.c \
+			./builtins/redirection/left.c \
 			./builtins/redirection/right_double.c \
 			./builtins/builtin.c \
+			./builtins/builtin_bis.c \
 			./builtins/cd_project.c \
 			./builtins/exit.c \
 			./builtins/pwd.c

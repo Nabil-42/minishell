@@ -6,13 +6,12 @@
 /*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:12:19 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/07 22:26:23 by nabboud          ###   ########.fr       */
+/*   Updated: 2024/08/12 12:02:08 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../lib/libft/includes/libft.h"
-#include "../env/env.h"
+#include "minishell.h"
+#include <libft.h>
 
 int	handle_consecutive_quotes(char *str, t_echo *eko)
 {
@@ -68,9 +67,9 @@ void	copy_non_special_char(char *str, t_echo *eko, t_general *g)
 	{
 		++eko->j;
 		eko->line[eko->j] = ' ';
+		--eko->j;
 	}
-	++eko->i;
-	++eko->j;
+	return ((++eko->i), (++eko->j), (void)0);
 }
 
 int	echo_take_of_double_quote(char *str, t_echo *eko, int n, t_general *g)
@@ -89,7 +88,7 @@ int	echo_take_of_double_quote(char *str, t_echo *eko, int n, t_general *g)
 		result = handle_single_double_quote(str, eko, &flag);
 		if (result == 0)
 			return (0);
-		dollar_check = dollar_double(str, eko);
+		dollar_check = dollar_double(str, eko, g);
 		if (dollar_check == -1)
 		{
 			eko->line[eko->j] = '\0';

@@ -3,44 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:24 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/03 00:03:03 by nabil            ###   ########.fr       */
+/*   Updated: 2024/08/08 14:52:01 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_H
 # define ENV_H
 
-#include <libft.h>
-#include "../../lib/libft/includes/libft.h"
-#include "../../includes/minishell.h"
-#include <stdbool.h>
-
-# define MAX_ENV 512
-
-typedef struct s_var
-{
-    bool    env_flag;
-    char    *key;
-    char    *value;
-}t_var;
-
-typedef struct s_env
-{
-    t_list  *env_p[MAX_ENV];
-    int     nb_var;
-}   t_env;
-
-
-// void	ft_env(t_env *env, t_general *g);
-
-void	init_local_env(t_env *local_env, char **envp);
-void	delete_env(t_env *env);
-char	**get_local_env(t_env *env);
-void	ft_add_var(t_env *env, char *env_str, bool flag);
-// void	ft_unset(t_env *env, char **args, t_general *g);
-char	*ft_getenv(t_env *env, char *key);
-
+# include "struct_env.h"
+/*env_init*/
+t_var			*create_var(char *key, int op, char *value);
+/*env_clean*/
+void			delete_envp(char **envp);
+void			delete_var(t_var *var);
+void			del(void *content);
+/**/
+/*export*/
+void			add_var(t_env *env, t_var *var);
+/*unset*/
+/*utils*/
+unsigned int	hash_function(const char *key, unsigned int table_size);
+t_list			*exist_env_var(char *key, t_list *lst);
 #endif

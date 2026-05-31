@@ -3,51 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 14:19:28 by tissad            #+#    #+#             */
-/*   Updated: 2024/07/13 18:16:53 by nabil            ###   ########.fr       */
+/*   Updated: 2024/08/08 17:02:55 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../lib/libft/includes/libft.h"
-#include "../env/env.h"
+#include "minishell.h"
+#include <libft.h>
 
 #define PATH_MAX 4096
-
-char	*remake_str_bis(char **tab)
-{
-	int		j;
-	int		k;
-	int		i;
-	char	*new_str;
-
-	i = 0;
-	if (tab[0] == NULL)
-		return (NULL);
-	new_str = malloc(sizeof(char) * PATH_MAX + 1);
-	if (new_str == NULL)
-		return (NULL);
-	k = 0;
-	while (tab[i] != NULL)
-	{
-		j = 0;
-		while (tab[i][j])
-		{
-			new_str[k] = tab[i][j];
-			++k;
-			++j;
-		}
-		if (tab[i + 1] != NULL)
-			new_str[k] = ' ';
-		++k;
-		++i;
-	}
-	k--;
-	new_str[k] = '\0';
-	return (new_str);
-}
 
 char	*remake_str(char **tab, t_echo *eko, int i)
 {
@@ -75,9 +41,7 @@ char	*remake_str(char **tab, t_echo *eko, int i)
 		++k;
 		++i;
 	}
-	k--;
-	new_str[k] = '\0';
-	return (new_str);
+	return ((k--), (new_str[k] = '\0'), new_str);
 }
 
 void	echo_2(t_general *g, char *str, t_echo *eko, char *tmp)
@@ -90,8 +54,8 @@ void	echo_2(t_general *g, char *str, t_echo *eko, char *tmp)
 		free(str);
 		return ;
 	}
-	if (*tmp == '\0' && str[0] != 39 && str[1] != 39
-		&& str[0] != '"' && str[1] != '"')
+	if (*tmp == '\0' && str[0] != 39 && str[1] != 39 && str[0] != '"'
+		&& str[1] != '"')
 	{
 		dollar(str, eko, g);
 		free(str);
@@ -107,10 +71,10 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 
 	str = NULL;
 	tmp = NULL;
-	if (tab[1] && ft_strcmp(tab[1], "-n") == 0)
-		str = remake_str(tab, eko, 2);
+	if (tab[eko->k + 1] && ft_strcmp(tab[eko->k + 1], "-n") == 0)
+		str = remake_str(tab, eko, eko->k + 2);
 	else
-		(str = remake_str(tab, eko, 1));
+		(str = remake_str(tab, eko, eko->k + 1));
 	if (!str)
 	{
 		g->flag_eko_n = 10;
@@ -123,15 +87,9 @@ void	echo(char **tab, t_echo *eko, t_general *g)
 		return (free(str), (void)0);
 	tmp = echo_verif_quote(str, eko, g);
 	if (tmp == NULL)
-	{
-		g->flag_eko_n = 11;
-		free(eko->line);
-		free(str);
-		return ;
-	}
+		return ((g->flag_eko_n = 11), free(eko->line), free(str));
 	echo_2(g, str, eko, tmp);
 	g->handle_eko = eko->line;
-
 }
 
 void	echo_2_bis(t_general *g, char *str, t_echo *eko, char *tmp)

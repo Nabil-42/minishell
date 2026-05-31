@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_n.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nabil <nabil@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nabboud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:25:04 by nabil             #+#    #+#             */
-/*   Updated: 2024/07/13 20:21:10 by nabil            ###   ########.fr       */
+/*   Updated: 2024/08/12 12:07:18 by nabboud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../lib/libft/includes/libft.h"
-#include "../env/env.h"
+#include "minishell.h"
+#include <libft.h>
 
 char	*extract_env_variable_name_n(char *str, int *i)
 {
@@ -35,7 +34,7 @@ char	*extract_env_variable_name_n(char *str, int *i)
 	return (variable_env);
 }
 
-int	handle_variable_expansion_n(char *str, t_echo *eko, int *i)
+int	handle_variable_expansion_n(char *str, t_echo *eko, int *i, t_general *g)
 {
 	char	*variable_env;
 	char	*name;
@@ -44,7 +43,7 @@ int	handle_variable_expansion_n(char *str, t_echo *eko, int *i)
 	variable_env = extract_env_variable_name_n(str, i);
 	if (variable_env == NULL)
 		return (0);
-	name = getenv(variable_env);
+	name = ft_getenv(&g->local_env, variable_env);
 	free(variable_env);
 	if (name == NULL)
 		return (0);
@@ -53,6 +52,7 @@ int	handle_variable_expansion_n(char *str, t_echo *eko, int *i)
 	{
 		eko->line[eko->j++] = name[k++];
 	}
+	free(name);
 	return (1);
 }
 
@@ -73,7 +73,7 @@ int	dollar_n(char *str, t_echo *eko, t_general *g)
 	{
 		if (str[i] == '$')
 		{
-			if (!handle_variable_expansion_n(str, eko, &i))
+			if (!handle_variable_expansion_n(str, eko, &i, g))
 				++i;
 			continue ;
 		}
