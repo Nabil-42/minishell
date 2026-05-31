@@ -37,26 +37,26 @@ SRCS		:= ./main.c \
 			./utils/error.c \
 			./utils/ft_split_quote.c \
 			./utils/split_delimiters.c \
-			./utils/split_delimiters_bis.c \
+			./utils/split_delimiters_utils.c \
 			./pipe/pipe_main.c \
 			./pipe/pipe_while.c \
-			./pipe/pipe_while_bis.c \
+			./pipe/pipe_child_utils.c \
 			./parsing/parsing.c \
-			./parsing/parsing_2.c \
-			./parsing/parsing_2_bis.c \
-			./parsing/parsing_3.c \
-			./parsing/parsing_4.c \
-			./parsing/parsing_5.c \
+			./parsing/parsing_quotes.c \
+			./parsing/parsing_spaces.c \
+			./parsing/parsing_pipes.c \
+			./parsing/parsing_path.c \
+			./parsing/parsing_multiline.c \
 			./parsing/parsenv.c \
 			./parsing/parsargsenv.c \
 			./parsing/split_str.c \
 			./parsing/split_file.c \
 			./builtins/echo/echo.c \
-			./builtins/echo/echo_poubelle.c \
+			./builtins/echo/echo_rebuild.c \
 			./builtins/echo/echo_simple_quote.c \
 			./builtins/echo/echo_double_quote.c \
-			./builtins/echo/echo_2.c \
-			./builtins/echo/echo_3.c \
+			./builtins/echo/echo_args.c \
+			./builtins/echo/echo_heredoc.c \
 			./builtins/echo/dollar.c \
 			./builtins/echo/dollar_n.c \
 			./builtins/echo/dollar_double.c \
@@ -70,7 +70,7 @@ SRCS		:= ./main.c \
 			./builtins/redirection/left.c \
 			./builtins/redirection/right_double.c \
 			./builtins/builtin.c \
-			./builtins/builtin_bis.c \
+			./builtins/builtin_echo_init.c \
 			./builtins/cd_project.c \
 			./builtins/exit.c \
 			./builtins/pwd.c
