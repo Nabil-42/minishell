@@ -1,0 +1,21 @@
+# Compiled object files
+*.o
+*.a
+
+# Executables (no extension on Linux/macOS)
+# Add your binary name here
+minishell
+push_swap
+so_long
+server
+client
+philo
+ft_printf
+
+# MacOS
+.DS_Store
+
+# Editor files
+.vscode/
+*.swp
+*~
